@@ -4,20 +4,50 @@
 
 @layer base {
     :root {
-        --text-color-light: rgba(0, 0, 0, .5);
-        --text-color-default: rgba(0, 0, 0, .8);
-        --text-color-dark: rgb(0, 0, 0);
-        --bg-color-default: rgb(255, 255, 255);
-        --bg-color-contrast: rgba(0, 0, 0, .1);
-        --bg-color-contrast-light: rgba(0, 0, 0, .05);
+        --skin-text-light: rgba(0, 0, 0, .5);
+        --skin-text-default: rgba(0, 0, 0, .8);
+        --skin-text-dark: rgb(0, 0, 0);
+        --skin-bg-default: rgb(255, 255, 255);
+        --skin-bg-contrast: rgba(0, 0, 0, .1);
+        --skin-bg-contrast-light: rgba(0, 0, 0, .05);
     }
 
-    .dark {
-        --text-color-light: rgba(255, 255, 255, .5);
-        --text-color-default: rgba(255, 255, 255, .8);
-        --text-color-dark: rgb(255, 255, 255);
-        --bg-color-default: rgb(0, 0, 0);
-        --bg-color-contrast: rgba(255, 255, 255, .1);
-        --bg-color-contrast-light: rgba(255, 255, 255, .05);
+    .theme-dark {
+        --skin-text-light: rgba(255, 255, 255, .5);
+        --skin-text-default: rgba(255, 255, 255, .8);
+        --skin-text-dark: rgb(255, 255, 255);
+        --skin-bg-default: rgb(0, 0, 0);
+        --skin-bg-contrast: rgba(255, 255, 255, .1);
+        --skin-bg-contrast-light: rgba(255, 255, 255, .05);
+    }
+}
+
+@layer components {
+    .btn-primary {
+        @apply bg-primary rounded-md font-bold py-sm px-lg;
+        color: #fff;
+    }
+
+    .btn-primary:hover {
+        @apply bg-primary-dark;
+    }
+
+    .btn-primary:disabled {
+        @apply bg-primary-light;
+        cursor: not-allowed;
+    }
+}
+
+@layer utilities {
+    .paragraph-sm {
+        @apply text-sm leading-relaxed;
+    }
+
+    .paragraph-md {
+        @apply text-md leading-relaxed;
+    }
+
+    .paragraph-lg {
+        @apply text-lg leading-relaxed;
     }
 }
