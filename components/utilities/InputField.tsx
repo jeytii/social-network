@@ -1,31 +1,34 @@
-interface Props {
-    className?: string;
-    id: string;
-    type?: string;
+import { InputHTMLAttributes } from 'react';
+
+interface Props extends InputHTMLAttributes<HTMLInputElement> {
+    containerClassName?: string;
     label: string;
+    error: string[] | null;
 }
 
 function InputField({
-    className, id, type, label,
+    containerClassName, label, error, ...props
 }: Props) {
+    const hasError = !!error && !!error.length;
+
     return (
-        <div className={className}>
-            <label className="text-skin-text font-bold text-md" htmlFor={id}>
+        <section className={containerClassName}>
+            <label className="text-skin-text font-bold text-md" htmlFor={props.id}>
                 {label}
             </label>
 
             <input
                 className="block w-full bg-skin-bg-contrast text-skin-text p-sm rounded-md mt-xs"
-                type={type}
-                id={id}
+                {...props}
             />
-        </div>
+
+            {hasError && <p className="text-danger text-sm mt-xs mb-0">{error[0]}</p>}
+        </section>
     );
 }
 
 InputField.defaultProps = {
-    className: '',
-    type: 'text',
+    containerClassName: '',
 };
 
 export default InputField;
