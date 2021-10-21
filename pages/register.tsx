@@ -1,11 +1,9 @@
-import Head from 'next/head';
-import Logo from 'components/Logo';
+import { useState } from 'react';
+import Public from 'components/Public';
 import InputField from 'components/utilities/InputField';
 import Select from 'components/utilities/Select';
 import Radio from 'components/utilities/Radio';
-import { useState } from 'react';
 
-const days = [1, 2, 3];
 const years = Array.from({ length: 100 }, (_, i) => new Date().getFullYear() - (i + 1));
 const months = [
     'January', 'February', 'March', 'April', 'May', 'June',
@@ -16,16 +14,7 @@ export default function Register() {
     const [gender, setGender] = useState<'Male' | 'Female' | null>(null);
 
     return (
-        <section className="bg-skin-bg min-h-screen">
-            <Head>
-                <title>Create an account</title>
-                <link rel="icon" href="/favicon.ico" />
-            </Head>
-
-            <header className="flex align-middle justify-center py-lg">
-                <Logo />
-            </header>
-
+        <Public title="Create an account - Sosyal.me">
             <div className="py-md sm:px-md">
                 <main className="max-w-screen-sm min-w-max m-auto rounded-md bg-skin-bg-contrast p-lg">
                     <h1 className="text-lg font-bold text-skin-text-light text-center">Create an account</h1>
@@ -131,6 +120,6 @@ export default function Register() {
                     </form>
                 </main>
             </div>
-        </section>
+        </Public>
     );
 }
