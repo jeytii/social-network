@@ -29,8 +29,6 @@
         "indent": ["error", 4],
         "no-use-before-define": "off",
         "consistent-return": "off",
-        "@typescript-eslint/no-var-requires": "off",
-        "@typescript-eslint/explicit-module-boundary-types": "off",
         "react/react-in-jsx-scope": "off",
         "react/jsx-indent": ["error", 4],
         "react/jsx-indent-props": ["error", 4],
