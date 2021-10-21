@@ -12,6 +12,7 @@ const months = [
 
 export default function Register() {
     const [gender, setGender] = useState<'Male' | 'Female' | null>(null);
+    const [method, setMethod] = useState<0 | 1>(0);
 
     return (
         <Public title="Create an account - Sosyal.me">
@@ -112,6 +113,32 @@ export default function Register() {
                                     name="gender"
                                     value="Female"
                                     checked={gender === 'Female'}
+                                />
+                            </div>
+                        </section>
+
+                        <section className="mt-lg">
+                            <span className="block text-skin-text font-bold text-md">
+                                Verification method
+                            </span>
+
+                            <div className="flex items-center mt-xs">
+                                <Radio
+                                    containerClassName="flex items-center cursor-pointer"
+                                    id="email_verification"
+                                    label="Email"
+                                    name="method"
+                                    value={0}
+                                    checked={method === 0}
+                                />
+
+                                <Radio
+                                    containerClassName="flex items-center cursor-pointer ml-lg"
+                                    id="sms_verification"
+                                    label="SMS"
+                                    name="method"
+                                    value={1}
+                                    checked={method === 1}
                                 />
                             </div>
                         </section>
