@@ -4,11 +4,37 @@ import InputField from 'components/utilities/InputField';
 import Select from 'components/utilities/Select';
 import Radio from 'components/utilities/Radio';
 
-const years = Array.from({ length: 100 }, (_, i) => new Date().getFullYear() - (i + 1));
+interface MonthOption {
+    label: string;
+    value: string;
+}
+
 const months = [
     'January', 'February', 'March', 'April', 'May', 'June',
     'July', 'August', 'September', 'October', 'November', 'December',
 ];
+
+const years = Array.from({ length: 100 }, (_, i) => {
+    const item = new Date().getFullYear() - (i + 1);
+
+    return {
+        label: `${item}`,
+        value: item,
+    };
+});
+
+const generateMonths = () => {
+    const items: MonthOption[] = [];
+
+    months.forEach((month) => {
+        items.push({
+            label: month,
+            value: month,
+        });
+    });
+
+    return items;
+};
 
 export default function Register() {
     const [gender, setGender] = useState<'Male' | 'Female' | null>(null);
@@ -73,7 +99,7 @@ export default function Register() {
                                 <Select
                                     className="bg-skin-bg-contrast text-skin-text rounded-md p-sm cursor-pointer"
                                     placeholder="Month"
-                                    items={months}
+                                    items={generateMonths()}
                                 />
                                 <input
                                     className="bg-skin-bg-contrast text-skin-text p-sm rounded-md ml-md"
