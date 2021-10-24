@@ -2,7 +2,7 @@ import { MdAccountCircle, MdOutlinePersonRemove, MdPersonAddAlt } from 'react-ic
 
 export default function RightSidebar() {
     return (
-        <aside className="w-[280px] sticky top-[61px] left-[0px] main-content bg-skin-bg-contrast-light p-lg">
+        <aside className="w-[280px] sticky top-[61px] left-[0px] full-height bg-skin-bg-contrast-light p-lg">
             <header className="flex items-center">
                 <h3 className="text-skin-text-light font-bold">Search people</h3>
                 <a className="text-primary text-sm ml-auto" href="/">See all</a>

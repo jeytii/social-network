@@ -13,7 +13,7 @@ export default function LeftSidebar() {
 
     return (
         <aside className={clsx(
-            'sticky top-[61px] left-[0px] main-content bg-skin-bg-contrast-light',
+            'sticky top-[61px] left-[0px] full-height bg-skin-bg-contrast-light',
             isPortrait ? 'w-[210px]' : 'auto',
         )}
         >
