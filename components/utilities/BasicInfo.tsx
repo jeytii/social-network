@@ -22,10 +22,7 @@ function BasicInfo({
 
             <div className="ml-sm">
                 <span className="block text-skin-text font-bold text-xs">{name}</span>
-                <span className="block text-skin-text-light text-xs">
-                    @
-                    {username}
-                </span>
+                <span className="block text-skin-text-light text-xs">{username}</span>
             </div>
         </div>
     );

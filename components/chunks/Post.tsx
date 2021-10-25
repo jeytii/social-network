@@ -15,7 +15,7 @@ export default function Post({ className, ...props }: Props) {
         <article className={clsx('bg-skin-bg-contrast rounded-md', className)} {...props}>
             <section className="p-md">
                 <div className="flex items-center">
-                    <BasicInfo imageUrl="/" imageSize={50} gender="Male" name="John doe" username="john.doe" />
+                    <BasicInfo imageUrl="/" imageSize={50} gender="Male" name="John doe" username="@john.doe" />
                     <MdMoreHoriz className="text-skin-text-light text-lg ml-auto" />
                 </div>
 
