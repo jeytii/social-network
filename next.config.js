@@ -6,6 +6,7 @@ module.exports = {
             ...config.resolve.alias,
             pages: resolve(__dirname, 'pages/'),
             components: resolve(__dirname, 'components/'),
+            hooks: resolve(__dirname, 'hooks/'),
         };
 
         return config;
