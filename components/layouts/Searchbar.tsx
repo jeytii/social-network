@@ -1,10 +1,7 @@
-import { useMediaQuery } from 'react-responsive';
 import { MdSearch } from 'react-icons/md';
 import clsx from 'clsx';
 
-export default function Searchbar() {
-    const isMobile = useMediaQuery({ maxWidth: 480 });
-
+export default function Searchbar({ isMobile }: { isMobile: boolean }) {
     return (
         <form className={clsx(
             'flex rounded-full',

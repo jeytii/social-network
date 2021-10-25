@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { useMediaQuery } from 'react-responsive';
 import {
     MdOutlineHome,
@@ -7,9 +8,11 @@ import {
     MdOutlineSettings,
 } from 'react-icons/md';
 import clsx from 'clsx';
+import useWindowSize from 'hooks/useWindowSize';
 
 export default function LeftSidebar() {
-    const isPortrait = useMediaQuery({ minWidth: 690 });
+    const windowSize = useWindowSize();
+    const isPortrait = useMediaQuery({ minWidth: 690 }, windowSize);
 
     return (
         <aside className={clsx(
@@ -18,50 +21,55 @@ export default function LeftSidebar() {
         )}
         >
             <nav>
-                <a
-                    className="flex items-center no-underline bg-skin-bg-contrast-light text-primary p-lg hover:bg-skin-bg-contrast-light"
-                    href="/"
-                    aria-label="Home link"
-                >
-                    <MdOutlineHome className="text-xl" />
-                    {isPortrait && <span className="ml-lg">Home</span>}
-                </a>
+                <Link href="/">
+                    <span
+                        className="flex items-center no-underline bg-skin-bg-contrast-light text-primary p-lg cursor-pointer hover:bg-skin-bg-contrast-light"
+                        aria-label="Home link"
+                    >
+                        <MdOutlineHome className="text-xl" />
+                        {isPortrait && <span className="ml-lg font-semibold">Home</span>}
+                    </span>
+                </Link>
 
-                <a
-                    className="flex items-center no-underline text-skin-text-light p-lg hover:bg-skin-bg-contrast-light"
-                    href="/"
-                    aria-label="Profile link"
-                >
-                    <MdAccountCircle className="text-xl" />
-                    {isPortrait && <span className="ml-lg">Profile</span>}
-                </a>
+                <Link href="/">
+                    <span
+                        className="flex items-center no-underline text-skin-text-light p-lg cursor-pointer hover:bg-skin-bg-contrast-light"
+                        aria-label="Profile link"
+                    >
+                        <MdAccountCircle className="text-xl" />
+                        {isPortrait && <span className="ml-lg font-semibold">Profile</span>}
+                    </span>
+                </Link>
 
-                <a
-                    className="flex items-center no-underline text-skin-text-light p-lg hover:bg-skin-bg-contrast-light"
-                    href="/"
-                    aria-label="Notifications link"
-                >
-                    <MdOutlineNotifications className="text-xl" />
-                    {isPortrait && <span className="ml-lg">Notifications</span>}
-                </a>
+                <Link href="/">
+                    <span
+                        className="flex items-center no-underline text-skin-text-light p-lg cursor-pointer hover:bg-skin-bg-contrast-light"
+                        aria-label="Notifications link"
+                    >
+                        <MdOutlineNotifications className="text-xl" />
+                        {isPortrait && <span className="ml-lg font-semibold">Notifications</span>}
+                    </span>
+                </Link>
 
-                <a
-                    className="flex items-center no-underline text-skin-text-light p-lg hover:bg-skin-bg-contrast-light"
-                    href="/"
-                    aria-label="Search link"
-                >
-                    <MdOutlineGroups className="text-xl" />
-                    {isPortrait && <span className="ml-lg">Search people</span>}
-                </a>
+                <Link href="/">
+                    <span
+                        className="flex items-center no-underline text-skin-text-light p-lg cursor-pointer hover:bg-skin-bg-contrast-light"
+                        aria-label="Search link"
+                    >
+                        <MdOutlineGroups className="text-xl" />
+                        {isPortrait && <span className="ml-lg font-semibold">Search people</span>}
+                    </span>
+                </Link>
 
-                <a
-                    className="flex items-center no-underline text-skin-text-light p-lg hover:bg-skin-bg-contrast-light"
-                    href="/"
-                    aria-label="Settings link"
-                >
-                    <MdOutlineSettings className="text-xl" />
-                    {isPortrait && <span className="ml-lg">Settings</span>}
-                </a>
+                <Link href="/">
+                    <span
+                        className="flex items-center no-underline text-skin-text-light p-lg cursor-pointer hover:bg-skin-bg-contrast-light"
+                        aria-label="Settings link"
+                    >
+                        <MdOutlineSettings className="text-xl" />
+                        {isPortrait && <span className="ml-lg font-semibold">Settings</span>}
+                    </span>
+                </Link>
             </nav>
         </aside>
     );
