@@ -7,7 +7,7 @@ import useWindowSize from 'hooks/useWindowSize';
 import Searchbar from './layouts/Searchbar';
 import LeftSidebar from './layouts/LeftSidebar';
 import RightSidebar from './layouts/RIghtSidebar';
-import BottomNav from './chunks/BottomNav';
+import BottomNav from './layouts/BottomNav';
 import Logo from './Logo';
 
 interface Props {
