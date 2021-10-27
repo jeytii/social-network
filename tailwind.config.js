@@ -59,6 +59,9 @@ module.exports = {
             sm: '10px',
             xs: '5px',
         },
+        stroke: {
+            current: 'rgba(36, 142, 201, .8)',
+        },
         extend: {},
     },
     variants: {
