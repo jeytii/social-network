@@ -17,13 +17,13 @@ export default function LeftSidebar() {
     return (
         <aside className={clsx(
             'sticky top-[61px] left-[0px] full-height bg-skin-bg-contrast-light',
-            isPortrait ? 'w-[210px]' : 'auto',
+            isPortrait ? 'w-[200px]' : 'auto',
         )}
         >
             <nav>
                 <Link href="/">
                     <span
-                        className="flex items-center no-underline bg-skin-bg-contrast-light text-primary p-lg cursor-pointer hover:bg-skin-bg-contrast-light"
+                        className="flex items-center no-underline bg-skin-bg-contrast-light text-primary text-sm p-lg cursor-pointer hover:bg-skin-bg-contrast-light"
                         aria-label="Home link"
                     >
                         <MdOutlineHome className="text-xl" />
@@ -33,7 +33,7 @@ export default function LeftSidebar() {
 
                 <Link href="/">
                     <span
-                        className="flex items-center no-underline text-skin-text-light p-lg cursor-pointer hover:bg-skin-bg-contrast-light"
+                        className="flex items-center no-underline text-skin-text-light text-sm p-lg cursor-pointer hover:bg-skin-bg-contrast-light"
                         aria-label="Profile link"
                     >
                         <MdAccountCircle className="text-xl" />
@@ -43,7 +43,7 @@ export default function LeftSidebar() {
 
                 <Link href="/">
                     <span
-                        className="flex items-center no-underline text-skin-text-light p-lg cursor-pointer hover:bg-skin-bg-contrast-light"
+                        className="flex items-center no-underline text-skin-text-light text-sm p-lg cursor-pointer hover:bg-skin-bg-contrast-light"
                         aria-label="Notifications link"
                     >
                         <MdOutlineNotifications className="text-xl" />
@@ -53,7 +53,7 @@ export default function LeftSidebar() {
 
                 <Link href="/">
                     <span
-                        className="flex items-center no-underline text-skin-text-light p-lg cursor-pointer hover:bg-skin-bg-contrast-light"
+                        className="flex items-center no-underline text-skin-text-light text-sm p-lg cursor-pointer hover:bg-skin-bg-contrast-light"
                         aria-label="Search link"
                     >
                         <MdOutlineGroups className="text-xl" />
@@ -63,7 +63,7 @@ export default function LeftSidebar() {
 
                 <Link href="/">
                     <span
-                        className="flex items-center no-underline text-skin-text-light p-lg cursor-pointer hover:bg-skin-bg-contrast-light"
+                        className="flex items-center no-underline text-skin-text-light text-sm p-lg cursor-pointer hover:bg-skin-bg-contrast-light"
                         aria-label="Settings link"
                     >
                         <MdOutlineSettings className="text-xl" />
