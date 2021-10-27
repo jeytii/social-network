@@ -4,19 +4,22 @@ import { useMediaQuery } from 'react-responsive';
 import { MdOutlineWbSunny, MdModeNight } from 'react-icons/md';
 import clsx from 'clsx';
 import useWindowSize from 'hooks/useWindowSize';
+import useRendered from 'hooks/useRendered';
 import Searchbar from './layouts/Searchbar';
 import LeftSidebar from './layouts/LeftSidebar';
 import RightSidebar from './layouts/RIghtSidebar';
 import BottomNav from './layouts/BottomNav';
+import Spinner from './vectors/Spinner';
 import Logo from './Logo';
 
 interface Props {
-    title: string;
+    title?: string;
     children: ReactNode;
 }
 
-export default function Protected({ title, children }: Props) {
+function Protected({ title, children }: Props) {
     const [nightMode, setNightMode] = useState<boolean>(false);
+    const rendered = useRendered();
     const windowSize = useWindowSize();
     const isDesktop = useMediaQuery({ minWidth: 1024 }, windowSize);
     const isMobile = useMediaQuery({ maxWidth: 480 }, windowSize);
@@ -34,7 +37,7 @@ export default function Protected({ title, children }: Props) {
     }
 
     return (
-        <section className="bg-skin-bg h-screen overflow-auto">
+        <main className="bg-skin-bg h-screen overflow-auto">
             <Head>
                 <title>{title}</title>
                 <link rel="icon" href="/favicon.ico" />
@@ -64,17 +67,23 @@ export default function Protected({ title, children }: Props) {
                 </label>
             </header>
 
-            <main className="flex items-start">
+            <section className="flex items-start">
                 {!isMobile && <LeftSidebar />}
 
-                <section className="flex-1 p-lg">
-                    {children}
+                <section className="flex-1">
+                    {rendered ? children : <Spinner className="p-lg" />}
                 </section>
 
                 {isDesktop && <RightSidebar />}
-            </main>
+            </section>
 
             {isMobile && <BottomNav />}
-        </section>
+        </main>
     );
 }
+
+Protected.defaultProps = {
+    title: 'Loading...',
+};
+
+export default Protected;
