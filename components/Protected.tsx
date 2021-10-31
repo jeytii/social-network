@@ -37,41 +37,50 @@ function Protected({ title, children }: Props) {
     }
 
     return (
-        <main className="bg-skin-bg h-screen overflow-auto">
+        <main className='bg-skin-bg h-screen overflow-auto'>
             <Head>
                 <title>{title}</title>
-                <link rel="icon" href="/favicon.ico" />
+                <link rel='icon' href='/favicon.ico' />
             </Head>
 
-            <header className={clsx(
-                'sticky top-[0] flex items-center bg-skin-bg py-sm px-lg drop-shadow-md z-10',
-                isMobile && 'gap-md',
-            )}
+            <header
+                className={clsx(
+                    'sticky top-[0] flex items-center bg-skin-bg py-sm px-lg drop-shadow-md z-10',
+                    isMobile && 'gap-md',
+                )}
             >
-                <a className="no-underline" href="/" aria-label="Logo link">
+                <a className='no-underline' href='/' aria-label='Logo link'>
                     <Logo />
                 </a>
 
                 <Searchbar isMobile={isMobile} />
 
-                <label className="cursor-pointer ml-auto" htmlFor="theme-toggler" title="Toggle theme" aria-label="Toggle theme">
-                    <input className="hidden" type="checkbox" id="theme-toggler" onChange={toggleDarkMode} />
+                <label
+                    className='cursor-pointer ml-auto'
+                    htmlFor='theme-toggler'
+                    title='Toggle theme'
+                    aria-label='Toggle theme'
+                >
+                    <input
+                        className='hidden'
+                        type='checkbox'
+                        id='theme-toggler'
+                        onChange={toggleDarkMode}
+                    />
 
-                    {
-                        nightMode ? (
-                            <MdModeNight className="text-skin-text-light text-lg" />
-                        ) : (
-                            <MdOutlineWbSunny className="text-skin-text-light text-lg" />
-                        )
-                    }
+                    {nightMode ? (
+                        <MdModeNight className='text-skin-text-light text-lg' />
+                    ) : (
+                        <MdOutlineWbSunny className='text-skin-text-light text-lg' />
+                    )}
                 </label>
             </header>
 
-            <section className="flex items-start">
+            <section className='flex items-start'>
                 {!isMobile && <LeftSidebar />}
 
-                <section className="flex-1">
-                    {rendered ? children : <Spinner className="p-lg" />}
+                <section className='flex-1'>
+                    {rendered ? children : <Spinner className='p-lg' />}
                 </section>
 
                 {isDesktop && <RightSidebar />}

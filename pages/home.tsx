@@ -10,23 +10,23 @@ const items = [
 
 export default function Home() {
     return (
-        <Protected title="Home">
-            <div className="p-lg">
+        <Protected title='Home'>
+            <div className='p-lg'>
                 <PostBox />
 
-                <div className="block mt-lg" aria-label="Sorting options">
-                    <span className="text-skin-text text-sm">Sort by:</span>
+                <div className='block mt-lg' aria-label='Sorting options'>
+                    <span className='text-skin-text text-sm'>Sort by:</span>
                     <Select
-                        className="text-skin-text-light text-sm bg-skin-bg ml-sm cursor-pointer"
+                        className='text-skin-text-light text-sm bg-skin-bg ml-sm cursor-pointer'
                         items={items}
-                        defaultValue="created_at"
+                        defaultValue='created_at'
                     />
                 </div>
 
-                <section className="mt-lg">
+                <section className='mt-lg'>
                     <Post />
-                    <Post className="mt-lg" />
-                    <Post className="mt-lg" />
+                    <Post className='mt-lg' />
+                    <Post className='mt-lg' />
                 </section>
             </div>
         </Protected>

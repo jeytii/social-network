@@ -5,8 +5,13 @@ import Comments from 'components/layouts/profile/Comments';
 import Bookmarks from 'components/layouts/profile/Bookmarks';
 import ProfileSectionNotFound from 'components/layouts/profile/NotFound';
 
-export default function useProfileSection(section?: string | string[]): ComponentType {
-    const routeSection = Array.isArray(section) && !!section.length ? `/${section.join('/')}` : '/';
+export default function useProfileSection(
+    section?: string | string[],
+): ComponentType {
+    const routeSection =
+        Array.isArray(section) && !!section.length
+            ? `/${section.join('/')}`
+            : '/';
 
     if (routeSection === '/') {
         return Posts;

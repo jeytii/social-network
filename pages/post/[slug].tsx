@@ -5,16 +5,16 @@ import CommentBox from 'components/chunks/CommentBox';
 
 export default function ViewPost() {
     return (
-        <Protected title="Sosyal.me">
-            <div className="p-lg">
+        <Protected title='Sosyal.me'>
+            <div className='p-lg'>
                 <Post />
 
                 <CommentBox />
 
-                <section className="mt-lg">
+                <section className='mt-lg'>
                     <Comment />
-                    <Comment className="mt-lg" />
-                    <Comment className="mt-lg" />
+                    <Comment className='mt-lg' />
+                    <Comment className='mt-lg' />
                 </section>
             </div>
         </Protected>

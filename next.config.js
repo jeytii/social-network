@@ -1,7 +1,7 @@
 const { resolve } = require('path');
 
 module.exports = {
-    webpack: (config) => {
+    webpack: config => {
         config.resolve.alias = {
             ...config.resolve.alias,
             pages: resolve(__dirname, 'pages/'),

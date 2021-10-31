@@ -10,9 +10,7 @@ export default function TextLink({ href, children, ...props }: Props) {
     return (
         <div {...props}>
             <Link href={href}>
-                <span className="block text-sm cursor-pointer">
-                    {children}
-                </span>
+                <span className='block text-sm cursor-pointer'>{children}</span>
             </Link>
         </div>
     );

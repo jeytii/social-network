@@ -9,13 +9,13 @@ interface Props {
 
 export default function Public({ title, children }: Props) {
     return (
-        <section className="bg-skin-bg h-screen">
+        <section className='bg-skin-bg h-screen'>
             <Head>
                 <title>{title}</title>
-                <link rel="icon" href="/favicon.ico" />
+                <link rel='icon' href='/favicon.ico' />
             </Head>
 
-            <header className="flex items-center justify-center py-lg">
+            <header className='flex items-center justify-center py-lg'>
                 <Logo />
             </header>
 
