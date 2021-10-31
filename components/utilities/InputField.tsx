@@ -13,14 +13,11 @@ function InputField({
 
     return (
         <section className={containerClassName}>
-            <label className="text-skin-text font-bold text-md" htmlFor={props.id}>
+            <label className="text-skin-text text-sm font-bold" htmlFor={props.id}>
                 {label}
             </label>
 
-            <input
-                className="block w-full bg-skin-bg-contrast text-skin-text p-sm rounded-md mt-xs"
-                {...props}
-            />
+            <input className="textfield mt-xs" {...props} />
 
             {hasError && <p className="text-danger text-sm mt-xs mb-0">{error[0]}</p>}
         </section>
@@ -28,7 +25,7 @@ function InputField({
 }
 
 InputField.defaultProps = {
-    containerClassName: '',
+    containerClassName: undefined,
 };
 
 export default InputField;
