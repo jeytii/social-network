@@ -1,40 +1,7 @@
 import { useState } from 'react';
 import Public from 'components/Public';
 import InputField from 'components/utilities/InputField';
-import Select from 'components/utilities/Select';
 import Radio from 'components/utilities/Radio';
-
-interface MonthOption {
-    label: string;
-    value: string;
-}
-
-const months = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December',
-];
-
-const years = Array.from({ length: 100 }, (_, i) => {
-    const item = new Date().getFullYear() - (i + 1);
-
-    return {
-        label: `${item}`,
-        value: item,
-    };
-});
-
-const generateMonths = () => {
-    const items: MonthOption[] = [];
-
-    months.forEach((month) => {
-        items.push({
-            label: month,
-            value: month,
-        });
-    });
-
-    return items;
-};
 
 export default function Register() {
     const [gender, setGender] = useState<'Male' | 'Female' | null>(null);
@@ -90,35 +57,16 @@ export default function Register() {
                             label="Confirm password"
                         />
 
-                        <section className="mt-lg">
-                            <span className="block text-skin-text font-bold text-md">
+                        <label className="block mt-lg" htmlFor="birthdate">
+                            <span className="block text-skin-text text-sm font-bold">
                                 Birthdate
                             </span>
 
-                            <div className="flex mt-xs">
-                                <Select
-                                    className="bg-skin-bg-contrast text-skin-text rounded-md p-sm cursor-pointer"
-                                    placeholder="Month"
-                                    items={generateMonths()}
-                                />
-                                <input
-                                    className="bg-skin-bg-contrast text-skin-text p-sm rounded-md ml-md"
-                                    type="number"
-                                    placeholder="Day"
-                                    min="1"
-                                    max="31"
-                                    defaultValue="1"
-                                />
-                                <Select
-                                    className="bg-skin-bg-contrast text-skin-text rounded-md p-sm cursor-pointer ml-md"
-                                    placeholder="Year"
-                                    items={years}
-                                />
-                            </div>
-                        </section>
+                            <input className="w-full bg-skin-bg-contrast text-skin-text text-sm rounded-md p-sm border border-skin-bg-contrast cursor-pointer mt-xs appearance-none" id="birthdate" type="date" />
+                        </label>
 
                         <section className="mt-lg">
-                            <span className="block text-skin-text font-bold text-md">
+                            <span className="block text-skin-text text-sm font-bold">
                                 Gender
                             </span>
 
@@ -133,7 +81,7 @@ export default function Register() {
                                 />
 
                                 <Radio
-                                    containerClassName="flex items-center cursor-pointer ml-lg"
+                                    containerClassName="flex items-center cursor-pointer ml-xl"
                                     id="female"
                                     label="Female"
                                     name="gender"
@@ -144,7 +92,7 @@ export default function Register() {
                         </section>
 
                         <section className="mt-lg">
-                            <span className="block text-skin-text font-bold text-md">
+                            <span className="block text-skin-text text-sm font-bold">
                                 Verification method
                             </span>
 
@@ -159,7 +107,7 @@ export default function Register() {
                                 />
 
                                 <Radio
-                                    containerClassName="flex items-center cursor-pointer ml-lg"
+                                    containerClassName="flex items-center cursor-pointer ml-xl"
                                     id="sms_verification"
                                     label="SMS"
                                     name="method"
