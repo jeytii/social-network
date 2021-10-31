@@ -24,16 +24,7 @@
 
 @layer components {
     .btn-primary {
-        @apply bg-primary rounded-md font-bold py-sm px-lg;
-        color: #fff;
-    }
-
-    .btn-primary-outline {
-        @apply text-primary font-bold border border-primary rounded-3xl hover:bg-primary;
-        background: transparent;
-    }
-
-    .btn-primary-outline:hover {
+        @apply bg-primary text-sm font-bold rounded-md py-sm px-lg;
         color: #fff;
     }
 
@@ -45,6 +36,15 @@
         @apply bg-primary-light;
         cursor: not-allowed;
     }
+
+    .btn-primary-outline {
+        @apply text-primary font-bold border border-primary rounded-3xl hover:bg-primary;
+        background: transparent;
+    }
+
+    .btn-primary-outline:hover {
+        color: #fff;
+    }
 }
 
 @layer utilities {
@@ -52,6 +52,14 @@
         height: calc(100vh - 61px);
     }
     
+    .transparent {
+        background: transparent;
+    }
+
+    .textfield {
+        @apply block w-full bg-skin-bg-contrast text-skin-text text-sm border border-skin-bg-contrast p-sm rounded-md;
+    }
+
     .paragraph-sm {
         @apply text-sm leading-relaxed;
     }
@@ -62,10 +70,6 @@
 
     .paragraph-lg {
         @apply text-lg leading-relaxed;
-    }
-
-    .transparent {
-        background: transparent;
     }
 
     .active-profile-nav-link {
