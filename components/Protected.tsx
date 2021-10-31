@@ -1,5 +1,5 @@
-import { ChangeEvent, ReactNode, useState } from 'react';
 import Head from 'next/head';
+import { ChangeEvent, ReactNode, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { MdOutlineWbSunny, MdModeNight } from 'react-icons/md';
 import clsx from 'clsx';
@@ -39,6 +39,16 @@ function Protected({ title, children }: Props) {
     return (
         <main className='bg-skin-bg h-screen overflow-auto'>
             <Head>
+                <link rel='preconnect' href='https://fonts.googleapis.com' />
+                <link
+                    rel='preconnect'
+                    href='https://fonts.gstatic.com'
+                    crossOrigin
+                />
+                <link
+                    href='https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap'
+                    rel='stylesheet'
+                />
                 <title>{title}</title>
                 <link rel='icon' href='/favicon.ico' />
             </Head>
