@@ -40,8 +40,8 @@ export default function ImageUploader() {
                 </div>
             )}
 
-            <p className='text-skin-text-light text-xs text-center mt-xs'>
-                Resolution must be between <b>200x200</b> and <b>800x800</b>.
+            <p className='text-skin-text-light text-sm text-center mt-xs'>
+                Must be between <b>200x200</b> and <b>800x800</b>.
             </p>
         </section>
     );

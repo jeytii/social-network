@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import { InputHTMLAttributes } from 'react';
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
@@ -6,19 +7,25 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
     error: string[] | null;
 }
 
-function InputField({ containerClassName, label, error, ...props }: Props) {
+function InputField({
+    containerClassName,
+    className,
+    label,
+    error,
+    ...props
+}: Props) {
     const hasError = !!error && !!error.length;
 
     return (
         <section className={containerClassName}>
             <label
-                className='text-skin-text text-sm font-bold'
+                className='text-skin-text text-md font-bold'
                 htmlFor={props.id}
             >
                 {label}
             </label>
 
-            <input className='textfield mt-xs' {...props} />
+            <input className={clsx('textfield mt-xs', className)} {...props} />
 
             {hasError && (
                 <p className='text-danger text-sm mt-xs mb-0'>{error[0]}</p>

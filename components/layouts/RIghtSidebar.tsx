@@ -5,10 +5,10 @@ export default function RightSidebar() {
     return (
         <aside className='w-[280px] sticky top-[61px] left-[0px] full-height bg-skin-bg-contrast-light p-lg'>
             <header className='flex items-center'>
-                <h3 className='text-skin-text-light text-sm font-bold'>
+                <h3 className='text-skin-text-light text-md font-bold'>
                     Search people
                 </h3>
-                <a className='text-primary text-xs ml-auto' href='/'>
+                <a className='text-primary text-sm ml-auto' href='/'>
                     See all
                 </a>
             </header>
@@ -20,7 +20,6 @@ export default function RightSidebar() {
                         username='@john.doe'
                         gender='Male'
                         imageUrl='/'
-                        imageSize={40}
                     />
 
                     <button
@@ -37,7 +36,6 @@ export default function RightSidebar() {
                         username='@john.doe'
                         gender='Male'
                         imageUrl='/'
-                        imageSize={40}
                     />
 
                     <button
@@ -54,7 +52,6 @@ export default function RightSidebar() {
                         username='@john.doe'
                         gender='Male'
                         imageUrl='/'
-                        imageSize={40}
                     />
 
                     <button

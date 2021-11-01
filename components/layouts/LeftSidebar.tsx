@@ -18,42 +18,42 @@ export default function LeftSidebar() {
         <aside
             className={clsx(
                 'sticky top-[61px] left-[0px] full-height bg-skin-bg-contrast-light',
-                isPortrait ? 'w-[200px]' : 'auto',
+                isPortrait ? 'w-[210px]' : 'auto',
             )}
         >
             <nav>
                 <Link href='/'>
                     <span
-                        className='flex items-center no-underline bg-skin-bg-contrast-light text-primary text-sm p-lg cursor-pointer hover:bg-skin-bg-contrast-light'
+                        className='flex items-center no-underline bg-skin-bg-contrast-light text-md text-primary p-lg cursor-pointer hover:bg-skin-bg-contrast-light'
                         aria-label='Home link'
                     >
                         <MdOutlineHome className='text-xl' />
                         {isPortrait && (
-                            <span className='ml-lg font-semibold'>Home</span>
+                            <span className='ml-lg font-bold'>Home</span>
                         )}
                     </span>
                 </Link>
 
                 <Link href='/'>
                     <span
-                        className='flex items-center no-underline text-skin-text-light text-sm p-lg cursor-pointer hover:bg-skin-bg-contrast-light'
+                        className='flex items-center no-underline text-md text-skin-text-light p-lg cursor-pointer hover:bg-skin-bg-contrast-light'
                         aria-label='Profile link'
                     >
                         <MdAccountCircle className='text-xl' />
                         {isPortrait && (
-                            <span className='ml-lg font-semibold'>Profile</span>
+                            <span className='ml-lg font-bold'>Profile</span>
                         )}
                     </span>
                 </Link>
 
                 <Link href='/'>
                     <span
-                        className='flex items-center no-underline text-skin-text-light text-sm p-lg cursor-pointer hover:bg-skin-bg-contrast-light'
+                        className='flex items-center no-underline text-md text-skin-text-light p-lg cursor-pointer hover:bg-skin-bg-contrast-light'
                         aria-label='Notifications link'
                     >
                         <MdOutlineNotifications className='text-xl' />
                         {isPortrait && (
-                            <span className='ml-lg font-semibold'>
+                            <span className='ml-lg font-bold'>
                                 Notifications
                             </span>
                         )}
@@ -62,12 +62,12 @@ export default function LeftSidebar() {
 
                 <Link href='/'>
                     <span
-                        className='flex items-center no-underline text-skin-text-light text-sm p-lg cursor-pointer hover:bg-skin-bg-contrast-light'
+                        className='flex items-center no-underline text-md text-skin-text-light p-lg cursor-pointer hover:bg-skin-bg-contrast-light'
                         aria-label='Search link'
                     >
                         <MdOutlineGroups className='text-xl' />
                         {isPortrait && (
-                            <span className='ml-lg font-semibold'>
+                            <span className='ml-lg font-bold'>
                                 Search people
                             </span>
                         )}
@@ -76,14 +76,12 @@ export default function LeftSidebar() {
 
                 <Link href='/'>
                     <span
-                        className='flex items-center no-underline text-skin-text-light text-sm p-lg cursor-pointer hover:bg-skin-bg-contrast-light'
+                        className='flex items-center no-underline text-md text-skin-text-light p-lg cursor-pointer hover:bg-skin-bg-contrast-light'
                         aria-label='Settings link'
                     >
                         <MdOutlineSettings className='text-xl' />
                         {isPortrait && (
-                            <span className='ml-lg font-semibold'>
-                                Settings
-                            </span>
+                            <span className='ml-lg font-bold'>Settings</span>
                         )}
                     </span>
                 </Link>

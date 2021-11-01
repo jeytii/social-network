@@ -16,7 +16,7 @@ export default function Radio({ containerClassName, label, ...props }: Props) {
             )}
 
             <input className='hidden' type='radio' {...props} />
-            <span className='text-skin-text text-sm ml-xs'>{label}</span>
+            <span className='text-skin-text text-md ml-xs'>{label}</span>
         </label>
     );
 }

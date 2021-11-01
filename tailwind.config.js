@@ -7,10 +7,11 @@ module.exports = {
     darkMode: false, // or 'media' or 'class'
     theme: {
         screens: {
-            sm: '480px',
-            md: '690px',
-            lg: '1024px',
-            xl: '1366px',
+            xs: { max: '360px' },
+            sm: { max: '480px' },
+            md: { max: '690px' },
+            lg: { max: '1024px' },
+            xl: { max: '1366px' },
         },
         colors: {
             primary: {
@@ -50,9 +51,9 @@ module.exports = {
         fontSize: {
             xl: '24px',
             lg: '20px',
-            md: '16px',
-            sm: '14px',
-            xs: '12px',
+            md: '15px',
+            sm: '13px',
+            xs: '11px',
         },
         spacing: {
             xxl: '40px',

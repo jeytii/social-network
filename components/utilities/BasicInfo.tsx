@@ -24,13 +24,14 @@ function BasicInfo({
             <MdAccountCircle
                 className='text-skin-text-light'
                 size={imageSize}
+                viewBox='2 2 20 20'
             />
 
             <figcaption className='ml-sm'>
-                <span className='block text-skin-text font-bold text-xs'>
+                <span className='block text-skin-text font-bold text-sm'>
                     {name}
                 </span>
-                <span className='block text-skin-text-light text-xs'>
+                <span className='block text-skin-text-light text-sm'>
                     {username}
                 </span>
             </figcaption>

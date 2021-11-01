@@ -5,7 +5,7 @@ export default function ForgotPassword() {
     return (
         <Public title='Verify account - Sosyal.me'>
             <div className='py-md sm:px-md'>
-                <main className='max-w-screen-sm m-auto rounded-md bg-skin-bg-contrast p-lg'>
+                <main className='max-w-[480px] m-auto rounded-md bg-skin-bg-contrast p-lg'>
                     <h1 className='text-lg font-bold text-skin-text-light text-center'>
                         Verify your account
                     </h1>
@@ -18,7 +18,7 @@ export default function ForgotPassword() {
                         />
                         <button
                             type='button'
-                            className='btn-primary mt-lg w-full'
+                            className='btn-primary w-full text-md mt-lg'
                             disabled
                         >
                             Verify my account

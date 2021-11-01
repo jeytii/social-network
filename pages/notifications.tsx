@@ -26,9 +26,9 @@ export default function Notifications() {
                             <span className='flex items-center bg-skin-bg-contrast-light text-skin-text border border-skin-bg-contrast p-sm rounded-md cursor-pointer'>
                                 <MdAccountCircle
                                     className='block text-skin-text-light'
-                                    size={50}
+                                    size={60}
                                 />
-                                <span className='text-sm ml-sm'>
+                                <span className='text-md ml-sm sm:text-sm'>
                                     <b>John Doe</b> <span>followed you.</span>
                                 </span>
                             </span>
@@ -40,9 +40,9 @@ export default function Notifications() {
                             <span className='flex items-center bg-primary-lighter text-skin-text border border-primary p-sm rounded-md cursor-pointer'>
                                 <MdAccountCircle
                                     className='block text-skin-text-light'
-                                    size={50}
+                                    size={60}
                                 />
-                                <p className='text-sm ml-sm'>
+                                <p className='text-md ml-sm sm:text-sm'>
                                     <b>John Doe</b> <span>followed you.</span>
                                 </p>
                             </span>
@@ -54,9 +54,9 @@ export default function Notifications() {
                             <span className='flex items-center bg-skin-bg-contrast-light text-skin-text border border-skin-bg-contrast p-sm rounded-md cursor-pointer'>
                                 <MdAccountCircle
                                     className='block text-skin-text-light'
-                                    size={50}
+                                    size={60}
                                 />
-                                <span className='text-sm ml-sm'>
+                                <span className='text-md ml-sm sm:text-sm'>
                                     <b>John Doe</b> <span>followed you.</span>
                                 </span>
                             </span>

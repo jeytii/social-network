@@ -3,7 +3,7 @@ export default function CommentBox() {
         <section className='flex gap-sm items-start mt-lg'>
             <form className='flex-1'>
                 <textarea
-                    className='block bg-skin-bg-contrast text-skin-text text-sm w-full py-sm px-md border border-skin-bg-contrast rounded-3xl resize-none disabled:opacity-7 disabled:text-skin-text-light disabled:cursor-not-allowed'
+                    className='block bg-skin-bg-contrast text-skin-text text-md w-full py-sm px-md border border-skin-bg-contrast rounded-3xl resize-none overflow-x-hidden disabled:opacity-7 disabled:text-skin-text-light disabled:cursor-not-allowed'
                     placeholder='Write a comment'
                     aria-label='Comment box'
                     rows={1}

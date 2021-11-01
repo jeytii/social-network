@@ -4,7 +4,9 @@ export default function PostBox() {
             <textarea
                 className='text-skin-text w-full transparent resize-none rounded-t-md p-md'
                 placeholder="What's on you mind?"
+                rows={3}
             />
+
             <div className='flex items-center py-sm px-md bg-skin-bg-contrast-light rounded-b-md'>
                 <span
                     className='text-sm text-primary'
@@ -13,7 +15,7 @@ export default function PostBox() {
                     300
                 </span>
                 <button
-                    className='btn-primary text-sm rounded-full ml-auto py-xs px-lg'
+                    className='btn-primary rounded-full ml-auto py-xs px-lg'
                     type='button'
                 >
                     Post

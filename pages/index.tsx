@@ -6,20 +6,21 @@ export default function Home() {
     return (
         <Public title='Welcome to Sosyal.me'>
             <div className='py-md sm:px-md'>
-                <main className='max-w-screen-sm m-auto rounded-md bg-skin-bg-contrast p-lg'>
+                <main className='max-w-[480px] m-auto rounded-md bg-skin-bg-contrast p-lg'>
                     <h1 className='text-lg font-bold text-skin-text-light text-center'>
                         Sign in to your account
                     </h1>
 
                     <div className='flex items-center bg-danger-lighter text-danger p-md border-danger rounded-md mt-lg'>
                         <BiErrorCircle className='text-xl' />
-                        <span className='text-sm ml-sm'>
+                        <span className='text-md ml-sm'>
                             Incorrect combination
                         </span>
                     </div>
 
                     <form className='py-lg'>
                         <InputField
+                            className='text-md'
                             id='username'
                             type='text'
                             label='Username or email address'
@@ -27,6 +28,7 @@ export default function Home() {
 
                         <InputField
                             containerClassName='mt-md'
+                            className='text-md'
                             id='password'
                             type='password'
                             label='Password'
@@ -34,7 +36,7 @@ export default function Home() {
 
                         <button
                             type='button'
-                            className='btn-primary mt-lg w-full'
+                            className='btn-primary w-full text-md mt-lg'
                             disabled
                         >
                             Sign in
@@ -43,14 +45,14 @@ export default function Home() {
 
                     <a
                         href='/'
-                        className='text-primary text-sm no-underline text-center block'
+                        className='text-primary text-md no-underline text-center block'
                     >
                         Create an account
                     </a>
 
                     <a
                         href='/'
-                        className='text-skin-text-light text-sm no-underline text-center block mt-sm'
+                        className='text-skin-text-light text-md no-underline text-center block mt-sm'
                     >
                         Forgot password
                     </a>

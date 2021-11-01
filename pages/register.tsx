@@ -10,7 +10,7 @@ export default function Register() {
     return (
         <Public title='Create an account - Sosyal.me'>
             <div className='py-md sm:px-md'>
-                <main className='max-w-screen-sm min-w-max m-auto rounded-md bg-skin-bg-contrast p-lg'>
+                <main className='max-w-[480px] min-w-max m-auto rounded-md bg-skin-bg-contrast p-lg'>
                     <h1 className='text-lg font-bold text-skin-text-light text-center'>
                         Create an account
                     </h1>
@@ -56,19 +56,19 @@ export default function Register() {
                         />
 
                         <label className='block mt-lg' htmlFor='birthdate'>
-                            <span className='block text-skin-text text-sm font-bold'>
+                            <span className='block text-skin-text text-md font-bold'>
                                 Birthdate
                             </span>
 
                             <input
-                                className='w-full bg-skin-bg-contrast text-skin-text text-sm rounded-md p-sm border border-skin-bg-contrast cursor-pointer mt-xs appearance-none'
+                                className='w-full bg-skin-bg-contrast text-skin-text text-md rounded-md p-sm border border-skin-bg-contrast cursor-pointer mt-xs'
                                 id='birthdate'
                                 type='date'
                             />
                         </label>
 
                         <section className='mt-lg'>
-                            <span className='block text-skin-text text-sm font-bold'>
+                            <span className='block text-skin-text text-md font-bold'>
                                 Gender
                             </span>
 
@@ -94,7 +94,7 @@ export default function Register() {
                         </section>
 
                         <section className='mt-lg'>
-                            <span className='block text-skin-text text-sm font-bold'>
+                            <span className='block text-skin-text text-md font-bold'>
                                 Verification method
                             </span>
 
@@ -121,7 +121,7 @@ export default function Register() {
 
                         <button
                             type='button'
-                            className='btn-primary mt-lg w-full'
+                            className='btn-primary w-full text-md mt-lg'
                             disabled
                         >
                             Sign up

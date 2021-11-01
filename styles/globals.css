@@ -57,7 +57,7 @@
     }
 
     .textfield {
-        @apply block w-full bg-skin-bg-contrast text-skin-text text-sm border border-skin-bg-contrast p-sm rounded-md;
+        @apply block w-full bg-skin-bg-contrast text-skin-text border border-skin-bg-contrast p-sm rounded-md;
     }
 
     .paragraph-sm {
@@ -70,6 +70,15 @@
 
     .paragraph-lg {
         @apply text-lg leading-relaxed;
+    }
+
+    .clamp {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -moz-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        -moz-box-orient: vertical;
+        overflow: hidden;
     }
 
     .active-profile-nav-link {

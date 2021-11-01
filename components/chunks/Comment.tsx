@@ -17,13 +17,12 @@ export default function Comment({ className, ...props }: Props) {
         >
             <BasicInfo
                 imageUrl='/'
-                imageSize={40}
                 gender='Male'
                 name='John doe'
                 username='5 hours ago'
             />
 
-            <p className='paragraph-sm text-skin-text my-sm'>
+            <p className='paragraph-md clamp text-skin-text my-sm'>
                 Lorem ipsum dolor sit amet, consectetur adipisicing elit.
                 Molestiae pariatur obcaecati recusandae tempore reprehenderit
                 officia aut culpa deleniti ducimus, blanditiis aliquam
@@ -36,8 +35,8 @@ export default function Comment({ className, ...props }: Props) {
                     className='flex items-center text-skin-text-light hover:text-primary'
                     type='button'
                 >
-                    <MdOutlineThumbUp className='text-md' />
-                    <span className='text-xs ml-xs'>5</span>
+                    <MdOutlineThumbUp className='text-lg' />
+                    <span className='text-sm ml-xs'>5</span>
                 </button>
 
                 <button
@@ -45,7 +44,7 @@ export default function Comment({ className, ...props }: Props) {
                     type='button'
                 >
                     <MdOutlineEditNote className='text-lg' />
-                    <span className='text-xs ml-xs'>Edit</span>
+                    <span className='text-sm ml-xs'>Edit</span>
                 </button>
 
                 <button
@@ -53,7 +52,7 @@ export default function Comment({ className, ...props }: Props) {
                     type='button'
                 >
                     <MdOutlineClear className='text-lg' />
-                    <span className='text-xs ml-xs'>Delete</span>
+                    <span className='text-sm ml-xs'>Delete</span>
                 </button>
             </div>
         </article>
