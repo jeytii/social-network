@@ -5,7 +5,7 @@ import InputField from 'components/utilities/InputField';
 export default function EditProfile() {
     return (
         <Protected title='Edit profile - Sosyal.me'>
-            <section className='p-lg'>
+            <section className='p-lg sm:px-md'>
                 <form className='max-w-[480px] m-auto'>
                     <ImageUploader />
 

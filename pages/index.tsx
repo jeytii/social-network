@@ -5,7 +5,7 @@ import { BiErrorCircle } from 'react-icons/bi';
 export default function Home() {
     return (
         <Public title='Welcome to Sosyal.me'>
-            <div className='py-md sm:px-md'>
+            <div className='py-md'>
                 <main className='max-w-[480px] m-auto rounded-md bg-skin-bg-contrast p-lg'>
                     <h1 className='text-lg font-bold text-skin-text-light text-center'>
                         Sign in to your account

@@ -9,7 +9,7 @@ interface Props {
 
 export default function Public({ title, children }: Props) {
     return (
-        <section className='bg-skin-bg h-screen'>
+        <section className='bg-skin-bg h-screen px-md'>
             <Head>
                 <link rel='preconnect' href='https://fonts.googleapis.com' />
                 <link

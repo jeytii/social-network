@@ -11,7 +11,7 @@ const items = [
 export default function Home() {
     return (
         <Protected title='Home'>
-            <div className='p-lg'>
+            <div className='p-lg sm:px-md'>
                 <PostBox />
 
                 <div className='block mt-lg' aria-label='Sorting options'>

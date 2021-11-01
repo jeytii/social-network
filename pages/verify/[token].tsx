@@ -4,7 +4,7 @@ import InputField from 'components/utilities/InputField';
 export default function ForgotPassword() {
     return (
         <Public title='Verify account - Sosyal.me'>
-            <div className='py-md sm:px-md'>
+            <div className='py-md'>
                 <main className='max-w-[480px] m-auto rounded-md bg-skin-bg-contrast p-lg'>
                     <h1 className='text-lg font-bold text-skin-text-light text-center'>
                         Verify your account

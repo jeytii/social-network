@@ -4,7 +4,7 @@ import InputField from 'components/utilities/InputField';
 export default function ForgotPassword() {
     return (
         <Public title='Forgot password - Sosyal.me'>
-            <div className='py-md sm:px-md'>
+            <div className='py-md'>
                 <main className='max-w-[480px] m-auto rounded-md bg-skin-bg-contrast p-lg'>
                     <div className='bg-primary-lighter rounded-md p-sm'>
                         <p className='text-primary text-md m-0'>

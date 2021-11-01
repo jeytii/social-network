@@ -6,7 +6,7 @@ import CommentBox from 'components/chunks/CommentBox';
 export default function ViewPost() {
     return (
         <Protected title='Sosyal.me'>
-            <div className='p-lg'>
+            <div className='p-lg sm:px-md'>
                 <Post />
 
                 <CommentBox />

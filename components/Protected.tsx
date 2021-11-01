@@ -53,17 +53,12 @@ function Protected({ title, children }: Props) {
                 <link rel='icon' href='/favicon.ico' />
             </Head>
 
-            <header
-                className={clsx(
-                    'sticky top-[0] flex items-center bg-skin-bg py-sm px-lg drop-shadow-md z-10',
-                    isMobile && 'gap-md',
-                )}
-            >
+            <header className='sticky top-[0] flex items-center bg-skin-bg py-sm px-lg drop-shadow-md z-10 sm:px-md sm:gap-md'>
                 <a className='no-underline' href='/' aria-label='Logo link'>
                     <Logo />
                 </a>
 
-                <Searchbar isMobile={isMobile} />
+                <Searchbar />
 
                 <label
                     className='cursor-pointer ml-auto'

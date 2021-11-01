@@ -5,7 +5,7 @@ import Protected from 'components/Protected';
 export default function Notifications() {
     return (
         <Protected title='Notifications - Sosyal.me'>
-            <section className='px-lg pt-sm pb-lg'>
+            <section className='px-lg pt-sm pb-lg sm:px-md'>
                 <div className='flex items-center'>
                     <h1 className='text-skin-text font-semibold'>
                         Notifications

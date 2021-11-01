@@ -9,7 +9,7 @@ export default function Register() {
 
     return (
         <Public title='Create an account - Sosyal.me'>
-            <div className='py-md sm:px-md'>
+            <div className='py-md'>
                 <main className='max-w-[480px] min-w-max m-auto rounded-md bg-skin-bg-contrast p-lg'>
                     <h1 className='text-lg font-bold text-skin-text-light text-center'>
                         Create an account

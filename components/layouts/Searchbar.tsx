@@ -1,14 +1,8 @@
 import { MdSearch } from 'react-icons/md';
-import clsx from 'clsx';
 
-export default function Searchbar({ isMobile }: { isMobile: boolean }) {
+export default function Searchbar() {
     return (
-        <form
-            className={clsx(
-                'flex rounded-full',
-                isMobile ? 'w-full' : 'max-w-xs ml-lg',
-            )}
-        >
+        <form className='flex rounded-full max-w-xs ml-lg sm:max-w-none sm:w-full sm:ml-auto'>
             <input
                 className='flex-1 w-full bg-skin-bg-contrast text-skin-text text-sm border-none rounded-l-full p-sm'
                 type='text'
