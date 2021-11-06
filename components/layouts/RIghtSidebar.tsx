@@ -1,7 +1,15 @@
 import { MdOutlinePersonRemove, MdPersonAddAlt } from 'react-icons/md';
 import BasicInfo from 'components/utilities/BasicInfo';
+import { useRouter } from 'next/router';
+import UserFilterer from './UserFilterer';
 
 export default function RightSidebar() {
+    const { asPath } = useRouter();
+
+    if (asPath === '/search') {
+        return <UserFilterer />;
+    }
+
     return (
         <aside className='w-[280px] sticky top-[61px] left-[0px] full-height bg-skin-bg-contrast-light p-lg'>
             <header className='flex items-center'>
