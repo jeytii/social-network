@@ -2,7 +2,6 @@ import Head from 'next/head';
 import { ChangeEvent, ReactNode, useState } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { MdOutlineWbSunny, MdModeNight } from 'react-icons/md';
-import clsx from 'clsx';
 import useWindowSize from 'hooks/useWindowSize';
 import useRendered from 'hooks/useRendered';
 import Searchbar from './layouts/Searchbar';
@@ -13,11 +12,11 @@ import Spinner from './vectors/Spinner';
 import Logo from './Logo';
 
 interface Props {
-    title?: string;
+    title: string;
     children: ReactNode;
 }
 
-function Protected({ title, children }: Props) {
+export default function Protected({ title, children }: Props) {
     const [nightMode, setNightMode] = useState<boolean>(false);
     const rendered = useRendered();
     const windowSize = useWindowSize();
@@ -43,7 +42,7 @@ function Protected({ title, children }: Props) {
                 <link
                     rel='preconnect'
                     href='https://fonts.gstatic.com'
-                    crossOrigin
+                    crossOrigin='true'
                 />
                 <link
                     href='https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap'
@@ -95,9 +94,3 @@ function Protected({ title, children }: Props) {
         </main>
     );
 }
-
-Protected.defaultProps = {
-    title: 'Loading...',
-};
-
-export default Protected;
