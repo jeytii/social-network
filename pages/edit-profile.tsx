@@ -18,14 +18,6 @@ export default function EditProfile() {
                         autoFocus
                     />
 
-                    <InputField
-                        containerClassName='mt-lg'
-                        id='location'
-                        label='Location'
-                        aria-label='Location field'
-                        error={null}
-                    />
-
                     <label className='block mt-lg' htmlFor='birthdate'>
                         <span className='block text-skin-text text-md font-bold'>
                             Birthdate
