@@ -27,11 +27,11 @@ function BasicInfo({
                 viewBox='2 2 20 20'
             />
 
-            <figcaption className='ml-sm'>
-                <span className='block text-skin-text font-bold text-sm'>
+            <figcaption className='flex-1 grid px-sm'>
+                <span className='block text-skin-text font-bold text-sm truncate'>
                     {name}
                 </span>
-                <span className='block text-skin-text-light text-sm'>
+                <span className='block text-skin-text-light text-sm truncate'>
                     {username}
                 </span>
             </figcaption>
