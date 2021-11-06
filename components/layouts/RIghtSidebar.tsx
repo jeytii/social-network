@@ -11,7 +11,7 @@ export default function RightSidebar() {
     }
 
     return (
-        <aside className='w-[280px] sticky top-[61px] left-[0px] full-height bg-skin-bg-contrast-light p-lg'>
+        <aside className='w-[280px] sticky top-[59px] left-[0px] full-height bg-skin-bg-contrast-light p-lg'>
             <header className='flex items-center'>
                 <h3 className='text-skin-text-light text-md font-bold'>
                     Search people
