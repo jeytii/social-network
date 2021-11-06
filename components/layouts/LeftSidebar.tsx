@@ -17,7 +17,7 @@ export default function LeftSidebar() {
     return (
         <aside
             className={clsx(
-                'sticky top-[61px] left-[0px] full-height bg-skin-bg-contrast-light',
+                'w-[210px] sticky top-[61px] left-[0px] full-height bg-skin-bg-contrast-light',
                 isPortrait ? 'w-[210px]' : 'auto',
             )}
         >
@@ -29,7 +29,7 @@ export default function LeftSidebar() {
                     >
                         <MdOutlineHome className='text-xl' />
                         {isPortrait && (
-                            <span className='ml-lg font-bold'>Home</span>
+                            <span className='ml-md font-bold'>Home</span>
                         )}
                     </span>
                 </Link>
@@ -41,7 +41,7 @@ export default function LeftSidebar() {
                     >
                         <MdAccountCircle className='text-xl' />
                         {isPortrait && (
-                            <span className='ml-lg font-bold'>Profile</span>
+                            <span className='ml-md font-bold'>Profile</span>
                         )}
                     </span>
                 </Link>
@@ -53,7 +53,7 @@ export default function LeftSidebar() {
                     >
                         <MdOutlineNotifications className='text-xl' />
                         {isPortrait && (
-                            <span className='ml-lg font-bold'>
+                            <span className='ml-md font-bold'>
                                 Notifications
                             </span>
                         )}
@@ -67,7 +67,7 @@ export default function LeftSidebar() {
                     >
                         <MdOutlineGroups className='text-xl' />
                         {isPortrait && (
-                            <span className='ml-lg font-bold'>
+                            <span className='ml-md font-bold'>
                                 Search people
                             </span>
                         )}
@@ -81,7 +81,7 @@ export default function LeftSidebar() {
                     >
                         <MdOutlineSettings className='text-xl' />
                         {isPortrait && (
-                            <span className='ml-lg font-bold'>Settings</span>
+                            <span className='ml-md font-bold'>Settings</span>
                         )}
                     </span>
                 </Link>
