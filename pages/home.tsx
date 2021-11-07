@@ -2,6 +2,7 @@ import Protected from 'components/Protected';
 import Post from 'components/chunks/Post';
 import PostBox from 'components/chunks/PostBox';
 import Select from 'components/utilities/Select';
+import axios from 'config/axios';
 
 const items = [
     { label: 'Timestamp', value: 'created_at' },
@@ -31,4 +32,30 @@ export default function Home() {
             </div>
         </Protected>
     );
+}
+
+export async function getServerSideProps({ req }) {
+    if (!req.cookies || !req.cookies.token) {
+        return {
+            redirect: {
+                destination: '/',
+                permanent: false,
+            },
+        };
+    }
+
+    try {
+        await axios(req.cookies.token).get(`${process.env.APP_URL}/private`);
+
+        return {
+            props: {},
+        };
+    } catch (e) {
+        return {
+            redirect: {
+                destination: '/',
+                permanent: false,
+            },
+        };
+    }
 }
