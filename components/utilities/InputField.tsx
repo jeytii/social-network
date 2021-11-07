@@ -1,34 +1,53 @@
+import { Control, FieldPathWithValue, useController } from 'react-hook-form';
 import clsx from 'clsx';
-import { InputHTMLAttributes } from 'react';
 
-interface Props extends InputHTMLAttributes<HTMLInputElement> {
+interface IndexFormData {
+    username: string;
+    password: string;
+}
+
+interface Props {
     containerClassName?: string;
+    className?: string;
+    type: string;
     label: string;
-    error: string[] | null;
+    name: FieldPathWithValue<IndexFormData, any, keyof IndexFormData>;
+    control: Control<IndexFormData>;
 }
 
 function InputField({
     containerClassName,
     className,
+    type,
     label,
-    error,
-    ...props
+    name,
+    control,
 }: Props) {
-    const hasError = !!error && !!error.length;
+    const { field, fieldState } = useController({ name, control });
 
     return (
         <section className={containerClassName}>
-            <label
-                className='text-skin-text text-md font-bold'
-                htmlFor={props.id}
-            >
+            <label className='text-skin-text text-md font-bold' htmlFor={name}>
                 {label}
             </label>
 
-            <input className={clsx('textfield mt-xs', className)} {...props} />
+            <input
+                className={clsx(
+                    'w-full bg-skin-bg-contrast text-skin-text border p-sm rounded-md mt-xs',
+                    className,
+                    fieldState.error
+                        ? 'border-danger'
+                        : 'border-skin-bg-contrast',
+                )}
+                id={name}
+                type={type}
+                {...field}
+            />
 
-            {hasError && (
-                <p className='text-danger text-sm mt-xs mb-0'>{error[0]}</p>
+            {!!fieldState.error && (
+                <p className='text-danger text-sm mt-xs mb-0'>
+                    {fieldState.error.message}
+                </p>
             )}
         </section>
     );
@@ -36,6 +55,7 @@ function InputField({
 
 InputField.defaultProps = {
     containerClassName: undefined,
+    className: undefined,
 };
 
 export default InputField;
