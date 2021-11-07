@@ -1,4 +1,4 @@
-import { InputHTMLAttributes } from 'react';
+import { ForwardedRef, forwardRef, InputHTMLAttributes } from 'react';
 import { BiRadioCircle, BiRadioCircleMarked } from 'react-icons/bi';
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
@@ -6,8 +6,11 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
     label: string;
 }
 
-export default function Radio({ containerClassName, label, ...props }: Props) {
-    return (
+export default forwardRef(
+    (
+        { containerClassName, label, ...props }: Props,
+        ref: ForwardedRef<HTMLInputElement>,
+    ) => (
         <label className={containerClassName} htmlFor={props.id}>
             {props.checked ? (
                 <BiRadioCircleMarked className='text-skin-text text-xl' />
@@ -15,8 +18,8 @@ export default function Radio({ containerClassName, label, ...props }: Props) {
                 <BiRadioCircle className='text-skin-text text-xl' />
             )}
 
-            <input className='hidden' type='radio' {...props} />
+            <input ref={ref} className='hidden' type='radio' {...props} />
             <span className='text-skin-text text-md ml-xs'>{label}</span>
         </label>
-    );
-}
+    ),
+);
