@@ -9,11 +9,6 @@ import Public from 'components/Public';
 import InputField from 'components/utilities/InputField';
 import axios from 'config/axios';
 
-interface IndexFormData {
-    username: string;
-    password: string;
-}
-
 interface IndexFormDataError {
     username: string[];
     password: string[];
@@ -41,12 +36,12 @@ export default function Index() {
     const [alertError, setAlertError] = useState<string | null>(null);
     const { replace } = useRouter();
     const {
+        register,
         getValues,
         setError,
         clearErrors,
-        control,
-        formState: { isSubmitting },
-    } = useForm<IndexFormData>({
+        formState: { errors },
+    } = useForm({
         defaultValues: fields,
     });
 
@@ -115,25 +110,24 @@ export default function Index() {
 
                     <form className='py-lg' onSubmit={submit}>
                         <InputField
-                            className='text-md'
                             type='text'
                             label='Username or email address'
-                            name='username'
-                            control={control}
+                            error={errors.username?.message}
+                            {...register('username')}
                         />
 
                         <InputField
                             containerClassName='mt-md'
                             type='password'
                             label='Password'
-                            name='password'
-                            control={control}
+                            error={errors.password?.message}
+                            {...register('password')}
                         />
 
                         <button
                             type='submit'
                             className='btn-primary w-full text-md mt-lg'
-                            disabled={isSubmitting}
+                            disabled
                         >
                             Sign in
                         </button>
