@@ -38,18 +38,9 @@ export default function Protected({ title, children }: Props) {
     return (
         <main className='bg-skin-bg h-screen overflow-auto'>
             <Head>
-                <link rel='preconnect' href='https://fonts.googleapis.com' />
-                <link
-                    rel='preconnect'
-                    href='https://fonts.gstatic.com'
-                    crossOrigin='true'
-                />
-                <link
-                    href='https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap'
-                    rel='stylesheet'
-                />
-                <title>{title}</title>
-                <link rel='icon' href='/favicon.ico' />
+                <title>
+                    {title} - {process.env.NEXT_PUBLIC_APP_NAME}
+                </title>
             </Head>
 
             <header className='sticky top-[0] flex items-center bg-skin-bg-contrast-light py-sm px-lg drop-shadow-md z-10 sm:px-md sm:gap-md'>
