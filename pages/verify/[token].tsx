@@ -1,25 +1,74 @@
+import { useRouter } from 'next/router';
+import { FormEvent, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { AxiosError } from 'axios';
+import Cookies from 'js-cookie';
 import Public from 'components/Public';
 import InputField from 'components/utilities/InputField';
+import axios from 'config/axios';
 
-export default function ForgotPassword() {
+export default function Verification({ token }) {
+    const [alertError, setAlertError] = useState<string | null>(null);
+    const [loading, setLoading] = useState<boolean>(false);
+    const { push } = useRouter();
+    const { register, getValues, setError, formState } = useForm({
+        defaultValues: {
+            code: '',
+        },
+    });
+
+    async function submit(event: FormEvent) {
+        event.preventDefault();
+
+        setLoading(true);
+
+        try {
+            const { data } = await axios().put('/verify', getValues());
+
+            Cookies.set('user', JSON.stringify(data.user));
+            Cookies.set('token', data.token);
+
+            push('/home');
+        } catch (error: AxiosError) {
+            if (error.response?.status === 422) {
+                if (alertError) {
+                    setAlertError(null);
+                }
+
+                setError('code', {
+                    type: 'manual',
+                    message: error.response?.data.errors.code[0],
+                });
+            } else {
+                setAlertError(error.response?.data.message);
+            }
+
+            setLoading(false);
+        }
+    }
+
     return (
-        <Public title='Verify account - Sosyal.me'>
+        <Public title='Verify account'>
             <div className='py-md'>
                 <main className='max-w-[480px] m-auto rounded-md bg-skin-bg-contrast p-lg'>
                     <h1 className='text-lg font-bold text-skin-text-light text-center'>
                         Verify your account
                     </h1>
 
-                    <form className='mt-lg'>
+                    <form className='mt-lg' onSubmit={submit}>
                         <InputField
                             id='code'
                             type='number'
                             label='6-digit verification code'
+                            error={formState.errors.code?.message}
+                            {...register('code', {
+                                valueAsNumber: true,
+                            })}
                         />
                         <button
-                            type='button'
+                            type='submit'
                             className='btn-primary w-full text-md mt-lg'
-                            disabled
+                            disabled={loading}
                         >
                             Verify my account
                         </button>
@@ -28,4 +77,47 @@ export default function ForgotPassword() {
             </div>
         </Public>
     );
+}
+
+export async function getServerSideProps({ params, req }) {
+    if (!req.cookies || !req.cookies.token) {
+        try {
+            await axios().get(`/verify/${params.token}`);
+
+            return {
+                props: {
+                    token: params.token,
+                },
+            };
+        } catch (err) {
+            return {
+                notFound: true,
+            };
+        }
+    }
+
+    try {
+        await axios(req.cookies.token).get(`${process.env.APP_URL}/private`);
+
+        return {
+            redirect: {
+                destination: '/home',
+                permanent: false,
+            },
+        };
+    } catch (e) {
+        try {
+            await axios().get(`/verify/${params.token}`);
+
+            return {
+                props: {
+                    token: params.token,
+                },
+            };
+        } catch (err) {
+            return {
+                notFound: true,
+            };
+        }
+    }
 }
