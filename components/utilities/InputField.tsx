@@ -23,7 +23,7 @@ const InputField = forwardRef(
             <input
                 ref={ref}
                 className={clsx(
-                    'w-full bg-skin-bg-contrast text-md text-skin-text border p-sm rounded-md mt-xs',
+                    'w-full bg-skin-bg-contrast text-md text-skin-text border p-sm rounded-md mt-xs disabled:opacity-50 disabled:cursor-not-allowed',
                     className,
                     error ? 'border-danger' : 'border-skin-bg-contrast',
                 )}
