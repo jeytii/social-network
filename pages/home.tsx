@@ -1,40 +1,26 @@
+import { GetServerSideProps } from 'next';
+import dynamic from 'next/dynamic';
 import Protected from 'components/Protected';
-import Post from 'components/chunks/Post';
 import PostBox from 'components/chunks/PostBox';
-import Select from 'components/utilities/Select';
+import Spinner from 'components/vectors/Spinner';
 import axios from 'config/axios';
 
-const items = [
-    { label: 'Timestamp', value: 'created_at' },
-    { label: 'Number of likes', value: 'likes' },
-];
+const Posts = dynamic(() => import('components/layouts/Posts'), {
+    loading: () => <Spinner className='p-lg' />,
+});
 
 export default function Home() {
     return (
         <Protected title='Home'>
             <div className='p-lg sm:px-md'>
                 <PostBox />
-
-                <div className='block mt-lg' aria-label='Sorting options'>
-                    <span className='text-skin-text text-sm'>Sort by:</span>
-                    <Select
-                        className='text-skin-text-light text-sm bg-skin-bg ml-sm cursor-pointer'
-                        items={items}
-                        defaultValue='created_at'
-                    />
-                </div>
-
-                <section className='mt-lg'>
-                    <Post />
-                    <Post className='mt-lg' />
-                    <Post className='mt-lg' />
-                </section>
+                <Posts />
             </div>
         </Protected>
     );
 }
 
-export async function getServerSideProps({ req }) {
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     if (!req.cookies || !req.cookies.token) {
         return {
             redirect: {
@@ -58,4 +44,4 @@ export async function getServerSideProps({ req }) {
             },
         };
     }
-}
+};
