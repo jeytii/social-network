@@ -27,6 +27,7 @@
         }
     },
     "rules": {
+        "camelcase": "off",
         "no-use-before-define": "off",
         "consistent-return": "off",
         "react/react-in-jsx-scope": "off",
