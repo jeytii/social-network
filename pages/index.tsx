@@ -33,10 +33,12 @@ const fields = {
 };
 
 export default function Index() {
+    const [loading, setLoading] = useState<boolean>(false);
     const [alertError, setAlertError] = useState<string | null>(null);
     const { replace } = useRouter();
     const {
         register,
+        watch,
         getValues,
         setError,
         clearErrors,
@@ -44,6 +46,8 @@ export default function Index() {
     } = useForm({
         defaultValues: fields,
     });
+
+    const [username, password] = watch(['username', 'password']);
 
     function processFormErrors(error: AxiosError) {
         const { errors } = error.response?.data;
@@ -68,6 +72,8 @@ export default function Index() {
     async function submit(event: FormEvent) {
         event.preventDefault();
 
+        setLoading(true);
+
         try {
             const { data } = await axios().post<OkResponse>(
                 '/login',
@@ -82,6 +88,8 @@ export default function Index() {
 
             replace('/home');
         } catch (error: AxiosError) {
+            setLoading(false);
+
             if (error.response.status === 422) {
                 processFormErrors(error);
             } else {
@@ -127,7 +135,9 @@ export default function Index() {
                         <button
                             type='submit'
                             className='btn-primary w-full text-md mt-lg'
-                            disabled
+                            disabled={
+                                !username.length || !password.length || loading
+                            }
                         >
                             Sign in
                         </button>
