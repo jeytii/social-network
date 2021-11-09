@@ -8,6 +8,7 @@ module.exports = {
             components: resolve(__dirname, 'components/'),
             hooks: resolve(__dirname, 'hooks/'),
             config: resolve(__dirname, 'config/'),
+            types: resolve(__dirname, 'types/'),
         };
 
         return config;
