@@ -16,7 +16,7 @@ export default function Search() {
                             name='John Doe'
                             username='@john.doe'
                             gender='Male'
-                            imageUrl='/'
+                            image_url='/'
                             imageSize={50}
                         />
 
@@ -32,7 +32,7 @@ export default function Search() {
                             name='John Doe'
                             username='@john.doe'
                             gender='Male'
-                            imageUrl='/'
+                            image_url='/'
                             imageSize={50}
                         />
 
@@ -48,7 +48,7 @@ export default function Search() {
                             name='John Doe'
                             username='@john.doe'
                             gender='Male'
-                            imageUrl='/'
+                            image_url='/'
                             imageSize={50}
                         />
 

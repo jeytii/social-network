@@ -16,7 +16,7 @@ export default function Comment({ className, ...props }: Props) {
             {...props}
         >
             <BasicInfo
-                imageUrl='/'
+                image_url='/'
                 gender='Male'
                 name='John doe'
                 username='5 hours ago'

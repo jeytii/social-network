@@ -27,7 +27,7 @@ export default function RightSidebar() {
                         name='John Doe'
                         username='@john.doe'
                         gender='Male'
-                        imageUrl='/'
+                        image_url='/'
                     />
 
                     <button
@@ -43,7 +43,7 @@ export default function RightSidebar() {
                         name='John Doe'
                         username='@john.doe'
                         gender='Male'
-                        imageUrl='/'
+                        image_url='/'
                     />
 
                     <button
@@ -59,7 +59,7 @@ export default function RightSidebar() {
                         name='John Doe'
                         username='@john.doe'
                         gender='Male'
-                        imageUrl='/'
+                        image_url='/'
                     />
 
                     <button
