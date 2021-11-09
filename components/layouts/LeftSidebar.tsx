@@ -17,7 +17,7 @@ export default function LeftSidebar() {
     return (
         <aside
             className={clsx(
-                'w-[210px] sticky top-[59px] left-[0px] full-height bg-skin-bg-contrast-light',
+                'sticky top-[59px] left-[0px] full-height bg-skin-bg-contrast-light',
                 isPortrait ? 'w-[210px]' : 'auto',
             )}
         >
