@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useInfiniteQuery } from 'react-query';
+import Cookies from 'js-cookie';
 import Post from 'components/chunks/Post';
 import Select from 'components/utilities/Select';
 import Spinner from 'components/vectors/Spinner';
@@ -19,7 +20,7 @@ const items = [
 ];
 
 async function getPosts() {
-    const { data } = await axios().get('/api/posts');
+    const { data } = await axios(Cookies.get('token')).get('/api/posts');
 
     return data;
 }

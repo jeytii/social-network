@@ -1,10 +1,7 @@
 import axios, { AxiosInstance } from 'axios';
-import Cookies from 'js-cookie';
-
-const authToken = Cookies.get('token');
 
 export default function axiosInstance(
-    token: string | undefined = authToken,
+    token: string | null = null,
 ): AxiosInstance {
     let headers = {};
 
