@@ -8,7 +8,7 @@ import useWindowSize from 'hooks/useWindowSize';
 import useRendered from 'hooks/useRendered';
 import Searchbar from './layouts/Searchbar';
 import LeftSidebar from './layouts/LeftSidebar';
-import RightSidebar from './layouts/RIghtSidebar';
+import RightSidebar from './layouts/right-sidebar';
 import BottomNav from './layouts/BottomNav';
 import Spinner from './vectors/Spinner';
 import Logo from './Logo';
