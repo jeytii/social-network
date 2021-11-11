@@ -1,18 +1,11 @@
-import { useEffect } from 'react';
+import { Fragment, useEffect } from 'react';
 import { useInfiniteQuery } from 'react-query';
 import Cookies from 'js-cookie';
 import Post from 'components/chunks/Post';
 import Select from 'components/utilities/Select';
 import Spinner from 'components/vectors/Spinner';
 import axios from 'config/axios';
-import type { Post as PostType } from 'types/post';
-
-interface Page {
-    items: PostType[];
-    has_more: boolean;
-    next_offset: number | null;
-    status: number;
-}
+import type { PostPage } from 'types/page';
 
 const items = [
     { label: 'Timestamp', value: 'created_at' },
@@ -25,28 +18,15 @@ async function getPosts() {
     return data;
 }
 
-function formatData(pages: Page[] | undefined) {
-    if (!pages || !pages.length) {
-        return [];
-    }
-
-    if (pages.length === 1) {
-        return pages[0].items;
-    }
-
-    return pages.flatMap(page => [...page.items]);
-}
-
 export default function Posts() {
-    const { data, isLoading, isSuccess, refetch } = useInfiniteQuery(
+    const { data, isLoading, isSuccess, refetch } = useInfiniteQuery<PostPage>(
         'posts',
         getPosts,
         {
             enabled: false,
+            getNextPageParam: last => (last.has_more ? last.next_offset : null),
         },
     );
-
-    const pages = formatData(data?.pages);
 
     useEffect(() => {
         refetch();
@@ -56,7 +36,7 @@ export default function Posts() {
         return <Spinner className='p-lg' />;
     }
 
-    if (isSuccess && !pages.length) {
+    if (isSuccess && !data?.pages[0].items.length) {
         return (
             <section className='p-lg'>
                 <h1 className='text-md text-skin-text-light text-center'>
@@ -78,8 +58,12 @@ export default function Posts() {
             </div>
 
             <div>
-                {pages.map(page => (
-                    <Post key={page.slug} className='mt-lg' {...page} />
+                {data?.pages.map(page => (
+                    <Fragment key={page.next_offset}>
+                        {page.items.map(post => (
+                            <Post key={post.slug} className='mt-lg' {...post} />
+                        ))}
+                    </Fragment>
                 ))}
             </div>
         </section>
