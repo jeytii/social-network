@@ -56,7 +56,7 @@ export default function Post({
                 </p>
 
                 <span className='text-skin-text-light text-sm'>
-                    {props.timestamp}
+                    {props.timestamp} {is_edited && '(edited)'}
                 </span>
             </section>
 
