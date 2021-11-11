@@ -11,11 +11,13 @@ export default function Verification() {
     const [alertError, setAlertError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const { push } = useRouter();
-    const { register, getValues, setError, formState } = useForm({
+    const { register, watch, getValues, setError, formState } = useForm({
         defaultValues: {
             code: '',
         },
     });
+
+    const code = watch('code');
 
     async function submit(event: FormEvent) {
         event.preventDefault();
@@ -60,6 +62,7 @@ export default function Verification() {
                         type='number'
                         label='6-digit verification code'
                         error={formState.errors.code?.message}
+                        disabled={loading}
                         {...register('code', {
                             valueAsNumber: true,
                         })}
@@ -67,7 +70,7 @@ export default function Verification() {
                     <button
                         type='submit'
                         className='btn-primary w-full text-md mt-lg'
-                        disabled={loading}
+                        disabled={Number.isNaN(code) || code === '' || loading}
                     >
                         Verify my account
                     </button>

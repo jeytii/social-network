@@ -87,6 +87,7 @@ export default function Register() {
                         type='text'
                         label='Name'
                         error={errors.name?.message}
+                        disabled={loading}
                         {...register('name')}
                     />
 
@@ -95,6 +96,7 @@ export default function Register() {
                         type='email'
                         label='Email address'
                         error={errors.email?.message}
+                        disabled={loading}
                         {...register('email')}
                     />
 
@@ -103,6 +105,7 @@ export default function Register() {
                         type='text'
                         label='Username'
                         error={errors.username?.message}
+                        disabled={loading}
                         {...register('username')}
                     />
 
@@ -112,6 +115,7 @@ export default function Register() {
                         label='Phone number'
                         placeholder='09123456789'
                         error={errors.phone_number?.message}
+                        disabled={loading}
                         {...register('phone_number')}
                     />
 
@@ -120,6 +124,7 @@ export default function Register() {
                         type='password'
                         label='Password'
                         error={errors.password?.message}
+                        disabled={loading}
                         {...register('password')}
                     />
 
@@ -128,15 +133,17 @@ export default function Register() {
                         type='password'
                         label='Confirm password'
                         error={errors.password_confirmation?.message}
+                        disabled={loading}
                         {...register('password_confirmation')}
                     />
 
                     <InputField
                         containerClassName='mt-lg'
-                        className='cursor-poSMSinter'
+                        className='cursor-pointer'
                         type='date'
                         label='Birth date'
                         error={errors.birth_date?.message}
+                        disabled={loading}
                         {...register('birth_date')}
                     />
 
@@ -152,6 +159,7 @@ export default function Register() {
                                 label='Male'
                                 value='Male'
                                 checked={gender === 'Male'}
+                                disabled={loading}
                                 {...register('gender')}
                             />
 
@@ -161,6 +169,7 @@ export default function Register() {
                                 label='Female'
                                 value='Female'
                                 checked={gender === 'Female'}
+                                disabled={loading}
                                 {...register('gender')}
                             />
                         </div>
@@ -184,6 +193,7 @@ export default function Register() {
                                 label='Email'
                                 value='email'
                                 checked={method === 'email'}
+                                disabled={loading}
                                 {...register('method')}
                             />
 
@@ -193,6 +203,7 @@ export default function Register() {
                                 label='SMS'
                                 value='sms'
                                 checked={method === 'sms'}
+                                disabled={loading}
                                 {...register('method')}
                             />
                         </div>

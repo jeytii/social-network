@@ -22,9 +22,13 @@ const fields = {
 export default function ResetPassword({ token }: { token: string }) {
     const [loading, setLoading] = useState<boolean>(false);
     const { replace } = useRouter();
-    const { register, getValues, setError, clearErrors, formState } = useForm({
-        defaultValues: { ...fields, token },
-    });
+    const { register, watch, getValues, setError, clearErrors, formState } =
+        useForm({
+            defaultValues: { ...fields, token },
+        });
+
+    const values = watch(['email', 'password', 'password_confirmation']);
+    const allInputsAreBlank = values.some(value => !value.length);
 
     async function submit(event: FormEvent) {
         event.preventDefault();
@@ -95,7 +99,7 @@ export default function ResetPassword({ token }: { token: string }) {
                     <button
                         type='submit'
                         className='btn-primary w-full text-md mt-lg'
-                        disabled={loading}
+                        disabled={allInputsAreBlank || loading}
                     >
                         Reset my password
                     </button>

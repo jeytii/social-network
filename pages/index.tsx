@@ -28,8 +28,8 @@ const fields = {
 };
 
 export default function Index() {
-    const [loading, setLoading] = useState<boolean>(false);
     const [alertError, setAlertError] = useState<string | null>(null);
+    const [loading, setLoading] = useState<boolean>(false);
     const { replace } = useRouter();
     const {
         register,
@@ -115,6 +115,7 @@ export default function Index() {
                         type='text'
                         label='Username or email address'
                         error={errors.username?.message}
+                        disabled={loading}
                         {...register('username')}
                     />
 
@@ -123,6 +124,7 @@ export default function Index() {
                         type='password'
                         label='Password'
                         error={errors.password?.message}
+                        disabled={loading}
                         {...register('password')}
                     />
 
