@@ -1,14 +1,12 @@
-import React from 'react';
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { AppProps } from 'next/dist/shared/lib/router/router';
+import Root from 'components/Root';
 import '../styles/globals.css';
 
-const client = new QueryClient();
-
-function MyApp({ Component, pageProps }) {
+function MyApp({ Component, pageProps }: AppProps) {
     return (
-        <QueryClientProvider client={client}>
+        <Root title={pageProps.title} isPrivate={pageProps.isPrivate}>
             <Component {...pageProps} />
-        </QueryClientProvider>
+        </Root>
     );
 }
 
