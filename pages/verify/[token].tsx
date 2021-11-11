@@ -1,13 +1,13 @@
+import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { FormEvent, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { AxiosError } from 'axios';
 import Cookies from 'js-cookie';
-import Public from 'components/Public';
 import InputField from 'components/utilities/InputField';
 import axios from 'config/axios';
 
-export default function Verification({ token }) {
+export default function Verification() {
     const [alertError, setAlertError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const { push } = useRouter();
@@ -48,45 +48,47 @@ export default function Verification({ token }) {
     }
 
     return (
-        <Public title='Verify account'>
-            <div className='py-md'>
-                <main className='max-w-[480px] m-auto rounded-md bg-skin-bg-contrast p-lg'>
-                    <h1 className='text-lg font-bold text-skin-text-light text-center'>
-                        Verify your account
-                    </h1>
+        <div className='py-md'>
+            <main className='max-w-[480px] m-auto rounded-md bg-skin-bg-contrast p-lg'>
+                <h1 className='text-lg font-bold text-skin-text-light text-center'>
+                    Verify your account
+                </h1>
 
-                    <form className='mt-lg' onSubmit={submit}>
-                        <InputField
-                            id='code'
-                            type='number'
-                            label='6-digit verification code'
-                            error={formState.errors.code?.message}
-                            {...register('code', {
-                                valueAsNumber: true,
-                            })}
-                        />
-                        <button
-                            type='submit'
-                            className='btn-primary w-full text-md mt-lg'
-                            disabled={loading}
-                        >
-                            Verify my account
-                        </button>
-                    </form>
-                </main>
-            </div>
-        </Public>
+                <form className='mt-lg' onSubmit={submit}>
+                    <InputField
+                        id='code'
+                        type='number'
+                        label='6-digit verification code'
+                        error={formState.errors.code?.message}
+                        {...register('code', {
+                            valueAsNumber: true,
+                        })}
+                    />
+                    <button
+                        type='submit'
+                        className='btn-primary w-full text-md mt-lg'
+                        disabled={loading}
+                    >
+                        Verify my account
+                    </button>
+                </form>
+            </main>
+        </div>
     );
 }
 
-export async function getServerSideProps({ params, req }) {
+export const getServerSideProps: GetServerSideProps = async ({
+    params,
+    req,
+}) => {
     if (!req.cookies || !req.cookies.token) {
         try {
-            await axios().get(`/verify/${params.token}`);
+            await axios().get(`/verify/${params?.token}`);
 
             return {
                 props: {
-                    token: params.token,
+                    title: 'Verify account',
+                    isPrivate: false,
                 },
             };
         } catch (err) {
@@ -107,11 +109,12 @@ export async function getServerSideProps({ params, req }) {
         };
     } catch (e) {
         try {
-            await axios().get(`/verify/${params.token}`);
+            await axios().get(`/verify/${params?.token}`);
 
             return {
                 props: {
-                    token: params.token,
+                    title: 'Verify account',
+                    isPrivate: false,
                 },
             };
         } catch (err) {
@@ -120,4 +123,4 @@ export async function getServerSideProps({ params, req }) {
             };
         }
     }
-}
+};

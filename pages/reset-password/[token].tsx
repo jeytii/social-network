@@ -4,7 +4,6 @@ import { FormEvent, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { AxiosError } from 'axios';
 import Cookies from 'js-cookie';
-import Public from 'components/Public';
 import InputField from 'components/utilities/InputField';
 import axios from 'config/axios';
 
@@ -59,54 +58,50 @@ export default function ResetPassword({ token }: { token: string }) {
     }
 
     return (
-        <Public title='Reset password - Sosyal.me'>
-            <div className='py-md'>
-                <main className='max-w-[480px] m-auto rounded-md bg-skin-bg-contrast p-lg'>
-                    <h1 className='text-lg font-bold text-skin-text-light text-center'>
-                        Reset your password
-                    </h1>
+        <div className='py-md'>
+            <main className='max-w-[480px] m-auto rounded-md bg-skin-bg-contrast p-lg'>
+                <h1 className='text-lg font-bold text-skin-text-light text-center'>
+                    Reset your password
+                </h1>
 
-                    <form className='mt-lg' onSubmit={submit}>
-                        <InputField
-                            id='email'
-                            type='email'
-                            label='Email address'
-                            error={formState.errors.email?.message}
-                            disabled={loading}
-                            {...register('email')}
-                        />
-                        <InputField
-                            containerClassName='mt-lg'
-                            id='password'
-                            type='password'
-                            label='New password'
-                            error={formState.errors.password?.message}
-                            disabled={loading}
-                            {...register('password')}
-                        />
-                        <InputField
-                            containerClassName='mt-lg'
-                            id='password_confirmation'
-                            type='password'
-                            label='Confirm new password'
-                            disabled={loading}
-                            error={
-                                formState.errors.password_confirmation?.message
-                            }
-                            {...register('password_confirmation')}
-                        />
+                <form className='mt-lg' onSubmit={submit}>
+                    <InputField
+                        id='email'
+                        type='email'
+                        label='Email address'
+                        error={formState.errors.email?.message}
+                        disabled={loading}
+                        {...register('email')}
+                    />
+                    <InputField
+                        containerClassName='mt-lg'
+                        id='password'
+                        type='password'
+                        label='New password'
+                        error={formState.errors.password?.message}
+                        disabled={loading}
+                        {...register('password')}
+                    />
+                    <InputField
+                        containerClassName='mt-lg'
+                        id='password_confirmation'
+                        type='password'
+                        label='Confirm new password'
+                        disabled={loading}
+                        error={formState.errors.password_confirmation?.message}
+                        {...register('password_confirmation')}
+                    />
 
-                        <button
-                            type='submit'
-                            className='btn-primary w-full text-md mt-lg'
-                            disabled={loading}
-                        >
-                            Reset my password
-                        </button>
-                    </form>
-                </main>
-            </div>
-        </Public>
+                    <button
+                        type='submit'
+                        className='btn-primary w-full text-md mt-lg'
+                        disabled={loading}
+                    >
+                        Reset my password
+                    </button>
+                </form>
+            </main>
+        </div>
     );
 }
 
@@ -120,6 +115,8 @@ export const getServerSideProps: GetServerSideProps = async ({
 
             return {
                 props: {
+                    title: 'Reset password - Sosyal.me',
+                    isPrivate: false,
                     token: params?.token,
                 },
             };
@@ -145,6 +142,8 @@ export const getServerSideProps: GetServerSideProps = async ({
 
             return {
                 props: {
+                    title: 'Reset password - Sosyal.me',
+                    isPrivate: false,
                     token: params?.token,
                 },
             };
