@@ -1,18 +1,22 @@
 import { HTMLAttributes } from 'react';
 import { MdAccountCircle } from 'react-icons/md';
 import clsx from 'clsx';
-import type { User } from 'types/user';
 
-interface Props extends User, HTMLAttributes<HTMLDivElement> {
+interface Props extends HTMLAttributes<HTMLDivElement> {
+    name: string;
+    username: string;
+    gender: 'Male' | 'Female';
+    image_url: string | null;
     imageSize?: number;
 }
 
 function BasicInfo({
     className,
+    name,
+    username,
+    gender,
     image_url,
     imageSize,
-    is_self,
-    is_followed,
     ...props
 }: Props) {
     return (
@@ -25,10 +29,10 @@ function BasicInfo({
 
             <figcaption className='flex-1 grid px-sm'>
                 <span className='block text-skin-text font-bold text-sm truncate'>
-                    {props.name}
+                    {name}
                 </span>
                 <span className='block text-skin-text-light text-sm truncate'>
-                    {props.username}
+                    {username}
                 </span>
             </figcaption>
         </figure>
