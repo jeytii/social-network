@@ -1,6 +1,6 @@
 import { InfiniteData, useMutation, useQueryClient } from 'react-query';
 import Cookies from 'js-cookie';
-import useTextBody from 'hooks/useTextBodyLength';
+import useTextBody from 'hooks/useTextBody';
 import axios from 'config/axios';
 import type { PostPage } from 'types/page';
 import type { Post } from 'types/post';
@@ -10,50 +10,57 @@ interface Variables {
 }
 
 interface ResponseBody {
-    data: {
-        status: number;
-        data: Post;
-    };
+    status: number;
+    data: Post;
 }
 
-export default function PostBox() {
-    const [hook, checkTextBodyLength, charactersLeft] = useTextBody();
+interface Props {
+    rows?: number;
+    buttonLabel: string;
+    placeholder: string;
+    value: string | null;
+    apiUrl: string;
+    apiMethod: 'post' | 'put';
+    onSuccessEvent(
+        current: InfiniteData<PostPage> | undefined,
+        data: ResponseBody,
+        variables: { body: string },
+    ): InfiniteData<PostPage>;
+}
+
+function PostBox(props: Props) {
+    const [hook, checkTextBodyLength, charactersLeft] = useTextBody(
+        props.value || '',
+    );
 
     const queryClient = useQueryClient();
 
-    const { mutate, isLoading } = useMutation<ResponseBody, unknown, Variables>(
-        newPost => axios(Cookies.get('token')).post('/api/posts', newPost),
+    const { mutate, isLoading } = useMutation<
+        { data: ResponseBody },
+        unknown,
+        Variables
+    >(
+        newPost =>
+            axios(Cookies.get('token'))[props.apiMethod](props.apiUrl, newPost),
         {
             onSuccess,
             retry: 3,
         },
     );
 
-    function onSuccess({ data }: ResponseBody) {
-        queryClient.setQueryData<{
-            pageParams: unknown[];
-            pages: PostPage[];
-        }>('posts', (current): InfiniteData<PostPage> => {
-            if (current) {
-                current.pages[0].items.unshift(data.data);
+    function onSuccess(
+        { data }: { data: ResponseBody },
+        variables: { body: string },
+    ) {
+        queryClient.setQueryData<InfiniteData<PostPage>>('posts', current =>
+            props.onSuccessEvent(current, data, variables),
+        );
 
-                return current;
-            }
-
-            return {
-                pageParams: [],
-                pages: [
-                    {
-                        items: [data.data],
-                        has_more: false,
-                        next_offset: null,
-                        status: 200,
-                    },
-                ],
-            };
-        });
-
-        hook.resetValue();
+        if (props.apiMethod === 'put') {
+            queryClient.setQueryData('showEditPostModal', false);
+        } else {
+            hook.resetValue();
+        }
     }
 
     function submit() {
@@ -63,9 +70,9 @@ export default function PostBox() {
     return (
         <form className='rounded-md bg-skin-bg-contrast'>
             <textarea
-                className='text-skin-text w-full transparent resize-none rounded-t-md p-md disabled:opacity-50 disabled:cursor-not-allowed'
-                placeholder="What's on you mind?"
-                rows={3}
+                className='block text-skin-text w-full transparent resize-none rounded-t-md p-md disabled:opacity-50 disabled:cursor-not-allowed'
+                placeholder={props.placeholder}
+                rows={props.rows}
                 disabled={isLoading}
                 onKeyPress={checkTextBodyLength}
                 {...hook.register}
@@ -84,9 +91,15 @@ export default function PostBox() {
                     disabled={isLoading || charactersLeft === 300}
                     onClick={submit}
                 >
-                    Post
+                    {props.buttonLabel}
                 </button>
             </div>
         </form>
     );
 }
+
+PostBox.defaultProps = {
+    rows: 3,
+};
+
+export default PostBox;
