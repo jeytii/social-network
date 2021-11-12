@@ -18,10 +18,10 @@ type HookData = [
     number,
 ];
 
-export default function useTextBody(maxLength = 300): HookData {
+export default function useTextBody(value: string, maxLength = 300): HookData {
     const { register, watch, getValues, setValue } = useForm({
         defaultValues: {
-            body: '',
+            body: value,
         },
     });
 
