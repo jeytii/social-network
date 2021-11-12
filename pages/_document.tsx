@@ -27,6 +27,9 @@ class MyDocument extends Document {
                 </Head>
                 <body>
                     <Main />
+
+                    <div id='edit-post' />
+
                     <NextScript />
                 </body>
             </Html>

@@ -60,6 +60,11 @@
         @apply block w-full bg-skin-bg-contrast text-skin-text border border-skin-bg-contrast p-sm rounded-md;
     }
 
+    .modal-wrapper {
+        @apply fixed left-[0px] top-[0px] w-screen h-screen flex items-center justify-center px-sm z-10;
+        background: rgba(0, 0, 0, .8);
+    }
+
     .paragraph-sm {
         @apply text-sm leading-relaxed;
     }
