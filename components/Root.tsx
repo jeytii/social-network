@@ -1,4 +1,6 @@
 import { ReactNode } from 'react';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { ReactQueryDevtools } from 'react-query/devtools';
 import Public from './Public';
 import Protected from './Protected';
 
@@ -13,5 +15,12 @@ export default function Root({ title, isPrivate, children }: Props) {
         return <Public title={title}>{children}</Public>;
     }
 
-    return <Protected title={title}>{children}</Protected>;
+    const queryClient = new QueryClient();
+
+    return (
+        <QueryClientProvider client={queryClient}>
+            <ReactQueryDevtools />
+            <Protected title={title}>{children}</Protected>
+        </QueryClientProvider>
+    );
 }
