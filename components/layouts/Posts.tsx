@@ -36,7 +36,7 @@ export default function Posts() {
         return <Spinner className='p-lg' />;
     }
 
-    if (isSuccess && !data?.pages[0].items.length) {
+    if (isSuccess && !!data?.pages && !data?.pages[0].items.length) {
         return (
             <section className='p-lg'>
                 <h1 className='text-md text-skin-text-light text-center'>
@@ -58,7 +58,7 @@ export default function Posts() {
             </div>
 
             <div>
-                {data?.pages.map(page => (
+                {data?.pages?.map(page => (
                     <Fragment key={page.next_offset}>
                         {page.items.map(post => (
                             <Post key={post.slug} className='mt-lg' {...post} />
