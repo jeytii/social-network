@@ -1,5 +1,5 @@
 import { HTMLAttributes, useState } from 'react';
-import BasicInfo from 'components/utilities/BasicInfo';
+import { InfiniteData, useQueryClient } from 'react-query';
 import {
     MdMoreHoriz,
     MdThumbUp,
@@ -9,13 +9,17 @@ import {
     MdBookmarkBorder,
 } from 'react-icons/md';
 import clsx from 'clsx';
+import BasicInfo from 'components/utilities/BasicInfo';
+import PostOptions from 'components/utilities/PostOptions';
 import type { Post as PostType } from 'types/post';
+import type { PostPage } from 'types/page';
 
 interface Props extends PostType, HTMLAttributes<HTMLElement> { }
 
 export default function Post({
     className,
     user,
+    slug,
     is_liked,
     is_bookmarked,
     likes_count,
@@ -26,7 +30,39 @@ export default function Post({
 }: Props) {
     const [liked, setLiked] = useState<boolean>(is_liked);
     const [bookmarked, setBookmarked] = useState<boolean>(is_bookmarked);
-    const { username, ...userProps } = user;
+    const [showOptions, setShowOptions] = useState<boolean>(false);
+    const queryClient = useQueryClient();
+    const { username, is_self, ...userProps } = user;
+
+    function toggleOptions() {
+        setShowOptions(current => !current);
+    }
+
+    const closeOptions = () => {
+        setShowOptions(false);
+    };
+
+    const formatPostsData = () => {
+        const posts = queryClient.getQueryData<InfiniteData<PostPage>>('posts');
+
+        if (!posts?.pages.length) {
+            return [];
+        }
+
+        if (posts?.pages.length === 1) {
+            return posts?.pages[0].items;
+        }
+
+        return posts?.pages.flatMap(page => [...page.items]);
+    };
+
+    const selectPostToBeEdited = () => {
+        const posts = formatPostsData();
+        const post = posts.find(p => p.slug === slug);
+
+        queryClient.setQueryData('edit.post', post);
+        queryClient.setQueryData('showEditPostModal', true);
+    };
 
     return (
         <article
@@ -41,13 +77,28 @@ export default function Post({
                         {...userProps}
                     />
 
-                    {is_own_post && (
-                        <button
-                            type='button'
-                            className='rounded-full p-xs ml-auto hover:bg-skin-bg-contrast-light'
-                        >
-                            <MdMoreHoriz className='text-skin-text-light text-lg' />
-                        </button>
+                    {(is_own_post || is_self) && (
+                        <div className='relative ml-auto'>
+                            <button
+                                type='button'
+                                className={clsx(
+                                    'block rounded-full p-xs',
+                                    showOptions
+                                        ? 'bg-skin-bg-contrast-light'
+                                        : 'hover:bg-skin-bg-contrast-light',
+                                )}
+                                onClick={toggleOptions}
+                            >
+                                <MdMoreHoriz className='text-skin-text-light text-lg' />
+                            </button>
+
+                            {showOptions && (
+                                <PostOptions
+                                    editEvent={selectPostToBeEdited}
+                                    close={closeOptions}
+                                />
+                            )}
+                        </div>
                     )}
                 </div>
 
