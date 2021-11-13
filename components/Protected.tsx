@@ -27,7 +27,7 @@ export default function Protected({ title, children }: Props) {
     const isMobile = useMediaQuery({ maxWidth: 480 }, windowSize);
     const queryClient = useQueryClient();
 
-    const [editPostModal, deletePostModal] = useQueries([
+    const [editPostModal, deletePostModal] = useQueries<[boolean, boolean]>([
         {
             queryKey: 'showEditPostModal',
             queryFn: () => queryClient.getQueryData('showEditPostModal'),
@@ -100,9 +100,9 @@ export default function Protected({ title, children }: Props) {
 
             {isMobile && <BottomNav />}
 
-            {editPostModal.data && <EditPostModal />}
+            <EditPostModal isOpen={editPostModal.data as boolean} />
 
-            {deletePostModal.data && <ConfirmDeletePostModal />}
+            <ConfirmDeletePostModal isOpen={deletePostModal.data as boolean} />
         </main>
     );
 }

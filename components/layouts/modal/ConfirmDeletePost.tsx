@@ -34,7 +34,11 @@ function successfulDelete(queryClient: QueryClient, slug?: string) {
     queryClient.removeQueries('delete.post');
 }
 
-export default function ConfirmDeletePostModal() {
+export default function ConfirmDeletePostModal({
+    isOpen,
+}: {
+    isOpen: boolean;
+}) {
     const queryClient = useQueryClient();
 
     const { mutate, isLoading } = useMutation<
@@ -63,7 +67,7 @@ export default function ConfirmDeletePostModal() {
     }, []);
 
     return (
-        <Modal closeEvent={closeModal}>
+        <Modal isOpen={isOpen} closeEvent={closeModal}>
             <header className='p-md'>
                 <Dialog.Title
                     as='h3'

@@ -6,7 +6,7 @@ import type { Post } from 'types/post';
 import type { PostPage } from 'types/page';
 import Modal from '.';
 
-export default function EditPostModal() {
+export default function EditPostModal({ isOpen }: { isOpen: boolean }) {
     const queryClient = useQueryClient();
     const { data: selectedPost } = useQuery<unknown, unknown, Post>(
         'edit.post',
@@ -41,7 +41,7 @@ export default function EditPostModal() {
     }, []);
 
     return (
-        <Modal closeEvent={closeModal}>
+        <Modal isOpen={isOpen} closeEvent={closeModal}>
             <header className='flex items-center py-sm px-md'>
                 <MdAccountCircle
                     className='text-skin-text'
