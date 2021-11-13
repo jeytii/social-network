@@ -2,10 +2,11 @@ import { useEffect } from 'react';
 
 interface Props {
     editEvent(): void;
+    deleteEvent(): void;
     close(): void;
 }
 
-export default function PostOptions({ editEvent, close }: Props) {
+export default function PostOptions({ editEvent, deleteEvent, close }: Props) {
     function closeOnEscape(event: KeyboardEvent) {
         if (event.key !== 'Escape') {
             return;
@@ -36,6 +37,7 @@ export default function PostOptions({ editEvent, close }: Props) {
             <button
                 className='block w-full text-sm text-skin-text rounded-b-md py-sm px-lg hover:bg-skin-bg-contrast-light hover:text-skin-text-dark'
                 type='button'
+                onClick={deleteEvent}
             >
                 Delete
             </button>

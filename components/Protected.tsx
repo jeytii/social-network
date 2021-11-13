@@ -1,11 +1,12 @@
 import Head from 'next/head';
 import { ChangeEvent, ReactNode, useState } from 'react';
-import { useQuery, useQueryClient } from 'react-query';
+import { useQueries, useQueryClient } from 'react-query';
 import { useMediaQuery } from 'react-responsive';
 import { MdOutlineWbSunny, MdModeNight } from 'react-icons/md';
 import useWindowSize from 'hooks/useWindowSize';
 import useRendered from 'hooks/useRendered';
 import EditPostModal from 'components/layouts/modal/EditPost';
+import ConfirmDeletePostModal from 'components/layouts/modal/ConfirmDeletePost';
 import Searchbar from './layouts/Searchbar';
 import LeftSidebar from './layouts/LeftSidebar';
 import RightSidebar from './layouts/right-sidebar';
@@ -25,13 +26,19 @@ export default function Protected({ title, children }: Props) {
     const isDesktop = useMediaQuery({ minWidth: 1024 }, windowSize);
     const isMobile = useMediaQuery({ maxWidth: 480 }, windowSize);
     const queryClient = useQueryClient();
-    const { data: showEditPostModal } = useQuery(
-        'showEditPostModal',
-        () => queryClient.getQueryData('showEditPostModal'),
+
+    const [editPostModal, deletePostModal] = useQueries([
         {
+            queryKey: 'showEditPostModal',
+            queryFn: () => queryClient.getQueryData('showEditPostModal'),
             initialData: false,
         },
-    );
+        {
+            queryKey: 'showDeletePostModal',
+            queryFn: () => queryClient.getQueryData('showDeletePostModal'),
+            initialData: false,
+        },
+    ]);
 
     function toggleDarkMode(event: ChangeEvent<HTMLInputElement>) {
         const { checked } = event.target;
@@ -93,7 +100,9 @@ export default function Protected({ title, children }: Props) {
 
             {isMobile && <BottomNav />}
 
-            {showEditPostModal && <EditPostModal />}
+            {editPostModal.data && <EditPostModal />}
+
+            {deletePostModal.data && <ConfirmDeletePostModal />}
         </main>
     );
 }

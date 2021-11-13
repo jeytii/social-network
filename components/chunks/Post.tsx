@@ -64,6 +64,11 @@ export default function Post({
         queryClient.setQueryData('showEditPostModal', true);
     };
 
+    const selectPostToBeDeleted = () => {
+        queryClient.setQueryData('delete.post', slug);
+        queryClient.setQueryData('showDeletePostModal', true);
+    };
+
     return (
         <article
             className={clsx('bg-skin-bg-contrast rounded-md', className)}
@@ -95,6 +100,7 @@ export default function Post({
                             {showOptions && (
                                 <PostOptions
                                     editEvent={selectPostToBeEdited}
+                                    deleteEvent={selectPostToBeDeleted}
                                     close={closeOptions}
                                 />
                             )}
