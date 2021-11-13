@@ -37,6 +37,20 @@
         cursor: not-allowed;
     }
 
+    .btn-danger {
+        @apply bg-danger text-sm font-bold rounded-md py-sm px-lg;
+        color: #fff;
+    }
+
+    .btn-danger:hover {
+        @apply bg-danger-dark;
+    }
+
+    .btn-danger:disabled {
+        @apply bg-danger-light;
+        cursor: not-allowed;
+    }
+
     .btn-primary-outline {
         @apply text-primary font-bold border border-primary rounded-3xl hover:bg-primary;
         background: transparent;
