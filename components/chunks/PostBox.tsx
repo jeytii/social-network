@@ -28,7 +28,9 @@ interface Props {
     ): InfiniteData<PostPage>;
 }
 
-function PostBox(props: Props) {
+const authToken = Cookies.get('token');
+
+function PostBox({ apiUrl, apiMethod, onSuccessEvent, ...props }: Props) {
     const [hook, checkTextBodyLength, charactersLeft] = useTextBody(
         props.value || '',
     );
@@ -39,24 +41,20 @@ function PostBox(props: Props) {
         { data: ResponseBody },
         unknown,
         Variables
-    >(
-        newPost =>
-            axios(Cookies.get('token'))[props.apiMethod](props.apiUrl, newPost),
-        {
-            onSuccess,
-            retry: 3,
-        },
-    );
+    >(newPost => axios(authToken)[apiMethod](apiUrl, newPost), {
+        onSuccess,
+        retry: 3,
+    });
 
     function onSuccess(
         { data }: { data: ResponseBody },
         variables: { body: string },
     ) {
         queryClient.setQueryData<InfiniteData<PostPage>>('posts', current =>
-            props.onSuccessEvent(current, data, variables),
+            onSuccessEvent(current, data, variables),
         );
 
-        if (props.apiMethod === 'put') {
+        if (apiMethod === 'put') {
             queryClient.setQueryData('showEditPostModal', false);
         } else {
             hook.resetValue();
