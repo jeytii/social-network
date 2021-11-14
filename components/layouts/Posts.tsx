@@ -1,7 +1,7 @@
 import { ChangeEvent, Fragment, useEffect } from 'react';
 import { useInfiniteQuery } from 'react-query';
 import Cookies from 'js-cookie';
-import Post from 'components/chunks/Post';
+import Post from 'components/chunks/post';
 import Select from 'components/utilities/Select';
 import Spinner from 'components/vectors/Spinner';
 import axios from 'config/axios';

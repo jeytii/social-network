@@ -1,5 +1,5 @@
 import Protected from 'components/Protected';
-import Post from 'components/chunks/Post';
+import Post from 'components/chunks/post';
 import Comment from 'components/chunks/Comment';
 import CommentBox from 'components/chunks/CommentBox';
 
