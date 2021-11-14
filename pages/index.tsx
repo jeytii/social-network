@@ -3,7 +3,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { FormEvent, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { BiErrorCircle } from 'react-icons/bi';
 import { AxiosError } from 'axios';
 import Cookies from 'js-cookie';
 import InputField from 'components/utilities/InputField';
@@ -29,6 +28,10 @@ const fields = {
 
 export default function Index() {
     const [alertError, setAlertError] = useState<string | null>(null);
+    const [codeResent, setCodeResent] = useState<boolean>(false);
+    const [unauthorizedError, setUnauthorizedError] = useState<{
+        username: string;
+    } | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const { replace } = useRouter();
     const {
@@ -85,13 +88,43 @@ export default function Index() {
         } catch (error: AxiosError) {
             setLoading(false);
 
-            if (error.response.status === 422) {
+            if (error.response?.status === 422) {
                 processFormErrors(error);
+            } else if (error.response?.status === 401) {
+                clearErrors();
+
+                if (codeResent) {
+                    setCodeResent(false);
+                }
+
+                if (alertError) {
+                    setAlertError(null);
+                }
+
+                setUnauthorizedError(error.response?.data.data);
             } else {
                 clearErrors();
-                setAlertError(error.response.data.message);
+
+                if (unauthorizedError) {
+                    setUnauthorizedError(null);
+                }
+
+                setAlertError(error.response?.data.message);
             }
         }
+    }
+
+    async function resendVerificationCode(method: 'email' | 'sms') {
+        setLoading(true);
+
+        await axios().post('/verify/resend', {
+            username: unauthorizedError?.username,
+            method,
+        });
+
+        setLoading(false);
+        setUnauthorizedError(null);
+        setCodeResent(true);
     }
 
     return (
@@ -101,12 +134,49 @@ export default function Index() {
                     Sign in to your account
                 </h1>
 
+                {!!codeResent && (
+                    <p className='bg-success-lighter text-md text-success p-md border-success rounded-md mt-lg'>
+                        A verification code has successfully sent to you.
+                    </p>
+                )}
+
                 {!!alertError && (
-                    <div className='flex items-center bg-danger-lighter text-danger p-md border-danger rounded-md mt-lg'>
-                        <BiErrorCircle className='text-xl' />
-                        <span className='text-md ml-sm'>
-                            Incorrect combination
-                        </span>
+                    <p className='bg-danger-lighter text-md text-danger p-md border-danger rounded-md mt-lg'>
+                        Incorrect username or password.
+                    </p>
+                )}
+
+                {!!unauthorizedError && (
+                    <div className='bg-danger-lighter text-danger p-md border-danger rounded-md mt-lg'>
+                        <p className='text-md ml-sm'>
+                            Please verify your account first before logging in.
+                            If you did not receive a verification code, request
+                            for another one through{' '}
+                            <button
+                                className='underline cursor-pointer hover:text-danger-dark disabled:cursor-not-allowed disabled:text-danger'
+                                type='button'
+                                disabled={loading}
+                                onClick={resendVerificationCode.bind(
+                                    null,
+                                    'email',
+                                )}
+                            >
+                                email address
+                            </button>{' '}
+                            or{' '}
+                            <button
+                                className='underline cursor-pointer hover:text-danger-dark disabled:cursor-not-allowed disabled:text-danger'
+                                type='button'
+                                disabled={loading}
+                                onClick={resendVerificationCode.bind(
+                                    null,
+                                    'sms',
+                                )}
+                            >
+                                SMS
+                            </button>
+                            .
+                        </p>
                     </div>
                 )}
 
