@@ -1,7 +1,5 @@
 import { HTMLAttributes, useState } from 'react';
-import { InfiniteData, useQueryClient } from 'react-query';
 import {
-    MdMoreHoriz,
     MdThumbUp,
     MdOutlineThumbUp,
     MdOutlineChatBubbleOutline,
@@ -9,12 +7,16 @@ import {
     MdBookmarkBorder,
 } from 'react-icons/md';
 import clsx from 'clsx';
+import Cookies from 'js-cookie';
 import BasicInfo from 'components/utilities/BasicInfo';
-import PostOptions from 'components/utilities/PostOptions';
 import type { Post as PostType } from 'types/post';
-import type { PostPage } from 'types/page';
+import MoreButton from 'components/utilities/MoreButton';
+import useDebounceClick from 'hooks/useDebounceClick';
+import axios from 'config/axios';
 
 interface Props extends PostType, HTMLAttributes<HTMLElement> { }
+
+const token = Cookies.get('token');
 
 export default function Post({
     className,
@@ -29,45 +31,53 @@ export default function Post({
     ...props
 }: Props) {
     const [liked, setLiked] = useState<boolean>(is_liked);
+    const [likesCount, setLikesCount] = useState<number>(likes_count);
     const [bookmarked, setBookmarked] = useState<boolean>(is_bookmarked);
-    const [showOptions, setShowOptions] = useState<boolean>(false);
-    const queryClient = useQueryClient();
+    const [debounce, mutatePreviousLikedState] = useDebounceClick(
+        liked,
+        sendLikePostRequest,
+        sendDislikePostRequest,
+    );
+
     const { username, is_self, ...userProps } = user;
 
-    function toggleOptions() {
-        setShowOptions(current => !current);
+    async function sendLikePostRequest() {
+        try {
+            const { data } = await axios(token).post(`/api/posts/${slug}/like`);
+
+            setLikesCount(data.data);
+            mutatePreviousLikedState(true);
+        } catch (e) {
+            setLiked(false);
+        }
     }
 
-    const closeOptions = () => {
-        setShowOptions(false);
-    };
+    async function sendDislikePostRequest() {
+        try {
+            const { data } = await axios(token).delete(
+                `/api/posts/${slug}/dislike`,
+            );
 
-    const formatPostsData = () => {
-        const posts = queryClient.getQueryData<InfiniteData<PostPage>>('posts');
-
-        if (!posts?.pages.length) {
-            return [];
+            setLikesCount(data.data);
+            mutatePreviousLikedState(false);
+        } catch (e) {
+            setLiked(true);
         }
+    }
 
-        if (posts?.pages.length === 1) {
-            return posts?.pages[0].items;
-        }
+    function toggleLike() {
+        setLiked(current => !current);
 
-        return posts?.pages.flatMap(page => [...page.items]);
-    };
+        setLikesCount(current => {
+            if (liked) {
+                return current - 1;
+            }
 
-    const selectPostToBeEdited = () => {
-        const posts = formatPostsData();
-        const post = posts.find(p => p.slug === slug);
+            return current + 1;
+        });
 
-        queryClient.setQueryData('edit.post', post);
-        queryClient.setQueryData('showEditPostModal', true);
-    };
-
-    const selectPostToBeDeleted = () => {
-        queryClient.setQueryData('delete.post', slug);
-        queryClient.setQueryData('showDeletePostModal', true);
-    };
+        debounce();
+    }
 
     return (
         <article
@@ -83,28 +93,7 @@ export default function Post({
                     />
 
                     {(is_own_post || is_self) && (
-                        <div className='relative ml-auto'>
-                            <button
-                                type='button'
-                                className={clsx(
-                                    'block rounded-full p-xs',
-                                    showOptions
-                                        ? 'bg-skin-bg-contrast-light'
-                                        : 'hover:bg-skin-bg-contrast-light',
-                                )}
-                                onClick={toggleOptions}
-                            >
-                                <MdMoreHoriz className='text-skin-text-light text-lg' />
-                            </button>
-
-                            {showOptions && (
-                                <PostOptions
-                                    editEvent={selectPostToBeEdited}
-                                    deleteEvent={selectPostToBeDeleted}
-                                    close={closeOptions}
-                                />
-                            )}
-                        </div>
+                        <MoreButton className='relative ml-auto' slug={slug} />
                     )}
                 </div>
 
@@ -126,6 +115,7 @@ export default function Post({
                             : 'text-skin-text-light hover:text-primary',
                     )}
                     type='button'
+                    onClick={toggleLike}
                 >
                     {liked ? (
                         <MdThumbUp className='text-lg' />
@@ -133,7 +123,7 @@ export default function Post({
                         <MdOutlineThumbUp className='text-lg' />
                     )}
 
-                    <span className='text-sm ml-sm'>{likes_count}</span>
+                    <span className='text-sm ml-sm'>{likesCount}</span>
                 </button>
 
                 <button
