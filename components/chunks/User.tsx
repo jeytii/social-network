@@ -1,8 +1,11 @@
 import { HTMLAttributes, useState } from 'react';
 import { MdPersonAddAlt, MdOutlinePersonRemove } from 'react-icons/md';
 import clsx from 'clsx';
-import type { User as UserType } from 'types/user';
 import BasicInfo from 'components/utilities/BasicInfo';
+import axios from 'config/axios';
+import type { User as UserType } from 'types/user';
+import useDebounceClick from 'hooks/useDebounceClick';
+import Cookies from 'js-cookie';
 
 interface Props extends UserType, HTMLAttributes<HTMLDivElement> { }
 
@@ -18,9 +21,35 @@ export default function User({
     ...props
 }: Props) {
     const [followed, setFollowed] = useState<boolean | null>(is_followed);
+    const [debounce, mutatePreviousState] = useDebounceClick(
+        followed as boolean,
+        follow,
+        unfollow,
+    );
 
-    function toggleFollowed() {
+    async function follow() {
+        try {
+            await axios(Cookies.get('token')).post(`/api/users/${slug}/follow`);
+            mutatePreviousState(true);
+        } catch (e) {
+            setFollowed(false);
+        }
+    }
+
+    async function unfollow() {
+        try {
+            await axios(Cookies.get('token')).delete(
+                `/api/users/${slug}/unfollow`,
+            );
+            mutatePreviousState(false);
+        } catch (e) {
+            setFollowed(true);
+        }
+    }
+
+    function toggleFollow() {
         setFollowed(current => !current);
+        debounce();
     }
 
     return (
@@ -36,22 +65,24 @@ export default function User({
                 {...props}
             />
 
-            <button
-                className={clsx(
-                    'rounded-full p-sm ml-auto',
-                    followed
-                        ? 'hover:bg-danger-lighter'
-                        : 'hover:bg-primary-lighter',
-                )}
-                type='button'
-                onClick={toggleFollowed}
-            >
-                {followed ? (
-                    <MdOutlinePersonRemove className='text-lg text-danger' />
-                ) : (
-                    <MdPersonAddAlt className='text-lg text-primary' />
-                )}
-            </button>
+            {!is_self && (
+                <button
+                    className={clsx(
+                        'rounded-full p-sm ml-auto',
+                        followed
+                            ? 'hover:bg-danger-lighter'
+                            : 'hover:bg-primary-lighter',
+                    )}
+                    type='button'
+                    onClick={toggleFollow}
+                >
+                    {followed ? (
+                        <MdOutlinePersonRemove className='text-lg text-danger' />
+                    ) : (
+                        <MdPersonAddAlt className='text-lg text-primary' />
+                    )}
+                </button>
+            )}
         </div>
     );
 }
