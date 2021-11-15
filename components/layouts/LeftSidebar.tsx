@@ -9,10 +9,12 @@ import {
 } from 'react-icons/md';
 import clsx from 'clsx';
 import useWindowSize from 'hooks/useWindowSize';
+import { useRouter } from 'next/router';
 
 export default function LeftSidebar() {
     const windowSize = useWindowSize();
     const isPortrait = useMediaQuery({ minWidth: 690 }, windowSize);
+    const { route } = useRouter();
 
     return (
         <aside
@@ -22,9 +24,14 @@ export default function LeftSidebar() {
             )}
         >
             <nav>
-                <Link href='/'>
+                <Link href='/home'>
                     <span
-                        className='flex items-center no-underline bg-skin-bg-contrast-light text-md text-primary p-lg cursor-pointer hover:bg-skin-bg-contrast-light'
+                        className={clsx(
+                            'flex items-center no-underline text-md p-lg cursor-pointer hover:bg-skin-bg-contrast-light',
+                            route === '/home'
+                                ? 'text-primary'
+                                : 'text-skin-text-light'
+                        )}
                         aria-label='Home link'
                     >
                         <MdOutlineHome className='text-xl' />
@@ -36,7 +43,12 @@ export default function LeftSidebar() {
 
                 <Link href='/'>
                     <span
-                        className='flex items-center no-underline text-md text-skin-text-light p-lg cursor-pointer hover:bg-skin-bg-contrast-light'
+                        className={clsx(
+                            'flex items-center no-underline text-md p-lg cursor-pointer hover:bg-skin-bg-contrast-light',
+                            route === '/foo'
+                                ? 'text-primary'
+                                : 'text-skin-text-light',
+                        )}
                         aria-label='Profile link'
                     >
                         <MdAccountCircle className='text-xl' />
@@ -46,9 +58,14 @@ export default function LeftSidebar() {
                     </span>
                 </Link>
 
-                <Link href='/'>
+                <Link href='/notifications'>
                     <span
-                        className='flex items-center no-underline text-md text-skin-text-light p-lg cursor-pointer hover:bg-skin-bg-contrast-light'
+                        className={clsx(
+                            'flex items-center no-underline text-md p-lg cursor-pointer hover:bg-skin-bg-contrast-light',
+                            route === '/notifications'
+                                ? 'text-primary'
+                                : 'text-skin-text-light',
+                        )}
                         aria-label='Notifications link'
                     >
                         <MdOutlineNotifications className='text-xl' />
@@ -60,9 +77,14 @@ export default function LeftSidebar() {
                     </span>
                 </Link>
 
-                <Link href='/'>
+                <Link href='/search'>
                     <span
-                        className='flex items-center no-underline text-md text-skin-text-light p-lg cursor-pointer hover:bg-skin-bg-contrast-light'
+                        className={clsx(
+                            'flex items-center no-underline text-md p-lg cursor-pointer hover:bg-skin-bg-contrast-light',
+                            route === '/search'
+                                ? 'text-primary'
+                                : 'text-skin-text-light',
+                        )}
                         aria-label='Search link'
                     >
                         <MdOutlineGroups className='text-xl' />
@@ -74,9 +96,14 @@ export default function LeftSidebar() {
                     </span>
                 </Link>
 
-                <Link href='/'>
+                <Link href='/settings'>
                     <span
-                        className='flex items-center no-underline text-md text-skin-text-light p-lg cursor-pointer hover:bg-skin-bg-contrast-light'
+                        className={clsx(
+                            'flex items-center no-underline text-md p-lg cursor-pointer hover:bg-skin-bg-contrast-light',
+                            route === '/settings'
+                                ? 'text-primary'
+                                : 'text-skin-text-light',
+                        )}
                         aria-label='Settings link'
                     >
                         <MdOutlineSettings className='text-xl' />
