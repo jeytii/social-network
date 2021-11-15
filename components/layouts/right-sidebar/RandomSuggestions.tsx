@@ -63,11 +63,11 @@ export default function RandomSuggestions() {
                 </button>
             </header>
 
-            <section className='mt-sm'>
+            <section>
                 {data?.map(user => (
                     <User
                         key={user.slug}
-                        className='bg-primary-lighter p-sm'
+                        className='bg-primary-lighter p-sm mt-sm'
                         {...user}
                     />
                 ))}
