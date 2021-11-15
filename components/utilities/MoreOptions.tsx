@@ -6,7 +6,7 @@ interface Props {
     close(): void;
 }
 
-export default function PostOptions({ editEvent, deleteEvent, close }: Props) {
+export default function MoreOptions({ editEvent, deleteEvent, close }: Props) {
     function closeOnEscape(event: KeyboardEvent) {
         if (event.key !== 'Escape') {
             return;

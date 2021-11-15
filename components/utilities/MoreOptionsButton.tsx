@@ -2,14 +2,14 @@ import { HTMLAttributes, useState } from 'react';
 import { useQueryClient, InfiniteData } from 'react-query';
 import { MdMoreHoriz } from 'react-icons/md';
 import clsx from 'clsx';
-import PostOptions from 'components/utilities/PostOptions';
+import MoreOptions from 'components/utilities/MoreOptions';
 import type { PostPage } from 'types/page';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
     slug: string;
 }
 
-export default function MoreButton({ slug, ...props }: Props) {
+export default function MoreOptionsButton({ slug, ...props }: Props) {
     const [showOptions, setShowOptions] = useState<boolean>(false);
     const queryClient = useQueryClient();
 
@@ -64,7 +64,7 @@ export default function MoreButton({ slug, ...props }: Props) {
             </button>
 
             {showOptions && (
-                <PostOptions
+                <MoreOptions
                     editEvent={selectPostToBeEdited}
                     deleteEvent={selectPostToBeDeleted}
                     close={closeOptions}

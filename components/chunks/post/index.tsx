@@ -2,7 +2,7 @@ import { HTMLAttributes, useState } from 'react';
 import { MdOutlineChatBubbleOutline } from 'react-icons/md';
 import clsx from 'clsx';
 import BasicInfo from 'components/utilities/BasicInfo';
-import MoreButton from 'components/utilities/MoreButton';
+import MoreOptionsButton from 'components/utilities/MoreOptionsButton';
 import type { Post as PostType } from 'types/post';
 import LikeButton from 'components/chunks/LikeButton';
 import BookmarkButton from './BookmarkButton';
@@ -40,7 +40,10 @@ export default function Post({
                     />
 
                     {(is_own_post || is_self) && (
-                        <MoreButton className='relative ml-auto' slug={slug} />
+                        <MoreOptionsButton
+                            className='relative ml-auto'
+                            slug={slug}
+                        />
                     )}
                 </div>
 
