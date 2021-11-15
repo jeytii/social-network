@@ -2,7 +2,7 @@ import { HTMLAttributes, useState } from 'react';
 import { MdPersonAddAlt, MdOutlinePersonRemove } from 'react-icons/md';
 import clsx from 'clsx';
 import type { User as UserType } from 'types/user';
-import BasicInfo from './BasicInfo';
+import BasicInfo from 'components/utilities/BasicInfo';
 
 interface Props extends UserType, HTMLAttributes<HTMLDivElement> { }
 

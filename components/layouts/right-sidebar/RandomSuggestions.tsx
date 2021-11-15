@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useQuery } from 'react-query';
 import Cookies from 'js-cookie';
-import User from 'components/utilities/User';
+import User from 'components/chunks/User';
 import Spinner from 'components/vectors/Spinner';
 import axios from 'config/axios';
 import type { User as UserType } from 'types/user';
