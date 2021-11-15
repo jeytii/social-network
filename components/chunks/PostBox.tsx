@@ -84,7 +84,7 @@ function PostBox({ apiUrl, apiMethod, onSuccessEvent, ...props }: Props) {
                     {charactersLeft}
                 </span>
                 <button
-                    className='btn-primary rounded-full ml-auto py-xs px-lg'
+                    className='button button-primary text-sm rounded-full ml-auto'
                     type='button'
                     disabled={isLoading || charactersLeft === 300}
                     onClick={submit}

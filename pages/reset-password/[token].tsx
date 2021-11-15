@@ -98,7 +98,7 @@ export default function ResetPassword({ token }: { token: string }) {
 
                     <button
                         type='submit'
-                        className='btn-primary w-full text-md mt-lg'
+                        className='button button-primary w-full py-sm mt-lg'
                         disabled={allInputsAreBlank || loading}
                     >
                         Reset my password

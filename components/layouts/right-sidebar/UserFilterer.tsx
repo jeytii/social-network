@@ -75,7 +75,7 @@ export default function UserFilterer() {
                 </div>
 
                 <button
-                    className='btn-primary w-full py-xs mt-lg'
+                    className='button button-primary w-full text-sm mt-lg'
                     type='submit'
                     disabled
                 >

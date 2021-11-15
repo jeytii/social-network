@@ -27,7 +27,7 @@ export default function ProfileHeadline() {
                 </figure>
 
                 <TextLink className='ml-auto sm:mt-sm' href='/edit-profile'>
-                    <span className='btn-primary-outline text-sm py-xs px-md'>
+                    <span className='button button-primary-outlined text-sm rounded-full'>
                         Edit profile
                     </span>
                 </TextLink>

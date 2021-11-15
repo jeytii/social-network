@@ -49,7 +49,7 @@ export default function EditProfile() {
 
                     <button
                         type='button'
-                        className='btn-primary w-full text-md mt-lg'
+                        className='button button-primary w-full mt-lg'
                     >
                         Update profile
                     </button>

@@ -23,40 +23,76 @@
 }
 
 @layer components {
-    .btn-primary {
-        @apply bg-primary text-sm font-bold rounded-md py-sm px-lg;
+    .button {
+        @apply text-md font-bold rounded-md py-xs px-lg cursor-pointer;
+    }
+
+    .button:disabled {
+        @apply opacity-50 cursor-not-allowed;
+    }
+
+    .button-default {
+        @apply bg-skin-bg-contrast-light text-skin-text-light;
+    }
+
+    .button-default:not(:disabled):hover {
+        @apply bg-skin-bg-contrast text-skin-text;
+    }
+
+    .button-primary {
+        @apply bg-primary;
         color: #fff;
     }
 
-    .btn-primary:hover {
+    .button-primary:not(:disabled):hover {
         @apply bg-primary-dark;
     }
 
-    .btn-primary:disabled {
-        @apply bg-primary-light;
-        cursor: not-allowed;
-    }
-
-    .btn-danger {
-        @apply bg-danger text-sm font-bold rounded-md py-sm px-lg;
-        color: #fff;
-    }
-
-    .btn-danger:hover {
-        @apply bg-danger-dark;
-    }
-
-    .btn-danger:disabled {
-        @apply bg-danger-light;
-        cursor: not-allowed;
-    }
-
-    .btn-primary-outline {
-        @apply text-primary font-bold border border-primary rounded-3xl hover:bg-primary;
+    .button-primary-outlined {
+        @apply text-primary border border-primary;
         background: transparent;
     }
 
-    .btn-primary-outline:hover {
+    .button-primary-outlined:hover {
+        @apply bg-primary;
+        color: #fff;
+    }
+
+    .button-success {
+        @apply bg-success;
+        color: #fff;
+    }
+
+    .button-success:not(:disabled):hover {
+        @apply bg-success-dark;
+    }
+
+    .button-success-outlined {
+        @apply text-success border border-success;
+        background: transparent;
+    }
+
+    .button-success-outlined:hover {
+        @apply bg-success;
+        color: #fff;
+    }
+
+    .button-danger {
+        @apply bg-danger;
+        color: #fff;
+    }
+
+    .button-danger:not(:disabled):hover {
+        @apply bg-danger-dark;
+    }
+
+    .button-danger-outlined {
+        @apply text-danger border border-danger;
+        background: transparent;
+    }
+
+    .button-danger-outlined:hover {
+        @apply bg-danger;
         color: #fff;
     }
 }

@@ -26,7 +26,7 @@ export default function ChangeUsername() {
                     />
 
                     <button
-                        className='btn-primary w-full text-md mt-lg'
+                        className='button button-primary w-full mt-lg'
                         type='button'
                     >
                         Update my username

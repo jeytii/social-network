@@ -217,7 +217,7 @@ export default function Register() {
 
                     <button
                         type='submit'
-                        className='btn-primary w-full text-md mt-lg'
+                        className='button button-primary w-full py-sm mt-lg'
                         disabled={loading}
                     >
                         Sign up

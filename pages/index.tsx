@@ -200,7 +200,7 @@ export default function Index() {
 
                     <button
                         type='submit'
-                        className='btn-primary w-full text-md mt-lg'
+                        className='button button-primary w-full py-sm mt-lg'
                         disabled={
                             !username.length || !password.length || loading
                         }

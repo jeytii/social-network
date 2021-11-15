@@ -84,7 +84,7 @@ export default function ConfirmDeletePostModal({
             <div className='p-md'>
                 <button
                     type='button'
-                    className='btn-danger text-md py-xs px-sm'
+                    className='button button-danger px-sm'
                     disabled={isLoading}
                     onClick={deletePost}
                 >
@@ -93,7 +93,7 @@ export default function ConfirmDeletePostModal({
 
                 <button
                     type='button'
-                    className='text-md text-skin-text-light rounded-md py-xs px-sm ml-md hover:text-skin-text'
+                    className='button button-default px-sm ml-md'
                     disabled={isLoading}
                     onClick={closeModal}
                 >

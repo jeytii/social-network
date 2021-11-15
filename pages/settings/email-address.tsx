@@ -27,7 +27,7 @@ export default function ChangeEmailAddress() {
                     />
 
                     <button
-                        className='btn-primary w-full text-md mt-lg'
+                        className='button button-primary w-full mt-lg'
                         type='button'
                     >
                         Update my email address
