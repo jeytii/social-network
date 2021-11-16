@@ -1,4 +1,4 @@
-import { HTMLAttributes, useState } from 'react';
+import { HTMLAttributes, MouseEvent, useState } from 'react';
 import { useQueryClient, InfiniteData } from 'react-query';
 import { MdMoreHoriz } from 'react-icons/md';
 import clsx from 'clsx';
@@ -27,7 +27,9 @@ export default function MoreOptionsButton({ slug, ...props }: Props) {
         return posts?.pages.flatMap(page => [...page.items]);
     };
 
-    const selectPostToBeEdited = () => {
+    const selectPostToBeEdited = (event: MouseEvent<HTMLButtonElement>) => {
+        event.stopPropagation();
+
         const posts = formatPostsData();
         const post = posts.find(p => p.slug === slug);
 
@@ -35,12 +37,16 @@ export default function MoreOptionsButton({ slug, ...props }: Props) {
         queryClient.setQueryData('showEditPostModal', true);
     };
 
-    const selectPostToBeDeleted = () => {
+    const selectPostToBeDeleted = (event: MouseEvent<HTMLButtonElement>) => {
+        event.stopPropagation();
+
         queryClient.setQueryData('delete.post', slug);
         queryClient.setQueryData('showDeletePostModal', true);
     };
 
-    function toggleOptions() {
+    function toggleOptions(event: MouseEvent<HTMLButtonElement>) {
+        event.stopPropagation();
+
         setShowOptions(current => !current);
     }
 
