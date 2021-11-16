@@ -1,4 +1,4 @@
-import { HTMLAttributes, useState } from 'react';
+import { ForwardedRef, forwardRef, HTMLAttributes, useState } from 'react';
 import { MdOutlineChatBubbleOutline } from 'react-icons/md';
 import clsx from 'clsx';
 import BasicInfo from 'components/utilities/BasicInfo';
@@ -7,20 +7,23 @@ import type { Post as PostType } from 'types/post';
 import LikeButton from 'components/chunks/LikeButton';
 import BookmarkButton from './BookmarkButton';
 
-interface Props extends PostType, HTMLAttributes<HTMLElement> { }
+type Props = PostType & HTMLAttributes<HTMLElement>;
 
-export default function Post({
-    className,
-    user,
-    slug,
-    is_liked,
-    is_bookmarked,
-    likes_count,
-    comments_count,
-    is_own_post,
-    is_edited,
-    ...props
-}: Props) {
+function Post(
+    {
+        className,
+        user,
+        slug,
+        is_liked,
+        is_bookmarked,
+        likes_count,
+        comments_count,
+        is_own_post,
+        is_edited,
+        ...props
+    }: Props,
+    ref: ForwardedRef<HTMLElement>,
+) {
     const [liked, setLiked] = useState<boolean>(is_liked);
     const [likesCount, setLikesCount] = useState<number>(likes_count);
     const [bookmarked, setBookmarked] = useState<boolean>(is_bookmarked);
@@ -28,6 +31,7 @@ export default function Post({
 
     return (
         <article
+            ref={ref}
             className={clsx('bg-skin-bg-contrast rounded-md', className)}
             {...props}
         >
@@ -58,7 +62,8 @@ export default function Post({
 
             <section className='flex bg-skin-bg-contrast-light'>
                 <LikeButton
-                    postSlug={slug}
+                    className='flex-1 flex items-center justify-center text-center py-sm'
+                    route={`/api/posts/${slug}`}
                     condition={liked}
                     count={likesCount}
                     stateEvent={setLiked}
@@ -82,3 +87,5 @@ export default function Post({
         </article>
     );
 }
+
+export default forwardRef(Post);
