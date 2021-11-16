@@ -1,8 +1,8 @@
-import { useEffect } from 'react';
+import { useEffect, MouseEvent } from 'react';
 
 interface Props {
-    editEvent(): void;
-    deleteEvent(): void;
+    editEvent(event: MouseEvent<HTMLButtonElement>): void;
+    deleteEvent(event: MouseEvent<HTMLButtonElement>): void;
     close(): void;
 }
 

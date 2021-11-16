@@ -30,7 +30,7 @@ export default function LeftSidebar() {
                             'flex items-center no-underline text-md p-lg cursor-pointer hover:bg-skin-bg-contrast-light',
                             route === '/home'
                                 ? 'text-primary'
-                                : 'text-skin-text-light'
+                                : 'text-skin-text-light',
                         )}
                         aria-label='Home link'
                     >

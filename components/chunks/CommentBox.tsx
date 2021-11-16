@@ -11,7 +11,7 @@ export default function CommentBox() {
                 <input className='hidden' type='submit' />
             </form>
 
-            <span className='w-[44px] h-[44px] flex items-center justify-center bg-skin-bg-contrast text-primary text-xs px-sm rounded-full'>
+            <span className='w-[44px] h-[44px] flex items-center justify-center bg-skin-bg-contrast text-primary text-sm px-sm rounded-full'>
                 300
             </span>
         </section>
