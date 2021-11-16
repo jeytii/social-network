@@ -1,12 +1,12 @@
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, HTMLAttributes, MouseEvent, SetStateAction } from 'react';
 import { MdThumbUp, MdOutlineThumbUp } from 'react-icons/md';
 import Cookies from 'js-cookie';
 import clsx from 'clsx';
 import useDebounceClick from 'hooks/useDebounceClick';
 import axios from 'config/axios';
 
-interface Props {
-    postSlug: string;
+interface Props extends HTMLAttributes<HTMLButtonElement> {
+    route: string;
     condition: boolean;
     count: number;
     stateEvent: Dispatch<SetStateAction<boolean>>;
@@ -16,23 +16,23 @@ interface Props {
 const token = Cookies.get('token');
 
 export default function LikeButton({
-    postSlug,
+    className,
+    route,
     condition,
     count,
     stateEvent,
     setCountEvent,
+    ...props
 }: Props) {
     const [debounce, mutatePreviousState] = useDebounceClick(
         condition,
-        sendLikePostRequest,
-        sendDislikePostRequest,
+        like,
+        dislike,
     );
 
-    async function sendLikePostRequest() {
+    async function like() {
         try {
-            const { data } = await axios(token).post(
-                `/api/posts/${postSlug}/like`,
-            );
+            const { data } = await axios(token).post(`${route}/like`);
 
             setCountEvent(data.data);
             mutatePreviousState(true);
@@ -41,11 +41,9 @@ export default function LikeButton({
         }
     }
 
-    async function sendDislikePostRequest() {
+    async function dislike() {
         try {
-            const { data } = await axios(token).delete(
-                `/api/posts/${postSlug}/dislike`,
-            );
+            const { data } = await axios(token).delete(`${route}/dislike`);
 
             setCountEvent(data.data);
             mutatePreviousState(false);
@@ -54,7 +52,9 @@ export default function LikeButton({
         }
     }
 
-    function toggleLike() {
+    function toggleLike(event: MouseEvent<HTMLButtonElement>) {
+        event.stopPropagation();
+
         stateEvent(current => !current);
 
         setCountEvent(current => {
@@ -71,13 +71,14 @@ export default function LikeButton({
     return (
         <button
             className={clsx(
-                'flex-1 flex items-center justify-center text-center py-sm',
+                className,
                 condition
                     ? 'text-primary'
                     : 'text-skin-text-light hover:text-primary',
             )}
             type='button'
             onClick={toggleLike}
+            {...props}
         >
             {condition ? (
                 <MdThumbUp className='text-lg' />
