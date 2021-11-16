@@ -10,7 +10,7 @@ const getComments = (slug: string) => async (ctx: QueryFunctionContext) => {
     const { data } = await axios(Cookies.get('token')).get('/api/comments', {
         params: {
             page: ctx.pageParam || 1,
-            pid: slug,
+            post: slug,
         },
     });
 
