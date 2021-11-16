@@ -1,4 +1,4 @@
-import { KeyboardEvent, KeyboardEventHandler, Ref } from 'react';
+import { ChangeEvent, KeyboardEvent, KeyboardEventHandler, Ref } from 'react';
 import { ChangeHandler, useForm } from 'react-hook-form';
 
 interface RegisterInput {
@@ -28,6 +28,13 @@ export default function useTextBody(value: string, maxLength = 300): HookData {
     const { body } = watch();
     const charactersLeft = maxLength - body.length;
 
+    function onChange(event: ChangeEvent<HTMLTextAreaElement>) {
+        const { target } = event;
+
+        target.style.height = 'auto';
+        target.style.height = `${target.scrollHeight}px`;
+    }
+
     function checkTextBodyLength(event: KeyboardEvent<HTMLTextAreaElement>) {
         if (charactersLeft > 0) {
             return true;
@@ -42,7 +49,7 @@ export default function useTextBody(value: string, maxLength = 300): HookData {
 
     return [
         {
-            register: register('body'),
+            register: register('body', { onChange }),
             values: getValues(),
             resetValue,
         },
