@@ -1,5 +1,6 @@
 import type { User } from './user';
 import type { Post } from './post';
+import type { Comment } from './comment';
 
 export interface Page {
     has_more: boolean;
@@ -13,4 +14,8 @@ export interface UserPage extends Page {
 
 export interface PostPage extends Page {
     items: Post[];
+}
+
+export interface CommentPage extends Page {
+    items: Comment[];
 }

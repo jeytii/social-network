@@ -1,59 +1,59 @@
-import { HTMLAttributes } from 'react';
+import { useState, HTMLAttributes } from 'react';
 import clsx from 'clsx';
-import {
-    MdOutlineClear,
-    MdOutlineEditNote,
-    MdOutlineThumbUp,
-} from 'react-icons/md';
 import BasicInfo from 'components/utilities/BasicInfo';
+import MoreOptionsButton from 'components/utilities/MoreOptionsButton';
+import LikeButton from 'components/chunks/LikeButton';
+import type { Comment as CommentType } from 'types/comment';
 
-type Props = HTMLAttributes<HTMLElement>;
+type Props = CommentType & HTMLAttributes<HTMLElement>;
 
-export default function Comment({ className, ...props }: Props) {
+export default function Comment({
+    className,
+    slug,
+    body,
+    likes_count,
+    is_own_comment,
+    is_liked,
+    is_edited,
+    timestamp,
+    user,
+    ...props
+}: Props) {
+    const [liked, setLiked] = useState<boolean>(is_liked);
+    const [likesCount, setLikesCount] = useState<number>(likes_count);
+    const { username, is_self, is_followed, ...userProps } = user;
+
     return (
         <article
             className={clsx('bg-skin-bg-contrast rounded-md p-md', className)}
             {...props}
         >
-            <BasicInfo
-                image_url='/'
-                gender='Male'
-                name='John doe'
-                username='5 hours ago'
-            />
+            <div className={is_own_comment ? 'flex items-center' : 'block'}>
+                <BasicInfo username={`@${username}`} {...userProps} />
 
-            <p className='paragraph-md clamp text-skin-text my-sm'>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                Molestiae pariatur obcaecati recusandae tempore reprehenderit
-                officia aut culpa deleniti ducimus, blanditiis aliquam
-                consequuntur ipsam ullam! Possimus fugit veniam ipsam voluptas
-                id! Lorem ipsum dolor sit amet consectetur adipisicing elitee.
-            </p>
+                {is_own_comment && (
+                    <MoreOptionsButton
+                        className='relative ml-auto'
+                        slug={slug}
+                    />
+                )}
+            </div>
 
-            <div className='flex items-center'>
-                <button
-                    className='flex items-center text-skin-text-light hover:text-primary'
-                    type='button'
-                >
-                    <MdOutlineThumbUp className='text-lg' />
-                    <span className='text-sm ml-xs'>5</span>
-                </button>
+            <p className='paragraph-md clamp text-skin-text my-sm'>{body}</p>
 
-                <button
-                    className='flex items-center text-skin-text-light ml-xxl hover:text-skin-text'
-                    type='button'
-                >
-                    <MdOutlineEditNote className='text-lg' />
-                    <span className='text-sm ml-xs'>Edit</span>
-                </button>
+            <span className='text-skin-text-light text-sm'>
+                {timestamp} {is_edited && '(edited)'}
+            </span>
 
-                <button
-                    className='flex items-center text-skin-text-light ml-xxl hover:text-danger'
-                    type='button'
-                >
-                    <MdOutlineClear className='text-lg' />
-                    <span className='text-sm ml-xs'>Delete</span>
-                </button>
+            <div className='flex items-center mt-sm'>
+                <LikeButton
+                    className='flex items-center text-center'
+                    route={`/api/comments/${slug}`}
+                    condition={liked}
+                    count={likesCount}
+                    stateEvent={setLiked}
+                    setCountEvent={setLikesCount}
+                />
             </div>
         </article>
     );
