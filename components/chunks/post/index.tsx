@@ -14,12 +14,14 @@ function Post(
         className,
         user,
         slug,
+        body,
         is_liked,
         is_bookmarked,
         likes_count,
         comments_count,
         is_own_post,
         is_edited,
+        timestamp,
         ...props
     }: Props,
     ref: ForwardedRef<HTMLElement>,
@@ -32,7 +34,10 @@ function Post(
     return (
         <article
             ref={ref}
-            className={clsx('bg-skin-bg-contrast rounded-md', className)}
+            className={clsx(
+                'bg-skin-bg-contrast-light border border-skin-bg-contrast hover:bg-skin-bg-contrast rounded-md',
+                className,
+            )}
             {...props}
         >
             <section className='p-md'>
@@ -46,17 +51,24 @@ function Post(
                     {(is_own_post || is_self) && (
                         <MoreOptionsButton
                             className='relative ml-auto'
+                            queryKey='posts'
                             slug={slug}
+                            edit={{
+                                label: 'Edit post',
+                                value: body,
+                                placholder: 'Edit post',
+                                apiUrl: `/api/posts/${slug}`,
+                            }}
                         />
                     )}
                 </div>
 
                 <p className='paragraph-md text-skin-text my-sm clamp'>
-                    {props.body}
+                    {body}
                 </p>
 
                 <span className='text-skin-text-light text-sm'>
-                    {props.timestamp} {is_edited && '(edited)'}
+                    {timestamp} {is_edited && '(edited)'}
                 </span>
             </section>
 

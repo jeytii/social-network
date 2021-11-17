@@ -1,15 +1,17 @@
 import { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
-import { InfiniteData } from 'react-query';
-import PostBox from 'components/chunks/PostBox';
+import { InfiniteData, useQueryClient } from 'react-query';
+import TextBox from 'components/utilities/TextBox';
 import Spinner from 'components/vectors/Spinner';
 import axios from 'config/axios';
 import type { Post } from 'types/post';
 import type { PostPage } from 'types/page';
 
-interface OnSuccessEventData {
-    status: number;
-    data: Post;
+interface SuccessEventData {
+    data: {
+        status: number;
+        data: Post;
+    };
 }
 
 const Posts = dynamic(() => import('components/layouts/Posts'), {
@@ -17,40 +19,35 @@ const Posts = dynamic(() => import('components/layouts/Posts'), {
 });
 
 export default function Home() {
-    const onSuccessEvent = (
-        current: InfiniteData<PostPage>,
-        data: OnSuccessEventData,
-    ) => {
-        if (current) {
-            current.pages[0].items.unshift(data.data);
+    const queryClient = useQueryClient();
 
-            return current;
-        }
+    const successEvent = ({ data }: SuccessEventData) => {
+        queryClient.setQueryData<InfiniteData<PostPage> | undefined>(
+            'posts',
+            current => {
+                if (current) {
+                    current.pages[0].items.unshift(data.data);
 
-        return {
-            pageParams: [],
-            pages: [
-                {
-                    items: [data.data],
-                    has_more: false,
-                    next_offset: null,
-                    status: 200,
-                },
-            ],
-        };
+                    return current;
+                }
+
+                return current;
+            },
+        );
     };
 
     return (
         <div className='p-lg sm:px-md'>
-            <PostBox
+            <TextBox
                 rows={3}
                 placeholder="What's on your mind?"
                 buttonLabel='Post'
                 value=''
                 apiUrl='/api/posts'
                 apiMethod='post'
-                onSuccessEvent={onSuccessEvent}
+                successEvent={successEvent}
             />
+
             <Posts />
         </div>
     );

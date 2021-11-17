@@ -1,40 +1,34 @@
 import { HTMLAttributes, MouseEvent, useState } from 'react';
-import { useQueryClient, InfiniteData } from 'react-query';
+import { useQueryClient } from 'react-query';
 import { MdMoreHoriz } from 'react-icons/md';
 import clsx from 'clsx';
 import MoreOptions from 'components/utilities/MoreOptions';
-import type { PostPage } from 'types/page';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
+    queryKey: string;
     slug: string;
+    edit: {
+        label: string;
+        value: string;
+        placholder: string;
+        apiUrl: string;
+    };
 }
 
-export default function MoreOptionsButton({ slug, ...props }: Props) {
+export default function MoreOptionsButton({
+    queryKey,
+    slug,
+    edit,
+    ...props
+}: Props) {
     const [showOptions, setShowOptions] = useState<boolean>(false);
     const queryClient = useQueryClient();
-
-    const formatPostsData = () => {
-        const posts = queryClient.getQueryData<InfiniteData<PostPage>>('posts');
-
-        if (!posts?.pages.length) {
-            return [];
-        }
-
-        if (posts?.pages.length === 1) {
-            return posts?.pages[0].items;
-        }
-
-        return posts?.pages.flatMap(page => [...page.items]);
-    };
 
     const selectPostToBeEdited = (event: MouseEvent<HTMLButtonElement>) => {
         event.stopPropagation();
 
-        const posts = formatPostsData();
-        const post = posts.find(p => p.slug === slug);
-
-        queryClient.setQueryData('edit.post', post);
-        queryClient.setQueryData('showEditPostModal', true);
+        queryClient.setQueryData('edit', { queryKey, slug, ...edit });
+        setShowOptions(false);
     };
 
     const selectPostToBeDeleted = (event: MouseEvent<HTMLButtonElement>) => {
@@ -42,6 +36,7 @@ export default function MoreOptionsButton({ slug, ...props }: Props) {
 
         queryClient.setQueryData('delete.post', slug);
         queryClient.setQueryData('showDeletePostModal', true);
+        setShowOptions(false);
     };
 
     function toggleOptions(event: MouseEvent<HTMLButtonElement>) {

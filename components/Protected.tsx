@@ -5,7 +5,7 @@ import { useMediaQuery } from 'react-responsive';
 import { MdOutlineWbSunny, MdModeNight } from 'react-icons/md';
 import useWindowSize from 'hooks/useWindowSize';
 import useRendered from 'hooks/useRendered';
-import EditPostModal from 'components/layouts/modal/EditPost';
+import EditItemModal from 'components/layouts/modal/EditItem';
 import ConfirmDeletePostModal from 'components/layouts/modal/ConfirmDeletePost';
 import Searchbar from './layouts/Searchbar';
 import LeftSidebar from './layouts/LeftSidebar';
@@ -13,6 +13,14 @@ import RightSidebar from './layouts/right-sidebar';
 import BottomNav from './layouts/BottomNav';
 import Spinner from './vectors/Spinner';
 import Logo from './Logo';
+
+interface EditItem {
+    slug: string;
+    label: string;
+    value: string;
+    placholder: string;
+    apiUrl: string;
+}
 
 interface Props {
     title: string;
@@ -27,11 +35,13 @@ export default function Protected({ title, children }: Props) {
     const isMobile = useMediaQuery({ maxWidth: 480 }, windowSize);
     const queryClient = useQueryClient();
 
-    const [editPostModal, deletePostModal] = useQueries<[boolean, boolean]>([
+    const [editPostModal, deletePostModal] = useQueries<
+        [EditItem | null, boolean]
+    >([
         {
-            queryKey: 'showEditPostModal',
-            queryFn: () => queryClient.getQueryData('showEditPostModal'),
-            initialData: false,
+            queryKey: 'edit',
+            queryFn: () => queryClient.getQueryData('edit'),
+            initialData: null,
         },
         {
             queryKey: 'showDeletePostModal',
@@ -100,7 +110,7 @@ export default function Protected({ title, children }: Props) {
 
             {isMobile && <BottomNav />}
 
-            <EditPostModal isOpen={editPostModal.data as boolean} />
+            <EditItemModal isOpen={!!editPostModal.data} />
 
             <ConfirmDeletePostModal isOpen={deletePostModal.data as boolean} />
         </main>

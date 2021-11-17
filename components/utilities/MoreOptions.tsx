@@ -24,6 +24,7 @@ export default function MoreOptions({ editEvent, deleteEvent, close }: Props) {
             window.removeEventListener('click', close);
         };
     }, []);
+
     return (
         <div className='absolute right-[0px] bg-skin-bg rounded-md shadow-md'>
             <button
