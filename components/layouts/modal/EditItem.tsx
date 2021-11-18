@@ -1,5 +1,4 @@
-import { useEffect } from 'react';
-import { useQueryClient, InfiniteData } from 'react-query';
+import { useQueryClient, InfiniteData, QueryKey } from 'react-query';
 import { MdAccountCircle, MdClose } from 'react-icons/md';
 import TextBox from 'components/utilities/TextBox';
 import type { PostPage, CommentPage } from 'types/page';
@@ -9,8 +8,12 @@ import Modal from '.';
 
 type SetQueryData = InfiniteData<PostPage | CommentPage> | undefined;
 
+interface Variables {
+    body: string;
+}
+
 interface EditItem {
-    queryKey: string;
+    queryKey: QueryKey;
     slug: string;
     label: string;
     value: string;
@@ -22,22 +25,20 @@ export default function EditItemModal({ isOpen }: { isOpen: boolean }) {
     const queryClient = useQueryClient();
     const item = queryClient.getQueryData<EditItem>('edit');
 
-    const successEvent = (_: never, { body }: { body: string }) => {
+    const successEvent = (_: never, { body }: Variables) => {
         queryClient.setQueryData<SetQueryData>(
             item?.queryKey as string,
             current => {
-                if (current) {
-                    current.pages.forEach(page => {
-                        const post = (page.items as (Post | Comment)[]).find(
-                            i => i.slug === item?.slug,
-                        );
+                current?.pages.forEach(page => {
+                    const selectedItem = (
+                        page.items as (Post | Comment)[]
+                    ).find(i => i.slug === item?.slug);
 
-                        if (post) {
-                            post.body = body;
-                            post.is_edited = true;
-                        }
-                    });
-                }
+                    if (selectedItem) {
+                        selectedItem.body = body;
+                        selectedItem.is_edited = true;
+                    }
+                });
 
                 return current;
             },
@@ -48,14 +49,7 @@ export default function EditItemModal({ isOpen }: { isOpen: boolean }) {
 
     const closeModal = () => {
         queryClient.setQueryData('edit', null);
-        // queryClient.removeQueries('edit');
     };
-
-    useEffect(() => {
-        return () => {
-            queryClient.removeQueries('edit');
-        };
-    }, []);
 
     return (
         <Modal isOpen={isOpen} closeEvent={closeModal}>
@@ -86,7 +80,6 @@ export default function EditItemModal({ isOpen }: { isOpen: boolean }) {
             <TextBox
                 placeholder={item?.placholder}
                 buttonLabel={item?.label}
-                rows={5}
                 value={item?.value}
                 apiUrl={item?.apiUrl}
                 apiMethod='put'

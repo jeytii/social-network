@@ -6,21 +6,13 @@ import { MdOutlineWbSunny, MdModeNight } from 'react-icons/md';
 import useWindowSize from 'hooks/useWindowSize';
 import useRendered from 'hooks/useRendered';
 import EditItemModal from 'components/layouts/modal/EditItem';
-import ConfirmDeletePostModal from 'components/layouts/modal/ConfirmDeletePost';
+import DeleteItemModal from 'components/layouts/modal/DeleteItem';
 import Searchbar from './layouts/Searchbar';
 import LeftSidebar from './layouts/LeftSidebar';
 import RightSidebar from './layouts/right-sidebar';
 import BottomNav from './layouts/BottomNav';
 import Spinner from './vectors/Spinner';
 import Logo from './Logo';
-
-interface EditItem {
-    slug: string;
-    label: string;
-    value: string;
-    placholder: string;
-    apiUrl: string;
-}
 
 interface Props {
     title: string;
@@ -35,22 +27,20 @@ export default function Protected({ title, children }: Props) {
     const isMobile = useMediaQuery({ maxWidth: 480 }, windowSize);
     const queryClient = useQueryClient();
 
-    const [editPostModal, deletePostModal] = useQueries<
-        [EditItem | null, boolean]
-    >([
+    const [editPostModal, deletePostModal] = useQueries([
         {
             queryKey: 'edit',
             queryFn: () => queryClient.getQueryData('edit'),
             initialData: null,
         },
         {
-            queryKey: 'showDeletePostModal',
-            queryFn: () => queryClient.getQueryData('showDeletePostModal'),
-            initialData: false,
+            queryKey: 'delete',
+            queryFn: () => queryClient.getQueryData('delete'),
+            initialData: null,
         },
     ]);
 
-    function toggleDarkMode(event: ChangeEvent<HTMLInputElement>) {
+    const toggleDarkMode = (event: ChangeEvent<HTMLInputElement>) => {
         const { checked } = event.target;
 
         setNightMode(checked);
@@ -60,7 +50,7 @@ export default function Protected({ title, children }: Props) {
         } else {
             document.body.classList.remove('theme-dark');
         }
-    }
+    };
 
     return (
         <main className='bg-skin-bg h-screen overflow-auto'>
@@ -110,9 +100,13 @@ export default function Protected({ title, children }: Props) {
 
             {isMobile && <BottomNav />}
 
-            <EditItemModal isOpen={!!editPostModal.data} />
+            {!!editPostModal.data && (
+                <EditItemModal isOpen={!!editPostModal.data} />
+            )}
 
-            <ConfirmDeletePostModal isOpen={deletePostModal.data as boolean} />
+            {!!deletePostModal.data && (
+                <DeleteItemModal isOpen={!!deletePostModal.data} />
+            )}
         </main>
     );
 }

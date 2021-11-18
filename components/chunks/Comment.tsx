@@ -10,6 +10,7 @@ type Props = CommentType & HTMLAttributes<HTMLElement>;
 export default function Comment({
     className,
     slug,
+    post_slug,
     body,
     likes_count,
     is_own_comment,
@@ -34,7 +35,20 @@ export default function Comment({
                 {is_own_comment && (
                     <MoreOptionsButton
                         className='relative ml-auto'
+                        queryKey={['comments', post_slug]}
                         slug={slug}
+                        edit={{
+                            label: 'Edit comment',
+                            value: body,
+                            placeholder: 'Edit comment',
+                            apiUrl: `/api/comments/${slug}`,
+                        }}
+                        delete={{
+                            title: 'Confirmation to delete comment',
+                            message:
+                                'Are you sure you want to delete this comment?',
+                            apiUrl: `/api/comments/${slug}`,
+                        }}
                     />
                 )}
             </div>

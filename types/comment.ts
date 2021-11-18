@@ -2,6 +2,7 @@ import type { User } from './user';
 
 export interface Comment {
     slug: string;
+    post_slug: string;
     body: string;
     likes_count: number;
     is_own_comment: boolean;

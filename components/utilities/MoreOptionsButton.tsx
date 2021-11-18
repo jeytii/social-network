@@ -1,16 +1,21 @@
 import { HTMLAttributes, MouseEvent, useState } from 'react';
-import { useQueryClient } from 'react-query';
+import { useQueryClient, QueryKey } from 'react-query';
 import { MdMoreHoriz } from 'react-icons/md';
 import clsx from 'clsx';
 import MoreOptions from 'components/utilities/MoreOptions';
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
-    queryKey: string;
+    queryKey: QueryKey;
     slug: string;
     edit: {
         label: string;
         value: string;
-        placholder: string;
+        placeholder: string;
+        apiUrl: string;
+    };
+    delete: {
+        title: string;
+        message: string;
         apiUrl: string;
     };
 }
@@ -19,6 +24,7 @@ export default function MoreOptionsButton({
     queryKey,
     slug,
     edit,
+    delete: deleteItem,
     ...props
 }: Props) {
     const [showOptions, setShowOptions] = useState<boolean>(false);
@@ -34,13 +40,17 @@ export default function MoreOptionsButton({
     const selectPostToBeDeleted = (event: MouseEvent<HTMLButtonElement>) => {
         event.stopPropagation();
 
-        queryClient.setQueryData('delete.post', slug);
-        queryClient.setQueryData('showDeletePostModal', true);
+        queryClient.setQueryData('delete', {
+            queryKey,
+            slug,
+            ...deleteItem,
+        });
+
         setShowOptions(false);
     };
 
     function toggleOptions(event: MouseEvent<HTMLButtonElement>) {
-        event.stopPropagation();
+        event.preventDefault();
 
         setShowOptions(current => !current);
     }

@@ -7,11 +7,6 @@ import type { Post } from 'types/post';
 import type { Comment } from 'types/comment';
 import type { PostPage, CommentPage } from 'types/page';
 
-interface Variables {
-    post: string;
-    body: string;
-}
-
 interface ResponseBody {
     status: number;
     data: Comment;
@@ -22,23 +17,20 @@ const authToken = Cookies.get('token');
 export default function CommentBox({ postSlug }: { postSlug: string }) {
     const queryClient = useQueryClient();
     const [hook, checkTextBodyLength, charactersLeft] = useTextBody('');
+    const newComment = {
+        post: postSlug,
+        ...hook.values,
+    };
 
-    const { mutate, isLoading } = useMutation<
-        { data: ResponseBody },
-        unknown,
-        Variables
-    >(newComment => axios(authToken).post('/api/comments', newComment), {
-        onSuccess,
-        retry: 3,
-    });
+    const { mutate, isLoading } = useMutation<{ data: ResponseBody }>(
+        () => axios(authToken).post('/api/comments', newComment),
+        { onSuccess, retry: 3 },
+    );
 
-    function foo(event: KeyboardEvent<HTMLTextAreaElement>) {
+    function monitorKeyPress(event: KeyboardEvent<HTMLTextAreaElement>) {
         if (event.key === 'Enter' && !event.shiftKey) {
             if (hook.values.body.length) {
-                mutate({
-                    post: postSlug,
-                    ...hook.values,
-                });
+                mutate();
             } else {
                 event.preventDefault();
             }
@@ -107,7 +99,7 @@ export default function CommentBox({ postSlug }: { postSlug: string }) {
                     rows={1}
                     aria-label='Comment box'
                     disabled={isLoading}
-                    onKeyPress={foo}
+                    onKeyPress={monitorKeyPress}
                     {...hook.register}
                 />
 
