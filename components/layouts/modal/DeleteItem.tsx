@@ -1,37 +1,24 @@
 import { useEffect } from 'react';
 import {
     useQueryClient,
-    InfiniteData,
     useMutation,
-    QueryClient,
+    InfiniteData,
+    QueryKey,
 } from 'react-query';
 import { Dialog } from '@headlessui/react';
 import Cookies from 'js-cookie';
 import axios from 'config/axios';
-import type { PostPage } from 'types/page';
+import type { PostPage, CommentPage } from 'types/page';
 import Modal from '.';
 
-const token = Cookies.get('token');
-const mutationFn = (post?: string) => axios(token).delete(`/api/posts/${post}`);
+type SetQueryData = InfiniteData<PostPage | CommentPage> | undefined;
 
-function successfulDelete(queryClient: QueryClient, slug?: string) {
-    queryClient.setQueryData<InfiniteData<PostPage> | undefined>(
-        'posts',
-        current => {
-            current?.pages.forEach(page => {
-                const index = page.items.findIndex(post => post.slug === slug);
-
-                if (index !== -1) {
-                    page.items.splice(index, 1);
-                }
-            });
-
-            return current;
-        },
-    );
-
-    queryClient.setQueryData('showDeletePostModal', false);
-    queryClient.removeQueries('delete.post');
+interface DeleteItem {
+    queryKey: QueryKey;
+    slug: string;
+    title: string;
+    message: string;
+    apiUrl: string;
 }
 
 export default function ConfirmDeletePostModal({
@@ -40,29 +27,45 @@ export default function ConfirmDeletePostModal({
     isOpen: boolean;
 }) {
     const queryClient = useQueryClient();
+    const item = queryClient.getQueryData<DeleteItem>('delete');
 
-    const { mutate, isLoading } = useMutation<
-        unknown,
-        unknown,
-        string | undefined
-    >(mutationFn, {
-        onSuccess(response, slug) {
-            successfulDelete(queryClient, slug);
-        },
-        retry: 3,
-    });
+    const onSuccess = () => {
+        queryClient.setQueryData<SetQueryData>(
+            item?.queryKey as string,
+            current => {
+                current?.pages.forEach(page => {
+                    const index = page.items.findIndex(
+                        post => post.slug === item?.slug,
+                    );
 
-    const deletePost = () => {
-        mutate(queryClient.getQueryData<string>('delete.post'));
+                    if (index !== -1) {
+                        page.items.splice(index, 1);
+                    }
+                });
+
+                return current;
+            },
+        );
+
+        queryClient.setQueryData('delete', null);
+    };
+
+    const { mutate, isLoading } = useMutation(
+        () => axios(Cookies.get('token')).delete(item?.apiUrl as string),
+        { onSuccess, retry: 3 },
+    );
+
+    const deleteItem = () => {
+        mutate();
     };
 
     const closeModal = () => {
-        queryClient.setQueryData('showDeletePostModal', false);
+        queryClient.setQueryData('delete', null);
     };
 
     useEffect(() => {
         return () => {
-            queryClient.removeQueries('delete.post');
+            queryClient.removeQueries('delete');
         };
     }, []);
 
@@ -73,12 +76,12 @@ export default function ConfirmDeletePostModal({
                     as='h3'
                     className='text-md font-bold leading-6 text-skin-text'
                 >
-                    Confirmation to delete post
+                    {item?.title}
                 </Dialog.Title>
             </header>
 
             <p className='paragraph-md text-skin-text p-md bg-skin-bg-contrast'>
-                Are you sure you want to delete the selected post?
+                {item?.message}
             </p>
 
             <div className='p-md'>
@@ -86,7 +89,7 @@ export default function ConfirmDeletePostModal({
                     type='button'
                     className='button button-danger px-sm'
                     disabled={isLoading}
-                    onClick={deletePost}
+                    onClick={deleteItem}
                 >
                     Delete
                 </button>
