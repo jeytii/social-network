@@ -15,7 +15,6 @@ interface Props {
     buttonLabel: string | undefined;
     value: string | undefined;
     placeholder: string | undefined;
-    rows?: number;
     apiUrl: string | undefined;
     apiMethod: 'post' | 'put';
     successEvent(
@@ -26,11 +25,10 @@ interface Props {
 
 const authToken = Cookies.get('token');
 
-function TextBox({
+export default function TextBox({
     buttonLabel,
     value,
     placeholder,
-    rows,
     apiUrl,
     apiMethod,
     successEvent,
@@ -43,7 +41,10 @@ function TextBox({
         {
             onSuccess(response) {
                 successEvent(response, hook.values);
-                hook.resetValue();
+
+                if (apiMethod === 'post') {
+                    hook.resetValue();
+                }
             },
             retry: 3,
         },
@@ -56,8 +57,8 @@ function TextBox({
     return (
         <form className='rounded-md bg-skin-bg-contrast'>
             <textarea
-                className='block text-skin-text w-full transparent resize-none rounded-t-md p-md disabled:opacity-50 disabled:cursor-not-allowed'
-                rows={rows}
+                className='block text-md text-skin-text w-full transparent resize-none rounded-t-md p-md disabled:opacity-50 disabled:cursor-not-allowed'
+                rows={3}
                 placeholder={placeholder}
                 disabled={isLoading}
                 onKeyPress={checkTextBodyLength}
@@ -74,7 +75,11 @@ function TextBox({
                 <button
                     className='button button-primary text-sm rounded-full ml-auto'
                     type='button'
-                    disabled={isLoading || charactersLeft === 300}
+                    disabled={
+                        isLoading ||
+                        charactersLeft === 300 ||
+                        (apiMethod === 'put' && hook.values.body === value)
+                    }
                     onClick={submit}
                 >
                     {buttonLabel}
@@ -83,9 +88,3 @@ function TextBox({
         </form>
     );
 }
-
-TextBox.defaultProps = {
-    rows: 3,
-};
-
-export default TextBox;
