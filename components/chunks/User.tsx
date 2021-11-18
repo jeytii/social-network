@@ -7,7 +7,7 @@ import type { User as UserType } from 'types/user';
 import useDebounceClick from 'hooks/useDebounceClick';
 import Cookies from 'js-cookie';
 
-interface Props extends UserType, HTMLAttributes<HTMLDivElement> { }
+type Props = UserType & HTMLAttributes<HTMLDivElement>;
 
 export default function User({
     className,

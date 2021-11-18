@@ -14,7 +14,7 @@ export default function EditProfile() {
                         id='name'
                         label='Name'
                         aria-label='Name field'
-                        error={null}
+                        error={undefined}
                         autoFocus
                     />
 

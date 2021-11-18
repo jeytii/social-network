@@ -39,7 +39,7 @@ const InputField = forwardRef(
 
 InputField.defaultProps = {
     containerClassName: undefined,
-    error: null,
+    error: undefined,
 };
 
 export default InputField;

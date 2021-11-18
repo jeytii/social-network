@@ -39,7 +39,6 @@ export default function Home() {
     return (
         <div className='p-lg sm:px-md'>
             <TextBox
-                rows={3}
                 placeholder="What's on your mind?"
                 buttonLabel='Post'
                 value=''

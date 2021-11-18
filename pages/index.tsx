@@ -1,6 +1,5 @@
 import { GetServerSideProps } from 'next';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import { FormEvent, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { AxiosError } from 'axios';
@@ -33,7 +32,6 @@ export default function Index() {
         username: string;
     } | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
-    const { replace } = useRouter();
     const {
         register,
         watch,
@@ -84,7 +82,7 @@ export default function Index() {
             Cookies.set('user', JSON.stringify(data.user));
             Cookies.set('token', data.token);
 
-            replace('/home');
+            window.location.href = '/home';
         } catch (error: AxiosError) {
             setLoading(false);
 

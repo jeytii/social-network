@@ -42,8 +42,8 @@ export default function ResetPassword({ token }: { token: string }) {
             Cookies.set('token', data.token);
 
             replace('/home');
-        } catch (error) {
-            const { errors } = (error as AxiosError).response?.data;
+        } catch (error: AxiosError) {
+            const { errors } = error.response.data;
             const keys = Object.keys(fields);
 
             setLoading(false);

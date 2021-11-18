@@ -35,7 +35,7 @@ function Post(
         <article
             ref={ref}
             className={clsx(
-                'bg-skin-bg-contrast-light border border-skin-bg-contrast hover:bg-skin-bg-contrast rounded-md',
+                'bg-skin-bg-contrast-light border border-skin-bg-contrast rounded-md hover:bg-skin-bg-contrast',
                 className,
             )}
             {...props}
@@ -56,7 +56,13 @@ function Post(
                             edit={{
                                 label: 'Edit post',
                                 value: body,
-                                placholder: 'Edit post',
+                                placeholder: 'Edit post',
+                                apiUrl: `/api/posts/${slug}`,
+                            }}
+                            delete={{
+                                title: 'Confirmation to delete post',
+                                message:
+                                    'Are you sure you want to delete this post?',
                                 apiUrl: `/api/posts/${slug}`,
                             }}
                         />
@@ -72,7 +78,7 @@ function Post(
                 </span>
             </section>
 
-            <section className='flex bg-skin-bg-contrast-light'>
+            <section className='flex bg-skin-bg-contrast-light border-t border-skin-bg-contrast'>
                 <LikeButton
                     className='flex-1 flex items-center justify-center text-center py-sm'
                     route={`/api/posts/${slug}`}
