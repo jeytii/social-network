@@ -56,13 +56,9 @@ export default function EditItemModal({ isOpen }: { isOpen: boolean }) {
             <header className='flex items-center py-sm px-md'>
                 <MdAccountCircle
                     className='text-skin-text'
-                    size={35}
+                    size={30}
                     viewBox='2 2 20 20'
                 />
-
-                <h1 className='text-md text-skin-text font-bold ml-sm'>
-                    Edit post
-                </h1>
 
                 <button
                     type='button'

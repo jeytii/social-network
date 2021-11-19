@@ -61,7 +61,7 @@ export default function Protected({ title, children }: Props) {
             </Head>
 
             <header className='sticky top-[0] flex items-center bg-skin-bg py-sm px-lg drop-shadow-md z-10 sm:px-md sm:gap-md'>
-                <a className='no-underline' href='/' aria-label='Logo link'>
+                <a className='no-underline' href='/home' aria-label='Logo link'>
                     <Logo />
                 </a>
 

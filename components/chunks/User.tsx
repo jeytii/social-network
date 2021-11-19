@@ -1,11 +1,11 @@
 import { HTMLAttributes, useState } from 'react';
 import { MdPersonAddAlt, MdOutlinePersonRemove } from 'react-icons/md';
+import Cookies from 'js-cookie';
 import clsx from 'clsx';
 import BasicInfo from 'components/utilities/BasicInfo';
+import useDebounceClick from 'hooks/useDebounceClick';
 import axios from 'config/axios';
 import type { User as UserType } from 'types/user';
-import useDebounceClick from 'hooks/useDebounceClick';
-import Cookies from 'js-cookie';
 
 type Props = UserType & HTMLAttributes<HTMLDivElement>;
 
