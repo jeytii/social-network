@@ -24,7 +24,7 @@ export default function CommentBox({ postSlug }: { postSlug: string }) {
 
     const { mutate, isLoading } = useMutation<{ data: ResponseBody }>(
         () => axios(authToken).post('/api/comments', newComment),
-        { onSuccess, retry: 3 },
+        { onSuccess },
     );
 
     function monitorKeyPress(event: KeyboardEvent<HTMLTextAreaElement>) {

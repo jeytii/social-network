@@ -46,7 +46,6 @@ export default function TextBox({
                     hook.resetValue();
                 }
             },
-            retry: 3,
         },
     );
 

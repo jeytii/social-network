@@ -52,7 +52,7 @@ export default function ConfirmDeletePostModal({
 
     const { mutate, isLoading } = useMutation(
         () => axios(Cookies.get('token')).delete(item?.apiUrl as string),
-        { onSuccess, retry: 3 },
+        { onSuccess },
     );
 
     const deleteItem = () => {
