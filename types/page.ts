@@ -3,7 +3,6 @@ import type { Post } from './post';
 import type { Comment } from './comment';
 
 export interface Page {
-    has_more: boolean;
     next_offset: number | null;
     status: number;
 }
