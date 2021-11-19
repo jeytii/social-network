@@ -59,10 +59,9 @@ export default function User({
         >
             <BasicInfo
                 name={name}
-                username={`@${username}`}
+                username={username}
                 gender={gender}
                 image_url={image_url}
-                {...props}
             />
 
             {!is_self && (

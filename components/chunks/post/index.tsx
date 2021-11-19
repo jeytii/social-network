@@ -29,7 +29,7 @@ function Post(
     const [liked, setLiked] = useState<boolean>(is_liked);
     const [likesCount, setLikesCount] = useState<number>(likes_count);
     const [bookmarked, setBookmarked] = useState<boolean>(is_bookmarked);
-    const { username, is_self, ...userProps } = user;
+    const { is_self, ...userProps } = user;
 
     return (
         <article
@@ -42,11 +42,7 @@ function Post(
         >
             <section className='p-md'>
                 <div className={is_own_post ? 'flex items-center' : 'block'}>
-                    <BasicInfo
-                        username={`@${username}`}
-                        imageSize={50}
-                        {...userProps}
-                    />
+                    <BasicInfo imageSize={50} {...userProps} />
 
                     {(is_own_post || is_self) && (
                         <MoreOptionsButton

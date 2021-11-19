@@ -32,7 +32,7 @@ function BasicInfo({
                     {name}
                 </span>
                 <span className='block text-skin-text-light text-sm truncate'>
-                    {username}
+                    @{username}
                 </span>
             </figcaption>
         </figure>

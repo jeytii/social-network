@@ -22,7 +22,7 @@ export default function Comment({
 }: Props) {
     const [liked, setLiked] = useState<boolean>(is_liked);
     const [likesCount, setLikesCount] = useState<number>(likes_count);
-    const { username, is_self, is_followed, ...userProps } = user;
+    const { is_self, is_followed, ...userProps } = user;
 
     return (
         <article
@@ -30,7 +30,7 @@ export default function Comment({
             {...props}
         >
             <div className={is_own_comment ? 'flex items-center' : 'block'}>
-                <BasicInfo username={`@${username}`} {...userProps} />
+                <BasicInfo {...userProps} />
 
                 {is_own_comment && (
                     <MoreOptionsButton
