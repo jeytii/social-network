@@ -1,5 +1,10 @@
 import { GetServerSideProps } from 'next';
-import { useQuery, QueryClient, useQueryClient } from 'react-query';
+import {
+    useQuery,
+    QueryClient,
+    useQueryClient,
+    QueryFunctionContext,
+} from 'react-query';
 import Cookies from 'js-cookie';
 import Post from 'components/chunks/post';
 import Comments from 'components/layouts/Comments';
@@ -8,8 +13,11 @@ import Spinner from 'components/vectors/Spinner';
 import axios from 'config/axios';
 import type { Post as PostType } from 'types/post';
 
-const getPost = (queryClient: QueryClient, slug: string) => async () => {
-    const post = queryClient.getQueryData<PostType>(['post', slug]);
+const getPost = async (ctx: QueryFunctionContext) => {
+    const post = (ctx.meta?.queryClient as QueryClient).getQueryData<PostType>([
+        'post',
+        ctx.meta?.slug,
+    ]);
 
     if (post) {
         return post;
@@ -17,7 +25,7 @@ const getPost = (queryClient: QueryClient, slug: string) => async () => {
 
     try {
         const { data } = await axios(Cookies.get('token')).get(
-            `/api/posts/${slug}`,
+            `/api/posts/${ctx.meta?.slug}`,
         );
 
         return data.post;
@@ -34,8 +42,9 @@ export default function ViewPost({ slug }: { slug: string }) {
     const queryClient = useQueryClient();
     const { data, isLoading, isError, error } = useQuery<PostType, Error>(
         ['post', slug],
-        getPost(queryClient, slug),
+        getPost,
         {
+            meta: { queryClient, slug },
             cacheTime: 1000 * 60 * 2,
         },
     );
