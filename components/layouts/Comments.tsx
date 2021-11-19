@@ -1,28 +1,19 @@
-import { useInfiniteQuery, QueryFunctionContext } from 'react-query';
-import Cookies from 'js-cookie';
+import { useInfiniteQuery } from 'react-query';
 import Comment from 'components/chunks/Comment';
 import Spinner from 'components/vectors/Spinner';
-import axios from 'config/axios';
 import type { CommentPage } from 'types/page';
 import type { Comment as CommentType } from 'types/comment';
-
-const getComments = (slug: string) => async (ctx: QueryFunctionContext) => {
-    const { data } = await axios(Cookies.get('token')).get('/api/comments', {
-        params: {
-            page: ctx.pageParam || 1,
-            post: slug,
-        },
-    });
-
-    return data;
-};
 
 export default function Comments({ postSlug }: { postSlug: string }) {
     const { data, isLoading, isSuccess } = useInfiniteQuery<
         CommentPage,
         unknown,
         CommentType
-    >(['comments', postSlug], getComments(postSlug), {
+    >(['comments', postSlug], {
+        meta: {
+            url: '/api/comments',
+            post: postSlug,
+        },
         getNextPageParam: last => last.next_offset ?? false,
         select: result => {
             let pages: CommentType[] = [];

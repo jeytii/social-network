@@ -1,8 +1,13 @@
 import { useMutation } from 'react-query';
-import Cookies from 'js-cookie';
 import useTextBody from 'hooks/useTextBody';
-import axios from 'config/axios';
 import { Post } from 'types/post';
+
+interface Variables {
+    url: string;
+    data: {
+        body: string;
+    };
+}
 
 interface SuccessEventData {
     data: {
@@ -23,8 +28,6 @@ interface Props {
     ): void;
 }
 
-const authToken = Cookies.get('token');
-
 export default function TextBox({
     buttonLabel,
     value,
@@ -36,25 +39,29 @@ export default function TextBox({
     const [hook, checkTextBodyLength, charactersLeft] = useTextBody(
         value || '',
     );
-    const { mutate, isLoading } = useMutation<SuccessEventData | never>(
-        () => axios(authToken)[apiMethod](apiUrl as string, hook.values),
-        {
-            onSuccess(response) {
-                successEvent(response, hook.values);
+    const { mutate, isLoading } = useMutation<
+        SuccessEventData | never,
+        unknown,
+        Variables
+    >(apiMethod === 'put' ? 'update' : 'create', {
+        onSuccess(response) {
+            successEvent(response, hook.values);
 
-                if (apiMethod === 'post') {
-                    hook.resetValue();
-                }
-            },
+            if (apiMethod === 'post') {
+                hook.resetValue();
+            }
         },
-    );
+    });
 
     function submit() {
-        mutate();
+        mutate({
+            url: apiUrl as string,
+            data: hook.values,
+        });
     }
 
     return (
-        <form className='rounded-md bg-skin-bg-contrast'>
+        <form className='rounded-md bg-skin-bg-contrast-light border border-skin-bg-contrast'>
             <textarea
                 className='block text-md text-skin-text w-full transparent resize-none rounded-t-md p-md disabled:opacity-50 disabled:cursor-not-allowed'
                 rows={3}
@@ -64,15 +71,15 @@ export default function TextBox({
                 {...hook.register}
             />
 
-            <div className='flex items-center py-sm px-md bg-skin-bg-contrast-light rounded-b-md'>
+            <div className='flex items-center bg-skin-bg-contrast-light rounded-b-md'>
                 <span
-                    className='text-sm text-primary'
+                    className='text-sm text-primary ml-md'
                     aria-label='Characters left'
                 >
                     {charactersLeft}
                 </span>
                 <button
-                    className='button button-primary text-sm rounded-full ml-auto'
+                    className='button text-primary text-sm ml-auto py-sm px-lg hover:text-primary-dark'
                     type='button'
                     disabled={
                         isLoading ||

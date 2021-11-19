@@ -1,24 +1,20 @@
 import { useEffect } from 'react';
 import { useQuery } from 'react-query';
-import Cookies from 'js-cookie';
 import User from 'components/chunks/User';
 import Spinner from 'components/vectors/Spinner';
-import axios from 'config/axios';
 import type { User as UserType } from 'types/user';
-
-async function getUsers() {
-    const { data } = await axios(Cookies.get('token')).get('/api/users/random');
-
-    return data.data;
-}
 
 export default function RandomSuggestions() {
     const { data, refetch, isLoading, isRefetching, isSuccess } = useQuery<
         unknown,
         unknown,
         UserType[]
-    >('suggestions', getUsers, {
+    >('suggestions', {
         enabled: false,
+        meta: {
+            url: '/api/users/random',
+            returnKey: 'data',
+        },
     });
 
     function refresh() {

@@ -1,36 +1,44 @@
 import { KeyboardEvent } from 'react';
 import { useMutation, useQueryClient, InfiniteData } from 'react-query';
-import Cookies from 'js-cookie';
 import useTextBody from 'hooks/useTextBody';
-import axios from 'config/axios';
 import type { Post } from 'types/post';
 import type { Comment } from 'types/comment';
 import type { PostPage, CommentPage } from 'types/page';
 
-interface ResponseBody {
-    status: number;
-    data: Comment;
+interface Variables {
+    url: string;
+    data: {
+        post: string;
+        body: string;
+    };
 }
 
-const authToken = Cookies.get('token');
+interface ResponseBody {
+    data: {
+        status: number;
+        data: Comment;
+    };
+}
 
 export default function CommentBox({ postSlug }: { postSlug: string }) {
     const queryClient = useQueryClient();
     const [hook, checkTextBodyLength, charactersLeft] = useTextBody('');
-    const newComment = {
-        post: postSlug,
-        ...hook.values,
-    };
 
-    const { mutate, isLoading } = useMutation<{ data: ResponseBody }>(
-        () => axios(authToken).post('/api/comments', newComment),
+    const { mutate, isLoading } = useMutation<ResponseBody, unknown, Variables>(
+        'create',
         { onSuccess },
     );
 
     function monitorKeyPress(event: KeyboardEvent<HTMLTextAreaElement>) {
         if (event.key === 'Enter' && !event.shiftKey) {
             if (hook.values.body.length) {
-                mutate();
+                mutate({
+                    url: '/api/comments',
+                    data: {
+                        post: postSlug,
+                        ...hook.values,
+                    },
+                });
             } else {
                 event.preventDefault();
             }
@@ -39,7 +47,7 @@ export default function CommentBox({ postSlug }: { postSlug: string }) {
         }
     }
 
-    function onSuccess({ data }: { data: ResponseBody }) {
+    function onSuccess({ data }: ResponseBody) {
         // Create a comment.
         queryClient.setQueryData<InfiniteData<CommentPage> | undefined>(
             ['comments', postSlug],

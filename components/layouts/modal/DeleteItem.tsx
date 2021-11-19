@@ -6,8 +6,6 @@ import {
     QueryKey,
 } from 'react-query';
 import { Dialog } from '@headlessui/react';
-import Cookies from 'js-cookie';
-import axios from 'config/axios';
 import type { PostPage, CommentPage } from 'types/page';
 import Modal from '.';
 
@@ -50,13 +48,14 @@ export default function ConfirmDeletePostModal({
         queryClient.setQueryData('delete', null);
     };
 
-    const { mutate, isLoading } = useMutation(
-        () => axios(Cookies.get('token')).delete(item?.apiUrl as string),
-        { onSuccess },
-    );
+    const { mutate, isLoading } = useMutation<
+        unknown,
+        unknown,
+        { url: string }
+    >('delete', { onSuccess });
 
     const deleteItem = () => {
-        mutate();
+        mutate({ url: item?.apiUrl as string });
     };
 
     const closeModal = () => {

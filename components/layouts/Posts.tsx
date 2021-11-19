@@ -1,12 +1,10 @@
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { ChangeEvent } from 'react';
-import { QueryFunctionContext, useInfiniteQuery } from 'react-query';
-import Cookies from 'js-cookie';
+import { useInfiniteQuery } from 'react-query';
 import Post from 'components/chunks/post';
 import Select from 'components/utilities/Select';
 import Spinner from 'components/vectors/Spinner';
-import axios from 'config/axios';
 import type { PostPage } from 'types/page';
 import type { Post as PostType } from 'types/post';
 
@@ -15,24 +13,17 @@ const items = [
     { label: 'Number of likes', value: 'likes' },
 ];
 
-const getPosts = (sort: string) => async (ctx: QueryFunctionContext) => {
-    const { data } = await axios(Cookies.get('token')).get('/api/posts', {
-        params: {
-            page: ctx.pageParam || 1,
-            sort,
-        },
-    });
-
-    return data;
-};
-
 export default function Posts() {
     const { query, replace } = useRouter();
     const { data, isLoading, isSuccess } = useInfiniteQuery<
         PostPage,
         unknown,
         PostType
-    >('posts', getPosts(query.sort as string), {
+    >('posts', {
+        meta: {
+            url: '/api/posts',
+            sort: query.sort,
+        },
         getNextPageParam: last => last.next_offset ?? false,
         select: result => {
             let pages: PostType[] = [];
