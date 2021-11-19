@@ -1,10 +1,10 @@
-import { Fragment } from 'react';
 import { useInfiniteQuery, QueryFunctionContext } from 'react-query';
 import Cookies from 'js-cookie';
 import Comment from 'components/chunks/Comment';
 import Spinner from 'components/vectors/Spinner';
 import axios from 'config/axios';
 import type { CommentPage } from 'types/page';
+import type { Comment as CommentType } from 'types/comment';
 
 const getComments = (slug: string) => async (ctx: QueryFunctionContext) => {
     const { data } = await axios(Cookies.get('token')).get('/api/comments', {
@@ -18,19 +18,36 @@ const getComments = (slug: string) => async (ctx: QueryFunctionContext) => {
 };
 
 export default function Comments({ postSlug }: { postSlug: string }) {
-    const { data, isLoading, isSuccess } = useInfiniteQuery<CommentPage>(
-        ['comments', postSlug],
-        getComments(postSlug),
-        {
-            getNextPageParam: last => (last.has_more ? last.next_offset : null),
+    const { data, isLoading, isSuccess } = useInfiniteQuery<
+        CommentPage,
+        unknown,
+        CommentType
+    >(['comments', postSlug], getComments(postSlug), {
+        getNextPageParam: last => last.next_offset ?? false,
+        select: result => {
+            let pages: CommentType[] = [];
+
+            if (result.pages.length === 1) {
+                pages = result.pages[0].items;
+            }
+
+            if (result.pages.length > 1) {
+                pages = result.pages.flatMap(page => [...page.items]);
+            }
+
+            return {
+                pageParams: result.pageParams,
+                pages,
+            };
         },
-    );
+        cacheTime: 1000 * 60 * 2,
+    });
 
     if (isLoading) {
         return <Spinner className='p-lg' />;
     }
 
-    if (isSuccess && !data?.pages[0].items.length) {
+    if (isSuccess && !data?.pages.length) {
         return (
             <section className='p-lg'>
                 <h1 className='text-md text-skin-text-light text-center'>
@@ -42,16 +59,8 @@ export default function Comments({ postSlug }: { postSlug: string }) {
 
     return (
         <section className='mt-lg'>
-            {data?.pages.map(page => (
-                <Fragment key={page.next_offset}>
-                    {page.items.map(comment => (
-                        <Comment
-                            key={comment.slug}
-                            className='mt-lg'
-                            {...comment}
-                        />
-                    ))}
-                </Fragment>
+            {data?.pages.map(comment => (
+                <Comment key={comment.slug} className='mt-lg' {...comment} />
             ))}
         </section>
     );

@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { ChangeEvent, Fragment } from 'react';
+import { ChangeEvent } from 'react';
 import { QueryFunctionContext, useInfiniteQuery } from 'react-query';
 import Cookies from 'js-cookie';
 import Post from 'components/chunks/post';
@@ -8,6 +8,7 @@ import Select from 'components/utilities/Select';
 import Spinner from 'components/vectors/Spinner';
 import axios from 'config/axios';
 import type { PostPage } from 'types/page';
+import type { Post as PostType } from 'types/post';
 
 const items = [
     { label: 'Timestamp', value: 'created_at' },
@@ -27,13 +28,29 @@ const getPosts = (sort: string) => async (ctx: QueryFunctionContext) => {
 
 export default function Posts() {
     const { query, replace } = useRouter();
-    const { data, isLoading, isSuccess } = useInfiniteQuery<PostPage>(
-        'posts',
-        getPosts(query.sort as string),
-        {
-            getNextPageParam: last => (last.has_more ? last.next_offset : null),
+    const { data, isLoading, isSuccess } = useInfiniteQuery<
+        PostPage,
+        unknown,
+        PostType
+    >('posts', getPosts(query.sort as string), {
+        getNextPageParam: last => last.next_offset ?? false,
+        select: result => {
+            let pages: PostType[] = [];
+
+            if (result.pages.length === 1) {
+                pages = result.pages[0].items;
+            }
+
+            if (result.pages.length > 1) {
+                pages = result.pages.flatMap(page => [...page.items]);
+            }
+
+            return {
+                pageParams: result.pageParams,
+                pages,
+            };
         },
-    );
+    });
 
     const changeSortType = (event: ChangeEvent<HTMLSelectElement>) => {
         replace(`/home?sort=${event.target.value}`);
@@ -43,7 +60,7 @@ export default function Posts() {
         return <Spinner className='p-lg' />;
     }
 
-    if (isSuccess && !!data?.pages && !data?.pages[0].items.length) {
+    if (isSuccess && !data?.pages.length) {
         return (
             <section className='p-lg'>
                 <h1 className='text-md text-skin-text-light text-center'>
@@ -66,17 +83,10 @@ export default function Posts() {
             </div>
 
             <div>
-                {data?.pages?.map(page => (
-                    <Fragment key={page.next_offset}>
-                        {page.items.map(post => (
-                            <Link key={post.slug} href={`/post/${post.slug}`}>
-                                <Post
-                                    className='cursor-pointer mt-lg'
-                                    {...post}
-                                />
-                            </Link>
-                        ))}
-                    </Fragment>
+                {data?.pages?.map(post => (
+                    <Link key={post.slug} href={`/post/${post.slug}`}>
+                        <Post className='cursor-pointer mt-lg' {...post} />
+                    </Link>
                 ))}
             </div>
         </section>
