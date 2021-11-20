@@ -33,7 +33,7 @@ export default function ForgotPassword() {
     const method = watch('method');
 
     function processFormErrors(error: AxiosError) {
-        const { errors } = error.response?.data;
+        const formErrors = error.response?.data.errors;
         const keys = Object.keys(fields);
 
         if (alertNotification) {
@@ -41,10 +41,10 @@ export default function ForgotPassword() {
         }
 
         keys.forEach(key => {
-            if (errors[key]) {
+            if (formErrors[key]) {
                 setError(key as keyof FormDataError, {
                     type: 'manual',
-                    message: errors[key][0],
+                    message: formErrors[key][0],
                 });
             } else {
                 clearErrors(key as keyof FormDataError);

@@ -2,7 +2,6 @@ import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { FormEvent, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { AxiosError } from 'axios';
 import Cookies from 'js-cookie';
 import InputField from 'components/utilities/InputField';
 import axios from 'config/axios';
@@ -31,18 +30,20 @@ export default function Verification() {
             Cookies.set('token', data.token);
 
             push('/home');
-        } catch (error: AxiosError) {
-            if (error.response?.status === 422) {
+        } catch (error) {
+            const { status, data } = error.response;
+
+            if (status === 422) {
                 if (alertError) {
                     setAlertError(null);
                 }
 
                 setError('code', {
                     type: 'manual',
-                    message: error.response?.data.errors.code[0],
+                    message: data.errors.code[0],
                 });
             } else {
-                setAlertError(error.response?.data.message);
+                setAlertError(data.message);
             }
 
             setLoading(false);

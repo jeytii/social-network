@@ -46,7 +46,7 @@ export default function Index() {
     const [username, password] = watch(['username', 'password']);
 
     function processFormErrors(error: AxiosError) {
-        const { errors } = error.response?.data;
+        const formErrors = error.response?.data.errors;
         const keys = Object.keys(fields);
 
         if (alertError) {
@@ -54,10 +54,10 @@ export default function Index() {
         }
 
         keys.forEach(key => {
-            if (errors[key]) {
+            if (formErrors[key]) {
                 setError(key as keyof FormDataError, {
                     type: 'manual',
-                    message: errors[key][0],
+                    message: formErrors[key][0],
                 });
             } else {
                 clearErrors(key as keyof FormDataError);
@@ -83,12 +83,13 @@ export default function Index() {
             Cookies.set('token', data.token);
 
             window.location.href = '/home';
-        } catch (error: AxiosError) {
+        } catch (error) {
+            const { status, data } = error.response;
             setLoading(false);
 
-            if (error.response?.status === 422) {
+            if (status === 422) {
                 processFormErrors(error);
-            } else if (error.response?.status === 401) {
+            } else if (status === 401) {
                 clearErrors();
 
                 if (codeResent) {
@@ -99,7 +100,7 @@ export default function Index() {
                     setAlertError(null);
                 }
 
-                setUnauthorizedError(error.response?.data.data);
+                setUnauthorizedError(data.data);
             } else {
                 clearErrors();
 
@@ -107,7 +108,7 @@ export default function Index() {
                     setUnauthorizedError(null);
                 }
 
-                setAlertError(error.response?.data.message);
+                setAlertError(data.message);
             }
         }
     }

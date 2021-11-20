@@ -2,7 +2,6 @@ import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { FormEvent, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { AxiosError } from 'axios';
 import Cookies from 'js-cookie';
 import InputField from 'components/utilities/InputField';
 import axios from 'config/axios';
@@ -42,7 +41,7 @@ export default function ResetPassword({ token }: { token: string }) {
             Cookies.set('token', data.token);
 
             replace('/home');
-        } catch (error: AxiosError) {
+        } catch (error) {
             const { errors } = error.response.data;
             const keys = Object.keys(fields);
 

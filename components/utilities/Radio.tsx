@@ -1,6 +1,9 @@
 import clsx from 'clsx';
 import { ForwardedRef, forwardRef, InputHTMLAttributes } from 'react';
-import { BiRadioCircle, BiRadioCircleMarked } from 'react-icons/bi';
+import {
+    MdOutlineRadioButtonUnchecked,
+    MdOutlineRadioButtonChecked,
+} from 'react-icons/md';
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
     containerClassName: string;
@@ -20,13 +23,13 @@ export default forwardRef(
             htmlFor={props.id}
         >
             {props.checked ? (
-                <BiRadioCircleMarked
-                    className='text-skin-text text-xl'
+                <MdOutlineRadioButtonChecked
+                    className='text-skin-text text-md'
                     viewBox='2 2 20 20'
                 />
             ) : (
-                <BiRadioCircle
-                    className='text-skin-text text-xl'
+                <MdOutlineRadioButtonUnchecked
+                    className='text-skin-text text-md'
                     viewBox='2 2 20 20'
                 />
             )}

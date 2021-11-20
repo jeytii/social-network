@@ -1,6 +1,5 @@
 import { FormEvent, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { AxiosError } from 'axios';
 import InputField from 'components/utilities/InputField';
 import Radio from 'components/utilities/Radio';
 import axios from 'config/axios';
@@ -56,7 +55,7 @@ export default function Register() {
             const { data } = await axios().post('/register', getValues());
 
             push(data.url);
-        } catch (error: AxiosError) {
+        } catch (error) {
             const e = error.response?.data.errors;
             const keys = Object.keys(fields);
 
