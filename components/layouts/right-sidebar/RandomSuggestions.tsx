@@ -27,7 +27,7 @@ export default function RandomSuggestions() {
 
     if (isLoading || isRefetching) {
         return (
-            <aside className='w-[280px] sticky top-[59px] left-[0px] full-height bg-skin-bg-contrast-light p-lg'>
+            <aside className='w-[280px] sticky top-[59.5px] full-height left-[0px] bg-skin-bg-contrast-light p-lg'>
                 <Spinner />
             </aside>
         );
@@ -35,7 +35,7 @@ export default function RandomSuggestions() {
 
     if (isSuccess && !data?.length) {
         return (
-            <aside className='w-[280px] sticky top-[59px] left-[0px] full-height bg-skin-bg-contrast-light p-lg'>
+            <aside className='w-[280px] sticky top-[59.5px] full-height left-[0px] bg-skin-bg-contrast-light p-lg'>
                 <p className='text-sm text-skin-text-light text-center'>
                     No suggestions left
                 </p>
@@ -44,7 +44,7 @@ export default function RandomSuggestions() {
     }
 
     return (
-        <aside className='w-[280px] sticky top-[59px] left-[0px] full-height bg-skin-bg-contrast-light p-lg'>
+        <aside className='w-[280px] sticky top-[59.5px] full-height left-[0px] bg-skin-bg-contrast-light p-lg'>
             <header className='flex items-center'>
                 <h3 className='text-skin-text-light text-md font-bold'>
                     Search people

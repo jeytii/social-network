@@ -21,12 +21,7 @@ export default function LeftSidebar() {
     const { route } = useRouter();
 
     return (
-        <aside
-            className={clsx(
-                'sticky top-[59px] left-[0px] full-height bg-skin-bg-contrast-light',
-                isPortrait ? 'w-[210px]' : 'auto',
-            )}
-        >
+        <aside className='w-[210px] sticky top-[59.5px] full-height left-[0px] bg-skin-bg-contrast-light md:w-auto'>
             <nav>
                 <Link href='/home'>
                     <span

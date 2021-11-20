@@ -19,7 +19,7 @@ const months = [
 
 export default function UserFilterer() {
     return (
-        <aside className='w-[280px] sticky top-[59px] left-[0px] full-height bg-skin-bg-contrast-light p-lg'>
+        <aside className='w-[280px] sticky top-[59.5px] full-height left-[0px] bg-skin-bg-contrast-light p-lg'>
             <header className='flex items-center'>
                 <h1 className='text-md text-skin-text font-bold'>Filter</h1>
                 <button
