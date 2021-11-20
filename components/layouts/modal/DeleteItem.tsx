@@ -11,6 +11,10 @@ import Modal from '.';
 
 type SetQueryData = InfiniteData<PostPage | CommentPage> | undefined;
 
+interface Variables {
+    url: string;
+}
+
 interface DeleteItem {
     queryKey: QueryKey;
     slug: string;
@@ -26,14 +30,17 @@ export default function ConfirmDeletePostModal({
 }) {
     const queryClient = useQueryClient();
     const item = queryClient.getQueryData<DeleteItem>('delete');
+    const { mutate, isLoading } = useMutation<unknown, unknown, Variables>(
+        'delete',
+        { onSuccess },
+    );
 
-    const onSuccess = () => {
-        queryClient.setQueryData<SetQueryData>(
-            item?.queryKey as string,
-            current => {
+    function onSuccess() {
+        if (item) {
+            queryClient.setQueryData<SetQueryData>(item.queryKey, current => {
                 current?.pages.forEach(page => {
                     const index = page.items.findIndex(
-                        post => post.slug === item?.slug,
+                        post => post.slug === item.slug,
                     );
 
                     if (index !== -1) {
@@ -42,31 +49,31 @@ export default function ConfirmDeletePostModal({
                 });
 
                 return current;
-            },
-        );
+            });
+        }
 
+        closeModal();
+    }
+
+    function deleteItem() {
+        if (item) {
+            mutate({ url: item.apiUrl });
+        }
+    }
+
+    function closeModal() {
         queryClient.setQueryData('delete', null);
-    };
-
-    const { mutate, isLoading } = useMutation<
-        unknown,
-        unknown,
-        { url: string }
-    >('delete', { onSuccess });
-
-    const deleteItem = () => {
-        mutate({ url: item?.apiUrl as string });
-    };
-
-    const closeModal = () => {
-        queryClient.setQueryData('delete', null);
-    };
+    }
 
     useEffect(() => {
         return () => {
             queryClient.removeQueries('delete');
         };
     }, []);
+
+    if (!item) {
+        return null;
+    }
 
     return (
         <Modal isOpen={isOpen} closeEvent={closeModal}>
@@ -75,12 +82,12 @@ export default function ConfirmDeletePostModal({
                     as='h3'
                     className='text-md font-bold leading-6 text-skin-text'
                 >
-                    {item?.title}
+                    {item.title}
                 </Dialog.Title>
             </header>
 
             <p className='paragraph-md text-skin-text p-md bg-skin-bg-contrast'>
-                {item?.message}
+                {item.message}
             </p>
 
             <div className='p-md'>

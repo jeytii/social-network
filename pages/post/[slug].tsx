@@ -65,9 +65,9 @@ export default function ViewPost({ slug }: { slug: string }) {
         <div className='p-lg sm:px-md'>
             <Post {...data} />
 
-            <CommentBox postSlug={slug} />
+            <CommentBox slug={slug} />
 
-            <Comments postSlug={slug} />
+            <Comments slug={slug} />
         </div>
     );
 }

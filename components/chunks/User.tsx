@@ -9,6 +9,8 @@ import type { User as UserType } from 'types/user';
 
 type Props = UserType & HTMLAttributes<HTMLDivElement>;
 
+const authToken = Cookies.get('token');
+
 export default function User({
     className,
     slug,
@@ -29,7 +31,7 @@ export default function User({
 
     async function follow() {
         try {
-            await axios(Cookies.get('token')).post(`/api/users/${slug}/follow`);
+            await axios(authToken).post(`/api/users/${slug}/follow`);
             mutatePreviousState(true);
         } catch (e) {
             setFollowed(false);
@@ -38,9 +40,7 @@ export default function User({
 
     async function unfollow() {
         try {
-            await axios(Cookies.get('token')).delete(
-                `/api/users/${slug}/unfollow`,
-            );
+            await axios(authToken).delete(`/api/users/${slug}/unfollow`);
             mutatePreviousState(false);
         } catch (e) {
             setFollowed(true);

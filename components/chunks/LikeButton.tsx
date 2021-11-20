@@ -13,7 +13,7 @@ interface Props extends HTMLAttributes<HTMLButtonElement> {
     setCountEvent: Dispatch<SetStateAction<number>>;
 }
 
-const token = Cookies.get('token');
+const authToken = Cookies.get('token');
 
 export default function LikeButton({
     className,
@@ -32,7 +32,7 @@ export default function LikeButton({
 
     async function like() {
         try {
-            const { data } = await axios(token).post(`${route}/like`);
+            const { data } = await axios(authToken).post(`${route}/like`);
 
             setCountEvent(data.data);
             mutatePreviousState(true);
@@ -43,7 +43,7 @@ export default function LikeButton({
 
     async function dislike() {
         try {
-            const { data } = await axios(token).delete(`${route}/dislike`);
+            const { data } = await axios(authToken).delete(`${route}/dislike`);
 
             setCountEvent(data.data);
             mutatePreviousState(false);
@@ -81,9 +81,9 @@ export default function LikeButton({
             {...props}
         >
             {condition ? (
-                <MdThumbUp className='text-lg' />
+                <MdThumbUp className='text-lg sm:text-md' />
             ) : (
-                <MdOutlineThumbUp className='text-lg' />
+                <MdOutlineThumbUp className='text-lg sm:text-md' />
             )}
 
             <span className='text-sm ml-sm'>{count}</span>

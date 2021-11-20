@@ -40,7 +40,7 @@ export default function Protected({ title, children }: Props) {
         },
     ]);
 
-    const toggleDarkMode = (event: ChangeEvent<HTMLInputElement>) => {
+    function toggleDarkMode(event: ChangeEvent<HTMLInputElement>) {
         const { checked } = event.target;
 
         setNightMode(checked);
@@ -50,7 +50,7 @@ export default function Protected({ title, children }: Props) {
         } else {
             document.body.classList.remove('theme-dark');
         }
-    };
+    }
 
     return (
         <main className='bg-skin-bg h-screen overflow-auto'>

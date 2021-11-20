@@ -20,10 +20,9 @@ interface ResponseBody {
     };
 }
 
-export default function CommentBox({ postSlug }: { postSlug: string }) {
+export default function CommentBox({ slug }: { slug: string }) {
     const queryClient = useQueryClient();
     const [hook, checkTextBodyLength, charactersLeft] = useTextBody('');
-
     const { mutate, isLoading } = useMutation<ResponseBody, unknown, Variables>(
         'create',
         { onSuccess },
@@ -34,10 +33,7 @@ export default function CommentBox({ postSlug }: { postSlug: string }) {
             if (hook.values.body.length) {
                 mutate({
                     url: '/api/comments',
-                    data: {
-                        post: postSlug,
-                        ...hook.values,
-                    },
+                    data: { post: slug, ...hook.values },
                 });
             } else {
                 event.preventDefault();
@@ -50,7 +46,7 @@ export default function CommentBox({ postSlug }: { postSlug: string }) {
     function onSuccess({ data }: ResponseBody) {
         // Create a comment.
         queryClient.setQueryData<InfiniteData<CommentPage> | undefined>(
-            ['comments', postSlug],
+            ['comments', slug],
             current => {
                 if (current) {
                     current.pages[0].items.unshift(data.data);
@@ -67,7 +63,7 @@ export default function CommentBox({ postSlug }: { postSlug: string }) {
             'posts',
             current => {
                 current?.pages.forEach(page => {
-                    const post = page.items.find(i => i.slug === postSlug);
+                    const post = page.items.find(i => i.slug === slug);
 
                     if (post) {
                         post.comments_count += 1;
@@ -79,21 +75,18 @@ export default function CommentBox({ postSlug }: { postSlug: string }) {
         );
 
         // Update the number of comments of the current previewed post.
-        queryClient.setQueryData<Post | undefined>(
-            ['post', postSlug],
-            current => {
-                if (current) {
-                    const { comments_count, ...postData } = current;
+        queryClient.setQueryData<Post | undefined>(['post', slug], current => {
+            if (current) {
+                const { comments_count, ...postData } = current;
 
-                    return {
-                        ...postData,
-                        comments_count: comments_count + 1,
-                    };
-                }
+                return {
+                    ...postData,
+                    comments_count: comments_count + 1,
+                };
+            }
 
-                return current;
-            },
-        );
+            return current;
+        });
 
         hook.resetValue();
     }

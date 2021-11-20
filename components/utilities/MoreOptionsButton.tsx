@@ -30,14 +30,14 @@ export default function MoreOptionsButton({
     const [showOptions, setShowOptions] = useState<boolean>(false);
     const queryClient = useQueryClient();
 
-    const selectPostToBeEdited = (event: MouseEvent<HTMLButtonElement>) => {
+    function selectPostToBeEdited(event: MouseEvent<HTMLButtonElement>) {
         event.stopPropagation();
 
         queryClient.setQueryData('edit', { queryKey, slug, ...edit });
-        setShowOptions(false);
-    };
+        closeOptions();
+    }
 
-    const selectPostToBeDeleted = (event: MouseEvent<HTMLButtonElement>) => {
+    function selectPostToBeDeleted(event: MouseEvent<HTMLButtonElement>) {
         event.stopPropagation();
 
         queryClient.setQueryData('delete', {
@@ -46,8 +46,8 @@ export default function MoreOptionsButton({
             ...deleteItem,
         });
 
-        setShowOptions(false);
-    };
+        closeOptions();
+    }
 
     function toggleOptions(event: MouseEvent<HTMLButtonElement>) {
         event.preventDefault();
@@ -55,9 +55,9 @@ export default function MoreOptionsButton({
         setShowOptions(current => !current);
     }
 
-    const closeOptions = () => {
+    function closeOptions() {
         setShowOptions(false);
-    };
+    }
 
     return (
         <div {...props}>

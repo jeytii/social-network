@@ -11,7 +11,7 @@ interface Props {
     stateEvent: Dispatch<SetStateAction<boolean>>;
 }
 
-const token = Cookies.get('token');
+const authToken = Cookies.get('token');
 
 export default function BookmarkButton({
     postSlug,
@@ -26,7 +26,7 @@ export default function BookmarkButton({
 
     async function bookmark() {
         try {
-            await axios(token).post(`/api/posts/${postSlug}/bookmark`);
+            await axios(authToken).post(`/api/posts/${postSlug}/bookmark`);
 
             mutatePreviousState(true);
         } catch (e) {
@@ -36,7 +36,7 @@ export default function BookmarkButton({
 
     async function unbookmark() {
         try {
-            await axios(token).delete(`/api/posts/${postSlug}/unbookmark`);
+            await axios(authToken).delete(`/api/posts/${postSlug}/unbookmark`);
 
             mutatePreviousState(false);
         } catch (e) {
@@ -61,9 +61,9 @@ export default function BookmarkButton({
             onClick={toggleBookmark}
         >
             {condition ? (
-                <MdBookmark className='text-lg' />
+                <MdBookmark className='text-lg sm:text-md' />
             ) : (
-                <MdBookmarkBorder className='text-lg' />
+                <MdBookmarkBorder className='text-lg sm:text-md' />
             )}
         </button>
     );

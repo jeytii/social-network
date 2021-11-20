@@ -17,10 +17,10 @@ interface SuccessEventData {
 }
 
 interface Props {
-    buttonLabel: string | undefined;
-    value: string | undefined;
-    placeholder: string | undefined;
-    apiUrl: string | undefined;
+    buttonLabel: string;
+    value: string;
+    placeholder: string;
+    apiUrl: string;
     apiMethod: 'post' | 'put';
     successEvent(
         response: SuccessEventData | never,
@@ -44,8 +44,8 @@ export default function TextBox({
         unknown,
         Variables
     >(apiMethod === 'put' ? 'update' : 'create', {
-        onSuccess(response) {
-            successEvent(response, hook.values);
+        onSuccess(response, variables) {
+            successEvent(response, variables.data);
 
             if (apiMethod === 'post') {
                 hook.resetValue();
@@ -55,7 +55,7 @@ export default function TextBox({
 
     function submit() {
         mutate({
-            url: apiUrl as string,
+            url: apiUrl,
             data: hook.values,
         });
     }

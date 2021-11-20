@@ -25,14 +25,13 @@ export default function EditItemModal({ isOpen }: { isOpen: boolean }) {
     const queryClient = useQueryClient();
     const item = queryClient.getQueryData<EditItem>('edit');
 
-    const successEvent = (_: never, { body }: Variables) => {
-        queryClient.setQueryData<SetQueryData>(
-            item?.queryKey as string,
-            current => {
+    function successEvent(_: never, { body }: Variables) {
+        if (item) {
+            queryClient.setQueryData<SetQueryData>(item.queryKey, current => {
                 current?.pages.forEach(page => {
                     const selectedItem = (
                         page.items as (Post | Comment)[]
-                    ).find(i => i.slug === item?.slug);
+                    ).find(i => i.slug === item.slug);
 
                     if (selectedItem) {
                         selectedItem.body = body;
@@ -41,15 +40,19 @@ export default function EditItemModal({ isOpen }: { isOpen: boolean }) {
                 });
 
                 return current;
-            },
-        );
+            });
+        }
 
-        queryClient.setQueryData('edit', null);
-    };
+        closeModal();
+    }
 
-    const closeModal = () => {
+    function closeModal() {
         queryClient.setQueryData('edit', null);
-    };
+    }
+
+    if (!item) {
+        return null;
+    }
 
     return (
         <Modal isOpen={isOpen} closeEvent={closeModal}>
@@ -74,10 +77,10 @@ export default function EditItemModal({ isOpen }: { isOpen: boolean }) {
             </header>
 
             <TextBox
-                placeholder={item?.placholder}
-                buttonLabel={item?.label}
-                value={item?.value}
-                apiUrl={item?.apiUrl}
+                placeholder={item.placholder}
+                buttonLabel={item.label}
+                value={item.value}
+                apiUrl={item.apiUrl}
                 apiMethod='put'
                 successEvent={successEvent}
             />

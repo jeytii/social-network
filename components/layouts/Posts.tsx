@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { ChangeEvent } from 'react';
-import { useInfiniteQuery } from 'react-query';
+import { InfiniteData, useInfiniteQuery } from 'react-query';
 import Post from 'components/chunks/post';
 import Select from 'components/utilities/Select';
 import Spinner from 'components/vectors/Spinner';
@@ -9,9 +9,26 @@ import type { PostPage } from 'types/page';
 import type { Post as PostType } from 'types/post';
 
 const items = [
-    { label: 'Timestamp', value: 'created_at' },
-    { label: 'Number of likes', value: 'likes' },
+    { label: 'Most recent', value: 'created_at' },
+    { label: 'Most liked', value: 'likes' },
 ];
+
+const formatData = (result: InfiniteData<PostPage>): InfiniteData<PostType> => {
+    let pages: PostType[] = [];
+
+    if (result.pages.length === 1) {
+        pages = result.pages[0].items;
+    }
+
+    if (result.pages.length > 1) {
+        pages = result.pages.flatMap(page => [...page.items]);
+    }
+
+    return {
+        pageParams: result.pageParams,
+        pages,
+    };
+};
 
 export default function Posts() {
     const { query, replace } = useRouter();
@@ -20,32 +37,14 @@ export default function Posts() {
         unknown,
         PostType
     >('posts', {
-        meta: {
-            url: '/api/posts',
-            sort: query.sort,
-        },
+        meta: { url: '/api/posts', ...query },
         getNextPageParam: last => last.next_offset ?? false,
-        select: result => {
-            let pages: PostType[] = [];
-
-            if (result.pages.length === 1) {
-                pages = result.pages[0].items;
-            }
-
-            if (result.pages.length > 1) {
-                pages = result.pages.flatMap(page => [...page.items]);
-            }
-
-            return {
-                pageParams: result.pageParams,
-                pages,
-            };
-        },
+        select: formatData,
     });
 
-    const changeSortType = (event: ChangeEvent<HTMLSelectElement>) => {
+    function changeSortType(event: ChangeEvent<HTMLSelectElement>) {
         replace(`/home?sort=${event.target.value}`);
-    };
+    }
 
     if (isLoading) {
         return <Spinner className='p-lg' />;
@@ -55,7 +54,7 @@ export default function Posts() {
         return (
             <section className='p-lg'>
                 <h1 className='text-md text-skin-text-light text-center'>
-                    Post something or follow someone to fill your news feed.
+                    No posts to show.
                 </h1>
             </section>
         );
@@ -74,7 +73,7 @@ export default function Posts() {
             </div>
 
             <div>
-                {data?.pages?.map(post => (
+                {data?.pages.map(post => (
                     <Link key={post.slug} href={`/post/${post.slug}`}>
                         <Post className='cursor-pointer mt-lg' {...post} />
                     </Link>
