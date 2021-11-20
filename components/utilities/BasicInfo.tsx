@@ -28,10 +28,10 @@ function BasicInfo({
             />
 
             <figcaption className='flex-1 grid px-sm'>
-                <span className='block text-skin-text font-bold text-sm truncate'>
+                <span className='block text-skin-text font-bold text-sm truncate xs:text-xs'>
                     {name}
                 </span>
-                <span className='block text-skin-text-light text-sm truncate'>
+                <span className='block text-skin-text-light text-sm truncate xs:text-xs'>
                     @{username}
                 </span>
             </figcaption>

@@ -42,7 +42,7 @@ function Post(
         >
             <section className='p-md'>
                 <div className={is_own_post ? 'flex items-center' : 'block'}>
-                    <BasicInfo imageSize={50} {...userProps} />
+                    <BasicInfo {...userProps} />
 
                     {(is_own_post || is_self) && (
                         <MoreOptionsButton
@@ -69,7 +69,7 @@ function Post(
                     {body}
                 </p>
 
-                <span className='text-skin-text-light text-sm'>
+                <span className='text-skin-text-light text-sm xs:text-xs'>
                     {timestamp} {is_edited && '(edited)'}
                 </span>
             </section>
@@ -88,7 +88,7 @@ function Post(
                     className='flex-1 flex items-center justify-center text-skin-text-light text-center py-sm hover:text-skin-text'
                     type='button'
                 >
-                    <MdOutlineChatBubbleOutline className='text-lg' />
+                    <MdOutlineChatBubbleOutline className='text-lg sm:text-md' />
                     <span className='text-sm ml-sm'>{comments_count}</span>
                 </button>
 
