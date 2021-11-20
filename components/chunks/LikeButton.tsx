@@ -1,4 +1,4 @@
-import { Dispatch, HTMLAttributes, MouseEvent, SetStateAction } from 'react';
+import { useState, HTMLAttributes, MouseEvent } from 'react';
 import { MdThumbUp, MdOutlineThumbUp } from 'react-icons/md';
 import Cookies from 'js-cookie';
 import clsx from 'clsx';
@@ -9,8 +9,7 @@ interface Props extends HTMLAttributes<HTMLButtonElement> {
     route: string;
     condition: boolean;
     count: number;
-    stateEvent: Dispatch<SetStateAction<boolean>>;
-    setCountEvent: Dispatch<SetStateAction<number>>;
+    successEvent(): void;
 }
 
 const authToken = Cookies.get('token');
@@ -20,24 +19,23 @@ export default function LikeButton({
     route,
     condition,
     count,
-    stateEvent,
-    setCountEvent,
+    successEvent,
     ...props
 }: Props) {
-    const [debounce, mutatePreviousState] = useDebounceClick(
-        condition,
-        like,
-        dislike,
-    );
+    const [liked, setLiked] = useState<boolean>(condition);
+    const [likesCount, setLikesCount] = useState<number>(count);
+    const [debounce, mutatePrevious] = useDebounceClick(liked, like, dislike);
 
     async function like() {
         try {
             const { data } = await axios(authToken).post(`${route}/like`);
 
-            setCountEvent(data.data);
-            mutatePreviousState(true);
+            successEvent();
+
+            setLikesCount(data.data);
+            mutatePrevious(true);
         } catch (e) {
-            stateEvent(false);
+            setLiked(false);
         }
     }
 
@@ -45,20 +43,22 @@ export default function LikeButton({
         try {
             const { data } = await axios(authToken).delete(`${route}/dislike`);
 
-            setCountEvent(data.data);
-            mutatePreviousState(false);
+            successEvent();
+
+            setLikesCount(data.data);
+            mutatePrevious(false);
         } catch (e) {
-            stateEvent(true);
+            setLiked(true);
         }
     }
 
     function toggleLike(event: MouseEvent<HTMLButtonElement>) {
-        event.stopPropagation();
+        event.preventDefault();
 
-        stateEvent(current => !current);
+        setLiked(current => !current);
 
-        setCountEvent(current => {
-            if (condition) {
+        setLikesCount(current => {
+            if (liked) {
                 return current - 1;
             }
 
@@ -72,7 +72,7 @@ export default function LikeButton({
         <button
             className={clsx(
                 className,
-                condition
+                liked
                     ? 'text-primary'
                     : 'text-skin-text-light hover:text-primary',
             )}
@@ -80,13 +80,13 @@ export default function LikeButton({
             onClick={toggleLike}
             {...props}
         >
-            {condition ? (
+            {liked ? (
                 <MdThumbUp className='text-lg sm:text-md' />
             ) : (
                 <MdOutlineThumbUp className='text-lg sm:text-md' />
             )}
 
-            <span className='text-sm ml-sm'>{count}</span>
+            <span className='text-sm ml-sm'>{likesCount}</span>
         </button>
     );
 }

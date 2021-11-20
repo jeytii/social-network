@@ -5,6 +5,7 @@ import BasicInfo from 'components/utilities/BasicInfo';
 import MoreOptionsButton from 'components/utilities/MoreOptionsButton';
 import type { Post as PostType } from 'types/post';
 import LikeButton from 'components/chunks/LikeButton';
+import { useQueryClient } from 'react-query';
 import BookmarkButton from './BookmarkButton';
 
 type Props = PostType & HTMLAttributes<HTMLElement>;
@@ -26,10 +27,16 @@ function Post(
     }: Props,
     ref: ForwardedRef<HTMLElement>,
 ) {
-    const [liked, setLiked] = useState<boolean>(is_liked);
-    const [likesCount, setLikesCount] = useState<number>(likes_count);
     const [bookmarked, setBookmarked] = useState<boolean>(is_bookmarked);
+    const queryClient = useQueryClient();
     const { is_self, ...userProps } = user;
+
+    async function successEvent() {
+        await queryClient.invalidateQueries('posts', {
+            refetchInactive: true,
+            refetchPage: () => true,
+        });
+    }
 
     return (
         <article
@@ -78,10 +85,9 @@ function Post(
                 <LikeButton
                     className='flex-1 flex items-center justify-center text-center py-sm'
                     route={`/api/posts/${slug}`}
-                    condition={liked}
-                    count={likesCount}
-                    stateEvent={setLiked}
-                    setCountEvent={setLikesCount}
+                    condition={is_liked}
+                    count={likes_count}
+                    successEvent={successEvent}
                 />
 
                 <button

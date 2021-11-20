@@ -1,4 +1,4 @@
-import { useState, HTMLAttributes } from 'react';
+import { HTMLAttributes } from 'react';
 import clsx from 'clsx';
 import BasicInfo from 'components/utilities/BasicInfo';
 import MoreOptionsButton from 'components/utilities/MoreOptionsButton';
@@ -20,8 +20,6 @@ export default function Comment({
     user,
     ...props
 }: Props) {
-    const [liked, setLiked] = useState<boolean>(is_liked);
-    const [likesCount, setLikesCount] = useState<number>(likes_count);
     const { is_self, is_followed, ...userProps } = user;
 
     return (
@@ -63,10 +61,8 @@ export default function Comment({
                 <LikeButton
                     className='flex items-center text-center'
                     route={`/api/comments/${slug}`}
-                    condition={liked}
-                    count={likesCount}
-                    stateEvent={setLiked}
-                    setCountEvent={setLikesCount}
+                    condition={is_liked}
+                    count={likes_count}
                 />
             </div>
         </article>
