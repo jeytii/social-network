@@ -1,9 +1,14 @@
 import { GetServerSideProps } from 'next';
 import Link from 'next/link';
-import axios from 'config/axios';
+import { useState } from 'react';
+import { Switch } from '@headlessui/react';
 import Cookies from 'js-cookie';
+import clsx from 'clsx';
+import axios from 'config/axios';
 
 export default function Settings() {
+    const [enabled, setEnabled] = useState(false);
+
     async function logout() {
         await axios(Cookies.get('token')).post('/api/logout');
 
@@ -18,11 +23,37 @@ export default function Settings() {
             <h1 className='text-md text-skin-text font-bold'>Settings</h1>
 
             <section className='flex items-center bg-skin-bg-contrast rounded-md p-md mt-sm'>
+                <h3 className='block text-md text-skin-text-light font-bold'>
+                    Dark mode
+                </h3>
+
+                <Switch
+                    checked={enabled}
+                    onChange={setEnabled}
+                    className={clsx(
+                        'relative inline-flex flex-shrink-0 h-[27px] w-[50px] border border-skin-bg-contrast rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75 ml-auto',
+                        enabled
+                            ? 'bg-primary-light'
+                            : 'bg-skin-bg-contrast-light',
+                    )}
+                >
+                    <span className='sr-only'>Use setting</span>
+                    <span
+                        aria-hidden='true'
+                        className={clsx(
+                            'pointer-events-none inline-block h-[25px] w-[25px] rounded-full bg-skin-bg shadow-lg transform ring-0 transition ease-in-out duration-200',
+                            enabled ? 'translate-x-[92%]' : 'translate-x-[0px]',
+                        )}
+                    />
+                </Switch>
+            </section>
+
+            <section className='flex items-center bg-skin-bg-contrast rounded-md p-md mt-lg'>
                 <div>
-                    <span className='block text-md text-primary font-bold'>
+                    <span className='block text-md text-skin-text-light font-bold'>
                         Username
                     </span>
-                    <span className='block text-md text-skin-text-light'>
+                    <span className='block text-md text-skin-text'>
                         john.doe
                     </span>
                 </div>
@@ -36,10 +67,10 @@ export default function Settings() {
 
             <section className='flex items-center bg-skin-bg-contrast rounded-md p-md mt-lg'>
                 <div>
-                    <span className='block text-md text-primary font-bold'>
+                    <span className='block text-md text-skin-text-light font-bold'>
                         Email address
                     </span>
-                    <span className='block text-md text-skin-text-light'>
+                    <span className='block text-md text-skin-text'>
                         john.doe@email.com
                     </span>
                 </div>
@@ -53,10 +84,10 @@ export default function Settings() {
 
             <section className='flex items-center bg-skin-bg-contrast rounded-md p-md mt-lg'>
                 <div>
-                    <span className='block text-md text-primary font-bold'>
+                    <span className='block text-md text-skin-text-light font-bold'>
                         Phone number
                     </span>
-                    <span className='block text-md text-skin-text-light'>
+                    <span className='block text-md text-skin-text'>
                         09123456789
                     </span>
                 </div>
@@ -69,7 +100,7 @@ export default function Settings() {
             </section>
 
             <section className='flex items-center bg-skin-bg-contrast rounded-md p-md mt-lg'>
-                <h3 className='block text-md text-primary font-bold'>
+                <h3 className='block text-md text-skin-text-light font-bold'>
                     Password
                 </h3>
 
