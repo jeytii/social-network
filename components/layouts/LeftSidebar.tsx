@@ -1,10 +1,14 @@
 import Link from 'next/link';
 import { useMediaQuery } from 'react-responsive';
 import {
+    MdHome,
     MdOutlineHome,
+    MdGroups,
     MdOutlineGroups,
+    MdNotifications,
     MdOutlineNotifications,
     MdAccountCircle,
+    MdSettings,
     MdOutlineSettings,
 } from 'react-icons/md';
 import clsx from 'clsx';
@@ -34,7 +38,12 @@ export default function LeftSidebar() {
                         )}
                         aria-label='Home link'
                     >
-                        <MdOutlineHome className='text-xl' />
+                        {route === '/home' ? (
+                            <MdHome className='text-xl' />
+                        ) : (
+                            <MdOutlineHome className='text-xl' />
+                        )}
+
                         {isPortrait && (
                             <span className='ml-md font-bold'>Home</span>
                         )}
@@ -68,7 +77,12 @@ export default function LeftSidebar() {
                         )}
                         aria-label='Notifications link'
                     >
-                        <MdOutlineNotifications className='text-xl' />
+                        {route === '/notifications' ? (
+                            <MdNotifications className='text-xl' />
+                        ) : (
+                            <MdOutlineNotifications className='text-xl' />
+                        )}
+
                         {isPortrait && (
                             <span className='ml-md font-bold'>
                                 Notifications
@@ -87,7 +101,12 @@ export default function LeftSidebar() {
                         )}
                         aria-label='Search link'
                     >
-                        <MdOutlineGroups className='text-xl' />
+                        {route === '/search' ? (
+                            <MdGroups className='text-xl' />
+                        ) : (
+                            <MdOutlineGroups className='text-xl' />
+                        )}
+
                         {isPortrait && (
                             <span className='ml-md font-bold'>
                                 Search people
@@ -106,7 +125,12 @@ export default function LeftSidebar() {
                         )}
                         aria-label='Settings link'
                     >
-                        <MdOutlineSettings className='text-xl' />
+                        {route === '/settings' ? (
+                            <MdSettings className='text-xl' />
+                        ) : (
+                            <MdOutlineSettings className='text-xl' />
+                        )}
+
                         {isPortrait && (
                             <span className='ml-md font-bold'>Settings</span>
                         )}
