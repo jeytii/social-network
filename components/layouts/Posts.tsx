@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { ChangeEvent } from 'react';
+import { ChangeEvent, useEffect } from 'react';
 import { InfiniteData, useInfiniteQuery } from 'react-query';
 import Post from 'components/chunks/post';
 import Select from 'components/utilities/Select';
@@ -32,11 +32,12 @@ const formatData = (result: InfiniteData<PostPage>): InfiniteData<PostType> => {
 
 export default function Posts() {
     const { query, replace } = useRouter();
-    const { data, isLoading, isSuccess } = useInfiniteQuery<
+    const { data, isLoading, isIdle, isSuccess, refetch } = useInfiniteQuery<
         PostPage,
         unknown,
         PostType
     >('posts', {
+        enabled: false,
         meta: { url: '/api/posts', ...query },
         getNextPageParam: last => last.next_offset ?? false,
         select: formatData,
@@ -46,7 +47,11 @@ export default function Posts() {
         replace(`/home?sort=${event.target.value}`);
     }
 
-    if (isLoading) {
+    useEffect(() => {
+        refetch();
+    }, [query]);
+
+    if (isLoading || isIdle) {
         return <Spinner className='p-lg' />;
     }
 
