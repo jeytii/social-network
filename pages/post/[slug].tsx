@@ -1,4 +1,5 @@
 import { GetServerSideProps } from 'next';
+import { useEffect } from 'react';
 import { useQuery, useQueryClient, QueryFunctionContext } from 'react-query';
 import Cookies from 'js-cookie';
 import Post from 'components/chunks/post';
@@ -7,7 +8,6 @@ import CommentBox from 'components/chunks/CommentBox';
 import Spinner from 'components/vectors/Spinner';
 import axios from 'config/axios';
 import type { Post as PostType } from 'types/post';
-import { useEffect } from 'react';
 
 const getPost = async (ctx: QueryFunctionContext) => {
     try {
