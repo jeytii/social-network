@@ -1,21 +1,115 @@
+import { ChangeEvent, useRef, useState } from 'react';
+import { useQuery, useQueryClient, QueryFunctionContext } from 'react-query';
 import { MdSearch } from 'react-icons/md';
+import Cookies from 'js-cookie';
+import clsx from 'clsx';
+import SearchSuggestions from 'components/chunks/SearchSuggestions';
+import Spinner from 'components/vectors/Spinner';
+import useDebounceChange from 'hooks/useDebounceChange';
+import axios from 'config/axios';
+import { User } from 'types/user';
+
+const getResults = async ({ meta }: QueryFunctionContext) => {
+    const response = await axios(Cookies.get('token')).get(
+        '/api/users/search',
+        {
+            params: { query: meta?.query },
+        },
+    );
+
+    return response.data.data;
+};
 
 export default function Searchbar() {
-    return (
-        <form className='bg-skin-bg-contrast flex rounded-full max-w-xs ml-lg sm:max-w-none sm:w-full sm:ml-auto'>
-            <input
-                className='flex-1 w-full bg-skin-bg-contrast-light text-skin-text text-sm border-none rounded-l-full p-sm'
-                type='text'
-                placeholder='Search people'
-            />
+    const [query, setQuery] = useState<string>('');
+    const [showResults, setShowResults] = useState<boolean>(false);
+    const inputRef = useRef<HTMLInputElement | null>(null);
+    const queryClient = useQueryClient();
+    const { data, refetch, isFetching, isSuccess } = useQuery<User[]>(
+        'search',
+        getResults,
+        {
+            enabled: false,
+            meta: { query },
+        },
+    );
 
-            <button
-                className='bg-skin-bg-contrast-light border-none px-sm rounded-r-full'
-                type='button'
-                aria-label='Search button'
+    function handleQuery(event: ChangeEvent<HTMLInputElement>) {
+        setQuery(event.target.value);
+    }
+
+    function truncateResults() {
+        queryClient.setQueryData('search', []);
+    }
+
+    function focus() {
+        setShowResults(true);
+    }
+
+    function blur() {
+        setShowResults(false);
+    }
+
+    useDebounceChange(query, refetch, truncateResults);
+
+    return (
+        <section className='relative w-[300px] ml-lg sm:max-w-none sm:w-full sm:ml-auto'>
+            <form
+                className={clsx(
+                    'bg-skin-bg-contrast flex shadow-inner',
+                    isSuccess && !!data?.length && showResults
+                        ? 'rounded-t-xl'
+                        : 'rounded-2xl',
+                )}
             >
-                <MdSearch className='text-lg text-skin-text-light' />
-            </button>
-        </form>
+                <input
+                    ref={inputRef}
+                    className={clsx(
+                        'flex-1 w-full bg-skin-bg-contrast-light text-skin-text text-sm border-none p-sm',
+                        isSuccess && !!data?.length && showResults
+                            ? 'rounded-tl-2xl'
+                            : 'rounded-l-2xl',
+                    )}
+                    type='text'
+                    value={query}
+                    placeholder='Search people'
+                    onChange={handleQuery}
+                    onFocus={focus}
+                />
+
+                {isFetching ? (
+                    <Spinner
+                        className={clsx(
+                            'bg-skin-bg-contrast-light flex items-center justify-center px-sm',
+                            isSuccess && !!data?.length && showResults
+                                ? 'rounded-tr-2xl'
+                                : 'rounded-r-2xl',
+                        )}
+                        size={20}
+                    />
+                ) : (
+                    <div
+                        className={clsx(
+                            'bg-skin-bg-contrast-light flex items-center justify-center px-sm',
+                            isSuccess && !!data?.length && showResults
+                                ? 'rounded-tr-2xl'
+                                : 'rounded-r-2xl',
+                        )}
+                    >
+                        <MdSearch className='text-lg text-skin-text-light' />
+                    </div>
+                )}
+
+                <input className='hidden' type='submit' />
+            </form>
+
+            {isSuccess && !!data?.length && showResults && (
+                <SearchSuggestions
+                    data={data}
+                    target={inputRef}
+                    hideEvent={blur}
+                />
+            )}
+        </section>
     );
 }
