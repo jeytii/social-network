@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { HTMLAttributes, useState } from 'react';
 import { MdPersonAddAlt, MdOutlinePersonRemove } from 'react-icons/md';
 import Cookies from 'js-cookie';
@@ -7,17 +8,20 @@ import useDebounceClick from 'hooks/useDebounceClick';
 import axios from 'config/axios';
 import type { User as UserType } from 'types/user';
 
-type Props = UserType & HTMLAttributes<HTMLDivElement>;
+interface Props extends UserType, HTMLAttributes<HTMLDivElement> {
+    imageSize?: number;
+}
 
 const authToken = Cookies.get('token');
 
-export default function User({
+function User({
     className,
     slug,
     name,
     username,
     gender,
     image_url,
+    imageSize,
     is_self,
     is_followed,
     ...props
@@ -47,41 +51,55 @@ export default function User({
         }
     }
 
-    function toggleFollow() {
+    function toggleFollow(event: MouseEvent) {
+        event.preventDefault();
+
         setFollowed(current => !current);
         debounce();
     }
 
     return (
-        <div
-            className={clsx('flex items-center rounded-md', className)}
-            {...props}
-        >
-            <BasicInfo
-                name={name}
-                username={username}
-                gender={gender}
-                image_url={image_url}
-            />
+        <Link href={`/${username}`}>
+            <div
+                className={clsx(
+                    'flex items-center rounded-md cursor-pointer',
+                    className,
+                )}
+                {...props}
+            >
+                <BasicInfo
+                    name={name}
+                    username={username}
+                    gender={gender}
+                    image_url={image_url}
+                    imageSize={imageSize}
+                />
 
-            {!is_self && (
-                <button
-                    className={clsx(
-                        'rounded-full p-sm ml-auto',
-                        followed
-                            ? 'hover:bg-danger-lighter'
-                            : 'hover:bg-primary-lighter',
-                    )}
-                    type='button'
-                    onClick={toggleFollow}
-                >
-                    {followed ? (
-                        <MdOutlinePersonRemove className='text-lg text-danger' />
-                    ) : (
-                        <MdPersonAddAlt className='text-lg text-primary' />
-                    )}
-                </button>
-            )}
-        </div>
+                {!is_self && (
+                    <button
+                        className={clsx(
+                            'rounded-full p-sm ml-auto',
+                            followed
+                                ? 'hover:bg-danger-lighter'
+                                : 'hover:bg-primary-lighter',
+                        )}
+                        type='button'
+                        onClick={toggleFollow}
+                    >
+                        {followed ? (
+                            <MdOutlinePersonRemove className='text-lg text-danger' />
+                        ) : (
+                            <MdPersonAddAlt className='text-lg text-primary' />
+                        )}
+                    </button>
+                )}
+            </div>
+        </Link>
     );
 }
+
+User.defaultProps = {
+    imageSize: 40,
+};
+
+export default User;
