@@ -61,6 +61,8 @@ export default function Searchbar() {
                         ? 'rounded-t-xl'
                         : 'rounded-2xl',
                 )}
+                method='get'
+                action='/search'
             >
                 <input
                     ref={inputRef}
@@ -71,6 +73,7 @@ export default function Searchbar() {
                             : 'rounded-l-2xl',
                     )}
                     type='text'
+                    name='query'
                     value={query}
                     placeholder='Search people'
                     onChange={handleQuery}
