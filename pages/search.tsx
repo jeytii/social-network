@@ -23,24 +23,21 @@ async function getUsers({ pageParam = 0, meta }: QueryFunctionContext) {
 
 export default function Search() {
     const { query } = useRouter();
-    const { data, refetch, isLoading, isSuccess } = useInfiniteQuery<
-        UserPage,
-        unknown,
-        UserType
-    >('users', getUsers, {
-        enabled: false,
-        meta: query,
-        select: ({ pageParams, pages }) => ({
-            pageParams,
-            pages: pages.flatMap(page => [...page.items]),
-        }),
-    });
+    const { data, refetch, isLoading, isFetching, isSuccess } =
+        useInfiniteQuery<UserPage, unknown, UserType>('users', getUsers, {
+            enabled: false,
+            meta: query,
+            select: ({ pageParams, pages }) => ({
+                pageParams,
+                pages: pages.flatMap(page => [...page.items]),
+            }),
+        });
 
     useEffect(() => {
         refetch();
     }, [query]);
 
-    if (isLoading) {
+    if (isLoading || isFetching) {
         return <Spinner className='p-lg' />;
     }
 
@@ -48,7 +45,7 @@ export default function Search() {
         return (
             <section className='p-lg'>
                 <h1 className='text-lg font-bold text-skin-text-light opacity-50 text-center'>
-                    Something went wrong. Refresh the page to try again.
+                    No person to show.
                 </h1>
             </section>
         );
