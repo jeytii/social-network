@@ -3,8 +3,10 @@ import { ChangeEvent, ReactNode, useState } from 'react';
 import { useQueries, useQueryClient } from 'react-query';
 import { useMediaQuery } from 'react-responsive';
 import { MdOutlineWbSunny, MdModeNight } from 'react-icons/md';
+import Cookies from 'js-cookie';
 import useWindowSize from 'hooks/useWindowSize';
 import useRendered from 'hooks/useRendered';
+import axios from 'config/axios';
 import EditItemModal from 'components/layouts/modal/EditItem';
 import DeleteItemModal from 'components/layouts/modal/DeleteItem';
 import Searchbar from './layouts/Searchbar';
@@ -37,6 +39,16 @@ export default function Protected({ title, children }: Props) {
             queryKey: 'delete',
             queryFn: () => queryClient.getQueryData('delete'),
             initialData: null,
+        },
+        {
+            queryKey: 'user',
+            queryFn: async () => {
+                const { data } = await axios(Cookies.get('token')).get(
+                    '/api/users/auth',
+                );
+
+                return data.data;
+            },
         },
     ]);
 
