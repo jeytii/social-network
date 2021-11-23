@@ -4,16 +4,15 @@ import { useState } from 'react';
 import { Switch } from '@headlessui/react';
 import Cookies from 'js-cookie';
 import clsx from 'clsx';
-import axios from 'config/axios';
+import { axiosClient, axiosServer } from 'config/axios';
 
 export default function Settings() {
     const [enabled, setEnabled] = useState(false);
 
     async function logout() {
-        await axios(Cookies.get('token')).post('/api/logout');
+        await axiosClient().post('/api/logout');
 
         Cookies.remove('token');
-        Cookies.remove('user');
 
         window.location.href = '/';
     }
@@ -133,7 +132,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     }
 
     try {
-        await axios(req.cookies.token).get(`${process.env.APP_URL}/private`);
+        await axiosServer(req.cookies.token).get('/private');
 
         return {
             props: {

@@ -1,17 +1,16 @@
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { QueryFunctionContext, useInfiniteQuery } from 'react-query';
-import Cookies from 'js-cookie';
 import Spinner from 'components/vectors/Spinner';
 import User from 'components/chunks/User';
-import axios from 'config/axios';
+import { axiosClient, axiosServer } from 'config/axios';
 import { UserPage } from 'types/page';
 import { User as UserType } from 'types/user';
 import { GetServerSideProps } from 'next';
 import clsx from 'clsx';
 
 async function getUsers({ pageParam = 0, meta }: QueryFunctionContext) {
-    const { data } = await axios(Cookies.get('token')).get('/api/users', {
+    const { data } = await axiosClient().get('/api/users', {
         params: {
             page: pageParam,
             ...meta,
@@ -83,7 +82,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     }
 
     try {
-        await axios(req.cookies.token).get(`${process.env.APP_URL}/private`);
+        await axiosServer(req.cookies.token).get('/private');
 
         return {
             props: {

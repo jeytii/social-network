@@ -6,12 +6,9 @@ import {
     QueryMeta,
 } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
-import Cookies from 'js-cookie';
 import Root from 'components/Root';
-import axios from 'config/axios';
+import { axiosClient } from 'config/axios';
 import '../styles/globals.css';
-
-const authToken = Cookies.get('token');
 
 const queryClient = new QueryClient({
     defaultOptions: {
@@ -19,7 +16,7 @@ const queryClient = new QueryClient({
             async queryFn({ pageParam = 0, meta }: QueryFunctionContext) {
                 const { url, returnKey, ...params } = meta as QueryMeta;
 
-                const { data } = await axios(authToken).get(url as string, {
+                const { data } = await axiosClient().get(url as string, {
                     params: {
                         page: pageParam,
                         ...params,
@@ -40,15 +37,15 @@ function MyApp({ Component, pageProps }: AppProps) {
     const { title, isPrivate, ...props } = pageProps;
 
     queryClient.setMutationDefaults('create', {
-        mutationFn: ({ url, data }) => axios(authToken).post(url, data),
+        mutationFn: ({ url, data }) => axiosClient().post(url, data),
     });
 
     queryClient.setMutationDefaults('update', {
-        mutationFn: ({ url, data }) => axios(authToken).put(url, data),
+        mutationFn: ({ url, data }) => axiosClient().put(url, data),
     });
 
     queryClient.setMutationDefaults('delete', {
-        mutationFn: ({ url }) => axios(authToken).delete(url),
+        mutationFn: ({ url }) => axiosClient().delete(url),
     });
 
     return (

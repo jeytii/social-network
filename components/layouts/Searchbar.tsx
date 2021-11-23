@@ -1,23 +1,19 @@
 import { ChangeEvent, useRef, useState } from 'react';
 import { useQuery, useQueryClient, QueryFunctionContext } from 'react-query';
 import { MdSearch } from 'react-icons/md';
-import Cookies from 'js-cookie';
 import clsx from 'clsx';
 import SearchSuggestions from 'components/chunks/SearchSuggestions';
 import Spinner from 'components/vectors/Spinner';
 import useDebounceChange from 'hooks/useDebounceChange';
-import axios from 'config/axios';
+import { axiosClient } from 'config/axios';
 import { User } from 'types/user';
 
 const getResults = async ({ meta }: QueryFunctionContext) => {
-    const response = await axios(Cookies.get('token')).get(
-        '/api/users/search',
-        {
-            params: { query: meta?.query },
-        },
-    );
+    const { data } = await axiosClient().get('/api/users/search', {
+        params: { query: meta?.query },
+    });
 
-    return response.data.data;
+    return data.data;
 };
 
 export default function Searchbar() {

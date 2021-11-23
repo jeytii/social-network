@@ -3,7 +3,7 @@ import { FormEvent, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Cookies from 'js-cookie';
 import InputField from 'components/utilities/InputField';
-import axios from 'config/axios';
+import { axiosClient, axiosServer } from 'config/axios';
 
 export default function Verification() {
     const [alertError, setAlertError] = useState<string | null>(null);
@@ -22,7 +22,7 @@ export default function Verification() {
         setLoading(true);
 
         try {
-            const { data } = await axios().put('/verify', getValues());
+            const { data } = await axiosClient().put('/verify', getValues());
 
             Cookies.set('token', data.token);
 
@@ -84,7 +84,7 @@ export const getServerSideProps: GetServerSideProps = async ({
 }) => {
     if (!req.cookies || !req.cookies.token) {
         try {
-            await axios().get(`/verify/${params?.token}`);
+            await axiosClient().get(`/verify/${params?.token}`);
 
             return {
                 props: {
@@ -100,7 +100,7 @@ export const getServerSideProps: GetServerSideProps = async ({
     }
 
     try {
-        await axios(req.cookies.token).get(`${process.env.APP_URL}/private`);
+        await axiosServer(req.cookies.token).get('/private');
 
         return {
             redirect: {
@@ -110,7 +110,7 @@ export const getServerSideProps: GetServerSideProps = async ({
         };
     } catch (e) {
         try {
-            await axios().get(`/verify/${params?.token}`);
+            await axiosClient().get(`/verify/${params?.token}`);
 
             return {
                 props: {

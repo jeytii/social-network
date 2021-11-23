@@ -1,17 +1,14 @@
 import { Dispatch, MouseEvent, SetStateAction } from 'react';
 import { MdBookmark, MdBookmarkBorder } from 'react-icons/md';
-import Cookies from 'js-cookie';
 import clsx from 'clsx';
 import useDebounceClick from 'hooks/useDebounceClick';
-import axios from 'config/axios';
+import { axiosClient } from 'config/axios';
 
 interface Props {
     postSlug: string;
     condition: boolean;
     stateEvent: Dispatch<SetStateAction<boolean>>;
 }
-
-const authToken = Cookies.get('token');
 
 export default function BookmarkButton({
     postSlug,
@@ -26,7 +23,7 @@ export default function BookmarkButton({
 
     async function bookmark() {
         try {
-            await axios(authToken).post(`/api/posts/${postSlug}/bookmark`);
+            await axiosClient().post(`/api/posts/${postSlug}/bookmark`);
 
             mutatePreviousState(true);
         } catch (e) {
@@ -36,7 +33,7 @@ export default function BookmarkButton({
 
     async function unbookmark() {
         try {
-            await axios(authToken).delete(`/api/posts/${postSlug}/unbookmark`);
+            await axiosClient().delete(`/api/posts/${postSlug}/unbookmark`);
 
             mutatePreviousState(false);
         } catch (e) {

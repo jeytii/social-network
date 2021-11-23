@@ -1,17 +1,16 @@
 import { GetServerSideProps } from 'next';
 import { useEffect } from 'react';
 import { useQuery, useQueryClient, QueryFunctionContext } from 'react-query';
-import Cookies from 'js-cookie';
 import Post from 'components/chunks/post';
 import Comments from 'components/layouts/Comments';
 import CommentBox from 'components/chunks/CommentBox';
 import Spinner from 'components/vectors/Spinner';
-import axios from 'config/axios';
+import { axiosClient, axiosServer } from 'config/axios';
 import type { Post as PostType } from 'types/post';
 
 const getPost = async (ctx: QueryFunctionContext) => {
     try {
-        const { data } = await axios(Cookies.get('token')).get(
+        const { data } = await axiosClient().get(
             `/api/posts/${ctx.meta?.slug}`,
         );
 
@@ -81,7 +80,7 @@ export const getServerSideProps: GetServerSideProps = async ({
     }
 
     try {
-        await axios(req.cookies.token).get(`${process.env.APP_URL}/private`);
+        await axiosServer(req.cookies.token).get('/private');
 
         return {
             props: {

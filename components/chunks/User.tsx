@@ -1,18 +1,15 @@
 import Link from 'next/link';
 import { HTMLAttributes, useState } from 'react';
 import { MdPersonAddAlt, MdOutlinePersonRemove } from 'react-icons/md';
-import Cookies from 'js-cookie';
 import clsx from 'clsx';
 import BasicInfo from 'components/utilities/BasicInfo';
 import useDebounceClick from 'hooks/useDebounceClick';
-import axios from 'config/axios';
+import { axiosClient } from 'config/axios';
 import type { User as UserType } from 'types/user';
 
 interface Props extends UserType, HTMLAttributes<HTMLDivElement> {
     imageSize?: number;
 }
-
-const authToken = Cookies.get('token');
 
 function User({
     className,
@@ -35,7 +32,7 @@ function User({
 
     async function follow() {
         try {
-            await axios(authToken).post(`/api/users/${slug}/follow`);
+            await axiosClient().post(`/api/users/${slug}/follow`);
             mutatePreviousState(true);
         } catch (e) {
             setFollowed(false);
@@ -44,7 +41,7 @@ function User({
 
     async function unfollow() {
         try {
-            await axios(authToken).delete(`/api/users/${slug}/unfollow`);
+            await axiosClient().delete(`/api/users/${slug}/unfollow`);
             mutatePreviousState(false);
         } catch (e) {
             setFollowed(true);

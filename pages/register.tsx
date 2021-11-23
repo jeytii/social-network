@@ -2,7 +2,7 @@ import { FormEvent, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import InputField from 'components/utilities/InputField';
 import Radio from 'components/utilities/Radio';
-import axios from 'config/axios';
+import { axiosClient, axiosServer } from 'config/axios';
 import { useRouter } from 'next/router';
 import { GetServerSideProps } from 'next';
 
@@ -52,7 +52,7 @@ export default function Register() {
         setLoading(true);
 
         try {
-            const { data } = await axios().post('/register', getValues());
+            const { data } = await axiosClient().post('/register', getValues());
 
             push(data.url);
         } catch (error) {
@@ -238,7 +238,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     }
 
     try {
-        await axios(req.cookies.token).get(`${process.env.APP_URL}/private`);
+        await axiosServer(req.cookies.token).get('/private');
 
         return {
             redirect: {

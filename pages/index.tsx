@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { AxiosError } from 'axios';
 import Cookies from 'js-cookie';
 import InputField from 'components/utilities/InputField';
-import axios from 'config/axios';
+import { axiosClient, axiosServer } from 'config/axios';
 import type { User } from 'types/user';
 
 interface FormDataError {
@@ -71,7 +71,7 @@ export default function Index() {
         setLoading(true);
 
         try {
-            const { data } = await axios().post<OkResponse>(
+            const { data } = await axiosClient().post<OkResponse>(
                 '/login',
                 getValues(),
             );
@@ -115,7 +115,7 @@ export default function Index() {
     async function resendVerificationCode(method: 'email' | 'sms') {
         setLoading(true);
 
-        await axios().post('/verify/resend', {
+        await axiosClient().post('/verify/resend', {
             username: unauthorizedError?.username,
             method,
         });
@@ -238,7 +238,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     }
 
     try {
-        await axios(req.cookies.token).get(`${process.env.APP_URL}/private`);
+        await axiosServer(req.cookies.token).get('/private');
 
         return {
             redirect: {

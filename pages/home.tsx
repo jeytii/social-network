@@ -3,7 +3,7 @@ import dynamic from 'next/dynamic';
 import { InfiniteData, useQueryClient } from 'react-query';
 import TextBox from 'components/utilities/TextBox';
 import Spinner from 'components/vectors/Spinner';
-import axios from 'config/axios';
+import { axiosServer } from 'config/axios';
 import type { Post } from 'types/post';
 import type { PostPage } from 'types/page';
 
@@ -63,7 +63,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     }
 
     try {
-        await axios(req.cookies.token).get(`${process.env.APP_URL}/private`);
+        await axiosServer(req.cookies.token).get('/private');
 
         return {
             props: {

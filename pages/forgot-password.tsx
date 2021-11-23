@@ -4,7 +4,7 @@ import { AxiosError } from 'axios';
 import clsx from 'clsx';
 import InputField from 'components/utilities/InputField';
 import Radio from 'components/utilities/Radio';
-import axios from 'config/axios';
+import { axiosClient } from 'config/axios';
 
 interface AlertNotifcation {
     status: number;
@@ -58,7 +58,7 @@ export default function ForgotPassword() {
         setLoading(true);
 
         try {
-            const { data } = await axios().post(
+            const { data } = await axiosClient().post(
                 '/forgot-password',
                 getValues(),
             );
