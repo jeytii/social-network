@@ -79,7 +79,6 @@ export default function Index() {
             clearErrors();
             setAlertError(null);
 
-            Cookies.set('user', JSON.stringify(data.user));
             Cookies.set('token', data.token);
 
             window.location.href = '/home';

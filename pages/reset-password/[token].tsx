@@ -1,5 +1,4 @@
 import { GetServerSideProps } from 'next';
-import { useRouter } from 'next/router';
 import { FormEvent, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Cookies from 'js-cookie';
@@ -20,7 +19,6 @@ const fields = {
 
 export default function ResetPassword({ token }: { token: string }) {
     const [loading, setLoading] = useState<boolean>(false);
-    const { replace } = useRouter();
     const { register, watch, getValues, setError, clearErrors, formState } =
         useForm({
             defaultValues: { ...fields, token },
@@ -37,10 +35,9 @@ export default function ResetPassword({ token }: { token: string }) {
         try {
             const { data } = await axios().put('/reset-password', getValues());
 
-            Cookies.set('user', JSON.stringify(data.user));
             Cookies.set('token', data.token);
 
-            replace('/home');
+            window.location.href = '/home';
         } catch (error) {
             const { errors } = error.response.data;
             const keys = Object.keys(fields);

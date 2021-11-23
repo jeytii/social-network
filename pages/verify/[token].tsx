@@ -1,5 +1,4 @@
 import { GetServerSideProps } from 'next';
-import { useRouter } from 'next/router';
 import { FormEvent, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Cookies from 'js-cookie';
@@ -9,7 +8,6 @@ import axios from 'config/axios';
 export default function Verification() {
     const [alertError, setAlertError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
-    const { push } = useRouter();
     const { register, watch, getValues, setError, formState } = useForm({
         defaultValues: {
             code: '',
@@ -26,10 +24,9 @@ export default function Verification() {
         try {
             const { data } = await axios().put('/verify', getValues());
 
-            Cookies.set('user', JSON.stringify(data.user));
             Cookies.set('token', data.token);
 
-            push('/home');
+            window.location.href = '/home';
         } catch (error) {
             const { status, data } = error.response;
 
