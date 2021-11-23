@@ -1,11 +1,20 @@
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
-import RandomSuggestions from './RandomSuggestions';
-import UserFilterer from './UserFilterer';
+import Spinner from 'components/vectors/Spinner';
+
+const loading = () => (
+    <Spinner className='w-[280px] sticky top-[59.5px] full-height left-[0px] bg-skin-bg-contrast-light p-lg' />
+);
+
+const UserFilterer = dynamic(() => import('./UserFilterer'), { loading });
+const RandomSuggestions = dynamic(() => import('./RandomSuggestions'), {
+    loading,
+});
 
 export default function RightSidebar() {
-    const { asPath } = useRouter();
+    const { route } = useRouter();
 
-    if (asPath === '/search') {
+    if (route === '/search') {
         return <UserFilterer />;
     }
 
