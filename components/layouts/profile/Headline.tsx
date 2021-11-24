@@ -1,73 +1,108 @@
+import Link from 'next/link';
 import {
     MdAccountCircle,
     MdOutlineCake,
     MdCalendarToday,
 } from 'react-icons/md';
 import TextLink from 'components/utilities/TextLink';
+import FollowButton from 'components/utilities/FollowButton';
 
-export default function ProfileHeadline() {
+interface ProfileInfo {
+    slug: string;
+    name: string;
+    username: string;
+    birth_date: string;
+    created_at: string;
+    bio: string;
+    image_url: string | null;
+    followers_count: number;
+    following_count: number;
+    is_self: boolean;
+    is_followed: boolean;
+}
+
+export default function ProfileHeadline({
+    slug,
+    name,
+    username,
+    birth_date,
+    created_at,
+    bio,
+    image_url,
+    followers_count,
+    following_count,
+    is_self,
+    is_followed,
+}: ProfileInfo) {
     return (
         <div className='p-lg sm:px-md'>
-            <section className='flex items-center text-center sm:block'>
+            <section className='flex items-center sm:block sm:text-center'>
                 <figure className='flex items-center sm:block'>
                     <MdAccountCircle
                         className='text-skin-text-light m-auto'
-                        size={90}
+                        size={80}
                         viewBox='2 2 20 20'
                     />
 
                     <figcaption className='ml-sm sm:mt-sm sm:mx-[0]'>
                         <span className='block text-skin-text font-bold text-md'>
-                            John Doe
+                            {name}
                         </span>
                         <span className='block text-skin-text-light text-md'>
-                            @john.doe
+                            @{username}
                         </span>
                     </figcaption>
                 </figure>
 
-                <TextLink className='ml-auto sm:mt-sm' href='/edit-profile'>
-                    <span className='button button-primary-outlined text-sm rounded-full'>
-                        Edit profile
-                    </span>
-                </TextLink>
+                {is_self ? (
+                    <div className='ml-auto sm:mt-sm'>
+                        <Link href='/edit-profile'>
+                            <span className='button button-primary-outlined text-sm rounded-full'>
+                                Edit profile
+                            </span>
+                        </Link>
+                    </div>
+                ) : (
+                    <FollowButton userSlug={slug} condition={is_followed} />
+                )}
             </section>
 
-            <p className='paragraph-md text-skin-text mt-lg sm:paragraph-sm'>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. At nisl
-                cursus a pulvinar ullamcorper purus amet, adipiscing. At nisl
-                cursus a pulvinar ul.
-            </p>
+            {!!bio && (
+                <p className='paragraph-md text-skin-text mt-lg sm:paragraph-sm'>
+                    {bio}
+                </p>
+            )}
 
-            <div className='flex items-center mt-lg'>
-                <div className='flex items-center'>
+            <div className='flex items-center mt-lg xs:block sm:justify-center'>
+                <div className='flex items-center sm:justify-center'>
                     <MdOutlineCake className='text-lg text-skin-text-light sm:text-md' />
-                    <span className='text-md text-skin-text-light ml-xs sm:text-sm'>
-                        September 18, 1995
+                    <span className='text-md text-skin-text-light ml-xs'>
+                        {birth_date}
                     </span>
                 </div>
 
-                <div className='flex items-center ml-xl'>
+                <div className='flex items-center ml-xl sm:justify-center xs:ml-auto xs:mt-sm'>
                     <MdCalendarToday className='text-lg text-skin-text-light sm:text-md' />
-                    <span className='text-md text-skin-text-light ml-xs sm:text-sm'>
-                        September 2020
+                    <span className='text-md text-skin-text-light ml-xs'>
+                        {created_at}
                     </span>
                 </div>
             </div>
 
-            <div className='flex items-center mt-lg'>
-                <TextLink className='text-md sm:text-sm' href='/followers'>
-                    <b className='text-skin-text font-bold'>10</b>
+            <div className='flex items-center mt-lg sm:justify-center'>
+                <TextLink className='text-md' href='/followers'>
+                    <b className='text-skin-text font-bold'>
+                        {followers_count}
+                    </b>
                     <span className='text-skin-text-light ml-xs'>
                         Followers
                     </span>
                 </TextLink>
 
-                <TextLink
-                    className='text-md ml-xl sm:text-sm'
-                    href='/following'
-                >
-                    <b className='text-skin-text font-bold'>20</b>
+                <TextLink className='text-md ml-xl' href='/following'>
+                    <b className='text-skin-text font-bold'>
+                        {following_count}
+                    </b>
                     <span className='text-skin-text-light ml-xs'>
                         Following
                     </span>
