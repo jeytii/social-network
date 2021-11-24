@@ -1,39 +1,144 @@
-import Protected from 'components/Protected';
+import { GetServerSideProps } from 'next';
+import { FormEvent, useState } from 'react';
+import { useMutation } from 'react-query';
+import { useForm } from 'react-hook-form';
+import { AxiosError } from 'axios';
 import InputField from 'components/utilities/InputField';
+import { axiosServer } from 'config/axios';
 
-export default function ChangeEmailAddress() {
+interface Variables {
+    url: string;
+    data: {
+        email: string;
+        password: string;
+    };
+}
+
+export default function ChangeEmailAddress({ email }: { email: string }) {
+    const [errorAlert, setErrorAlert] = useState<string | null>(null);
+    const { mutate, isLoading } = useMutation<unknown, AxiosError, Variables>(
+        'update',
+        { onSuccess, onError },
+    );
+    const { register, getValues, watch, setError, clearErrors, formState } =
+        useForm({
+            defaultValues: { email, password: '' },
+        });
+
+    const [emailAddress, password] = watch(['email', 'password']);
+
+    function onError(error: AxiosError) {
+        if (error.response?.status === 422) {
+            const { errors } = error.response.data;
+            const keys: ['email', 'password'] = ['email', 'password'];
+
+            if (errorAlert) {
+                setErrorAlert(null);
+            }
+
+            keys.forEach(key => {
+                if (errors[key]) {
+                    setError(key, {
+                        type: 'manual',
+                        message: errors[key][0],
+                    });
+                } else {
+                    clearErrors(key);
+                }
+            });
+        } else {
+            clearErrors();
+            setErrorAlert(error.response?.data.message);
+        }
+    }
+
+    function onSuccess() {
+        window.location.href = '/settings';
+    }
+
+    function submit(event: FormEvent) {
+        event.preventDefault();
+
+        mutate({
+            url: '/api/settings/change/email',
+            data: getValues(),
+        });
+    }
+
     return (
-        <Protected title='Change email address'>
-            <section className='p-lg'>
-                <div className='flex items-center bg-primary-lighter text-md text-primary p-md border-primary rounded-md'>
-                    You can only change your email address 3 times within 30
-                    days.
-                </div>
+        <section className='p-lg'>
+            {errorAlert && errorAlert.length && (
+                <p className='bg-danger-light text-md text-danger rounded-md p-sm mb-lg'>
+                    {errorAlert}
+                </p>
+            )}
 
-                <form className='mt-sm'>
-                    <InputField
-                        className='text-md'
-                        id='email'
-                        type='text'
-                        label='Email address'
-                    />
+            <form onSubmit={submit}>
+                <InputField
+                    className='text-md'
+                    id='email'
+                    type='text'
+                    label='Email address'
+                    disabled={isLoading}
+                    error={formState.errors.email?.message}
+                    autoFocus
+                    {...register('email')}
+                />
 
-                    <InputField
-                        containerClassName='mt-lg'
-                        className='text-md'
-                        id='password'
-                        type='password'
-                        label='Password'
-                    />
+                <InputField
+                    containerClassName='mt-lg'
+                    className='text-md'
+                    id='password'
+                    type='password'
+                    label='Password'
+                    disabled={isLoading}
+                    error={formState.errors.password?.message}
+                    {...register('password')}
+                />
 
-                    <button
-                        className='button button-primary w-full mt-lg'
-                        type='button'
-                    >
-                        Update my email address
-                    </button>
-                </form>
-            </section>
-        </Protected>
+                <button
+                    className='button button-primary w-full py-sm mt-lg'
+                    type='submit'
+                    disabled={
+                        isLoading ||
+                        !emailAddress.length ||
+                        !password.length ||
+                        (!!emailAddress.length && emailAddress === email)
+                    }
+                >
+                    Update my email address
+                </button>
+            </form>
+        </section>
     );
 }
+
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+    if (!req.cookies || !req.cookies.token) {
+        return {
+            redirect: {
+                destination: '/',
+                permanent: false,
+            },
+        };
+    }
+
+    try {
+        const { data } = await axiosServer(req.cookies.token).get('/private');
+
+        return {
+            props: {
+                title: 'Change email address',
+                isPrivate: true,
+                email: data.user.email,
+            },
+        };
+    } catch (e) {
+        return {
+            redirect: {
+                destination: '/',
+                permanent: false,
+            },
+        };
+    }
+};
