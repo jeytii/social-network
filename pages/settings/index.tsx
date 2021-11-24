@@ -6,7 +6,16 @@ import Cookies from 'js-cookie';
 import clsx from 'clsx';
 import { axiosClient, axiosServer } from 'config/axios';
 
-export default function Settings() {
+interface User {
+    slug: string;
+    email: string;
+    username: string;
+    phone_number: string;
+    gender: string;
+    image_url: string | null;
+}
+
+export default function Settings({ user }: { user: User }) {
     const [enabled, setEnabled] = useState(false);
 
     async function logout() {
@@ -53,7 +62,7 @@ export default function Settings() {
                         Username
                     </span>
                     <span className='block text-md text-skin-text'>
-                        john.doe
+                        {user.username}
                     </span>
                 </div>
 
@@ -70,7 +79,7 @@ export default function Settings() {
                         Email address
                     </span>
                     <span className='block text-md text-skin-text'>
-                        john.doe@email.com
+                        {user.email}
                     </span>
                 </div>
 
@@ -87,7 +96,7 @@ export default function Settings() {
                         Phone number
                     </span>
                     <span className='block text-md text-skin-text'>
-                        09123456789
+                        {user.phone_number}
                     </span>
                 </div>
 
@@ -132,12 +141,13 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     }
 
     try {
-        await axiosServer(req.cookies.token).get('/private');
+        const { data } = await axiosServer(req.cookies.token).get('/private');
 
         return {
             props: {
                 title: 'Settings',
                 isPrivate: true,
+                user: data.user,
             },
         };
     } catch (e) {
