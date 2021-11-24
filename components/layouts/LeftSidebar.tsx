@@ -1,4 +1,6 @@
 import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useQueryClient } from 'react-query';
 import { useMediaQuery } from 'react-responsive';
 import {
     MdHome,
@@ -13,15 +15,17 @@ import {
 } from 'react-icons/md';
 import clsx from 'clsx';
 import useWindowSize from 'hooks/useWindowSize';
-import { useRouter } from 'next/router';
+import { User } from 'types/user';
 
 export default function LeftSidebar() {
     const windowSize = useWindowSize();
-    const isPortrait = useMediaQuery({ minWidth: 690 }, windowSize);
+    const isPortrait = useMediaQuery({ minWidth: 721 }, windowSize);
     const { route } = useRouter();
+    const queryClient = useQueryClient();
+    const username = queryClient.getQueryData<User>('user')?.username;
 
     return (
-        <aside className='w-[210px] sticky top-[59.5px] full-height left-[0px] bg-skin-bg-contrast-light md:w-auto'>
+        <aside className='w-[200px] sticky top-[59.5px] full-height left-[0px] bg-skin-bg-contrast-light md:w-auto'>
             <nav>
                 <Link href='/home'>
                     <span
@@ -45,7 +49,7 @@ export default function LeftSidebar() {
                     </span>
                 </Link>
 
-                <Link href='/'>
+                <Link href={`/${username}`}>
                     <span
                         className={clsx(
                             'flex items-center no-underline text-md p-lg cursor-pointer hover:bg-skin-bg-contrast-light',
