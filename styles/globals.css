@@ -24,7 +24,7 @@
 
 @layer components {
     .button {
-        @apply text-md font-bold rounded-md py-xs px-lg cursor-pointer;
+        @apply inline-block text-md font-bold rounded-md py-xs px-lg cursor-pointer;
     }
 
     .button:disabled {
