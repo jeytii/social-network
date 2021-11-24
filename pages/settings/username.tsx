@@ -53,6 +53,12 @@ export default function ChangeUsername({ username }: { username: string }) {
     }
 
     function onSuccess() {
+        if (errorAlert) {
+            setErrorAlert(null);
+        }
+
+        clearErrors();
+
         window.location.href = '/settings';
     }
 

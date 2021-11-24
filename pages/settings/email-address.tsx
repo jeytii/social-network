@@ -53,6 +53,12 @@ export default function ChangeEmailAddress({ email }: { email: string }) {
     }
 
     function onSuccess() {
+        if (errorAlert) {
+            setErrorAlert(null);
+        }
+
+        clearErrors();
+
         window.location.href = '/settings';
     }
 
