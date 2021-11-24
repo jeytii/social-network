@@ -6,15 +6,6 @@ import { AxiosError } from 'axios';
 import InputField from 'components/utilities/InputField';
 import { axiosServer } from 'config/axios';
 
-interface User {
-    slug: string;
-    email: string;
-    username: string;
-    phone_number: string;
-    gender: string;
-    image_url: string | null;
-}
-
 interface Variables {
     url: string;
     data: {
@@ -23,46 +14,49 @@ interface Variables {
     };
 }
 
-export default function ChangeUsername({ user }: { user: User }) {
+export default function ChangeUsername({ username }: { username: string }) {
     const [errorAlert, setErrorAlert] = useState<string | null>(null);
-    const values = {
-        username: user.username,
-        password: '',
-    };
-
-    const { register, getValues, setError, clearErrors, formState } = useForm({
-        defaultValues: values,
-    });
-
     const { mutate, isLoading } = useMutation<unknown, AxiosError, Variables>(
         'update',
-        {
-            onSuccess() {
-                window.location.href = '/settings';
-            },
-            onError(error) {
-                if (error.response?.status === 422) {
-                    const { errors } = error.response.data;
-                    const keys = Object.keys(values);
+        { onSuccess, onError },
+    );
+    const { register, getValues, watch, setError, clearErrors, formState } =
+        useForm({
+            defaultValues: { username, password: '' },
+        });
 
-                    keys.forEach(key => {
-                        if (errors[key]) {
-                            setError(key as 'username' | 'password', {
-                                type: 'manual',
-                                message: errors[key][0],
-                            });
-                        } else {
-                            clearErrors(key as 'username' | 'password');
-                        }
+    const [userName, password] = watch(['username', 'password']);
+
+    function onError(error: AxiosError) {
+        if (error.response?.status === 422) {
+            const { errors } = error.response.data;
+            const keys: ['username', 'password'] = ['username', 'password'];
+
+            if (errorAlert) {
+                setErrorAlert(null);
+            }
+
+            keys.forEach(key => {
+                if (errors[key]) {
+                    setError(key, {
+                        type: 'manual',
+                        message: errors[key][0],
                     });
                 } else {
-                    setErrorAlert(error.response?.data.message);
+                    clearErrors(key);
                 }
-            },
-        },
-    );
+            });
+        } else {
+            clearErrors();
+            setErrorAlert(error.response?.data.message);
+        }
+    }
 
-    async function submit(event: FormEvent) {
+    function onSuccess() {
+        window.location.href = '/settings';
+    }
+
+    function submit(event: FormEvent) {
         event.preventDefault();
 
         mutate({
@@ -105,7 +99,12 @@ export default function ChangeUsername({ user }: { user: User }) {
                 <button
                     className='button button-primary w-full py-sm mt-lg'
                     type='submit'
-                    disabled={isLoading}
+                    disabled={
+                        isLoading ||
+                        !userName.length ||
+                        !password.length ||
+                        (!!userName.length && userName === username)
+                    }
                 >
                     Update my username
                 </button>
@@ -131,7 +130,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
             props: {
                 title: 'Change username',
                 isPrivate: true,
-                user: data.user,
+                username: data.user.username,
             },
         };
     } catch (e) {
