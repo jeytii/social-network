@@ -3,7 +3,6 @@ import { ChangeEvent, ReactNode, useState } from 'react';
 import { useQueries, useQueryClient } from 'react-query';
 import { useMediaQuery } from 'react-responsive';
 import { MdOutlineWbSunny, MdModeNight } from 'react-icons/md';
-import useWindowSize from 'hooks/useWindowSize';
 import useRendered from 'hooks/useRendered';
 import { axiosClient } from 'config/axios';
 import EditItemModal from 'components/layouts/modal/EditItem';
@@ -23,9 +22,8 @@ interface Props {
 export default function Protected({ title, children }: Props) {
     const [nightMode, setNightMode] = useState<boolean>(false);
     const rendered = useRendered();
-    const windowSize = useWindowSize();
-    const isDesktop = useMediaQuery({ minWidth: 1024 }, windowSize);
-    const isMobile = useMediaQuery({ maxWidth: 480 }, windowSize);
+    const isDesktop = useMediaQuery({ minWidth: 1024 });
+    const isMobile = useMediaQuery({ maxWidth: 480 });
     const queryClient = useQueryClient();
 
     const [editPostModal, deletePostModal] = useQueries([
