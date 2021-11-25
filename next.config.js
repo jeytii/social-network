@@ -13,4 +13,8 @@ module.exports = {
 
         return config;
     },
+    images: {
+        loader: 'cloudinary',
+        path: process.env.IMAGE_LOADER_BASE_URL,
+    },
 };
