@@ -48,14 +48,14 @@ const Bookmarks = dynamic(
     },
 );
 
-export default function ProfileSection({ user }: { user: ProfileInfo | null }) {
+export default function Profile({ user }: { user: ProfileInfo | null }) {
     const isLandscapeTablet = useMediaQuery({ maxWidth: 720 });
     const { query, asPath } = useRouter();
     const { username, sections } = query;
     const section = Array.isArray(sections) ? sections.join('/') : null;
 
     const stateClass = (condition: boolean) =>
-        condition ? 'active-profile-nav-link' : 'text-skin-text-light';
+        condition ? 'text-primary' : 'text-skin-text-light';
 
     if (!user) {
         return <h1>User not found</h1>;
