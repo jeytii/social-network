@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import {
     MdAccountCircle,
     MdOutlineCake,
@@ -38,11 +39,20 @@ export default function ProfileHeadline({
         <div className='p-lg sm:px-md'>
             <section className='flex items-center sm:block sm:text-center'>
                 <figure className='flex items-center sm:block'>
-                    <MdAccountCircle
-                        className='text-skin-text-light m-auto'
-                        size={80}
-                        viewBox='2 2 20 20'
-                    />
+                    {image_url ? (
+                        <Image
+                            className='m-auto'
+                            src={image_url}
+                            width={80}
+                            height={80}
+                        />
+                    ) : (
+                        <MdAccountCircle
+                            className='text-skin-text-light m-auto'
+                            size={80}
+                            viewBox='2 2 20 20'
+                        />
+                    )}
 
                     <figcaption className='ml-sm sm:mt-sm sm:mx-[0]'>
                         <span className='block text-skin-text font-bold text-md'>
@@ -75,15 +85,21 @@ export default function ProfileHeadline({
 
             <div className='flex items-center mt-lg xs:block sm:justify-center'>
                 <div className='flex items-center sm:justify-center'>
-                    <MdOutlineCake className='text-lg text-skin-text-light sm:text-md' />
-                    <span className='text-md text-skin-text-light ml-xs'>
+                    <MdOutlineCake
+                        className='text-md text-skin-text-light sm:text-sm'
+                        viewBox='2 2 20 20'
+                    />
+                    <span className='text-md text-skin-text-light ml-sm'>
                         {birth_date}
                     </span>
                 </div>
 
                 <div className='flex items-center ml-xl sm:justify-center xs:ml-auto xs:mt-sm'>
-                    <MdCalendarToday className='text-lg text-skin-text-light sm:text-md' />
-                    <span className='text-md text-skin-text-light ml-xs'>
+                    <MdCalendarToday
+                        className='text-md text-skin-text-light sm:text-sm'
+                        viewBox='2 2 20 20'
+                    />
+                    <span className='text-md text-skin-text-light ml-sm'>
                         {created_at}
                     </span>
                 </div>

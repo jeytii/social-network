@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { ForwardedRef, forwardRef, HTMLAttributes } from 'react';
 import { MdAccountCircle } from 'react-icons/md';
 import clsx from 'clsx';
@@ -29,11 +30,19 @@ const BasicInfo = forwardRef(
                 className={clsx('flex items-center', className)}
                 {...props}
             >
-                <MdAccountCircle
-                    className='text-skin-text-light'
-                    size={imageSize}
-                    viewBox='2 2 20 20'
-                />
+                {image_url ? (
+                    <Image
+                        src={image_url}
+                        width={imageSize}
+                        height={imageSize}
+                    />
+                ) : (
+                    <MdAccountCircle
+                        className='text-skin-text-light'
+                        size={imageSize}
+                        viewBox='2 2 20 20'
+                    />
+                )}
 
                 <figcaption className='flex-1 grid px-sm'>
                     <span className='block text-skin-text font-bold text-sm truncate xs:text-xs'>

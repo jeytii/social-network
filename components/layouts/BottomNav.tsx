@@ -1,6 +1,7 @@
-import clsx from 'clsx';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import Image from 'next/image';
+import { useQueryClient } from 'react-query';
 import {
     MdOutlineHome,
     MdOutlineGroups,
@@ -8,9 +9,13 @@ import {
     MdAccountCircle,
     MdOutlineSettings,
 } from 'react-icons/md';
+import clsx from 'clsx';
+import { User } from 'types/user';
 
 export default function BottomNav() {
     const { route } = useRouter();
+    const queryClient = useQueryClient();
+    const user = queryClient.getQueryData<User>('user');
     const activeClass =
         'relative text-primary after:absolute after:w-full after:h-[5px] after:bg-primary after:left-[0px] after:bottom-[0px]';
 
@@ -24,18 +29,26 @@ export default function BottomNav() {
                             route === '/home' && activeClass,
                         )}
                     >
-                        <MdOutlineHome className='text-lg m-auto' />
+                        <MdOutlineHome className='m-auto' size={20} />
                     </span>
                 </Link>
 
-                <Link href='/'>
+                <Link href={`/${user?.username}`}>
                     <span
                         className={clsx(
                             'flex-1 py-md text-skin-text-light cursor-pointer',
                             route === '/' && activeClass,
                         )}
                     >
-                        <MdAccountCircle className='text-lg m-auto' />
+                        {user?.image_url ? (
+                            <Image
+                                src={user?.image_url}
+                                width={20}
+                                height={20}
+                            />
+                        ) : (
+                            <MdAccountCircle className='m-auto' size={20} />
+                        )}
                     </span>
                 </Link>
 
@@ -46,7 +59,7 @@ export default function BottomNav() {
                             route === '/notifications' && activeClass,
                         )}
                     >
-                        <MdOutlineNotifications className='text-lg m-auto' />
+                        <MdOutlineNotifications className='m-auto' size={20} />
                     </span>
                 </Link>
 
@@ -57,7 +70,7 @@ export default function BottomNav() {
                             route === '/search' && activeClass,
                         )}
                     >
-                        <MdOutlineGroups className='text-lg m-auto' />
+                        <MdOutlineGroups className='m-auto' size={20} />
                     </span>
                 </Link>
 
@@ -68,7 +81,7 @@ export default function BottomNav() {
                             route === '/settings' && activeClass,
                         )}
                     >
-                        <MdOutlineSettings className='text-lg m-auto' />
+                        <MdOutlineSettings className='m-auto' size={20} />
                     </span>
                 </Link>
             </div>

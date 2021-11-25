@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import Image from 'next/image';
 import { useQueryClient } from 'react-query';
 import { useMediaQuery } from 'react-responsive';
 import {
@@ -14,18 +15,16 @@ import {
     MdOutlineSettings,
 } from 'react-icons/md';
 import clsx from 'clsx';
-import useWindowSize from 'hooks/useWindowSize';
 import { User } from 'types/user';
 
 export default function LeftSidebar() {
-    const windowSize = useWindowSize();
-    const isPortrait = useMediaQuery({ minWidth: 721 }, windowSize);
+    const isPortrait = useMediaQuery({ minWidth: 721 });
     const { route } = useRouter();
     const queryClient = useQueryClient();
-    const username = queryClient.getQueryData<User>('user')?.username;
+    const user = queryClient.getQueryData<User>('user');
 
     return (
-        <aside className='w-[200px] sticky top-[59.5px] full-height left-[0px] bg-skin-bg-contrast-light md:w-auto'>
+        <aside className='w-[200px] sticky full-height left-[0px] bg-skin-bg-contrast-light md:w-auto'>
             <nav>
                 <Link href='/home'>
                     <span
@@ -49,7 +48,7 @@ export default function LeftSidebar() {
                     </span>
                 </Link>
 
-                <Link href={`/${username}`}>
+                <Link href={`/${user?.username}`}>
                     <span
                         className={clsx(
                             'flex items-center no-underline text-md p-lg cursor-pointer hover:bg-skin-bg-contrast-light',
@@ -59,7 +58,16 @@ export default function LeftSidebar() {
                         )}
                         aria-label='Profile link'
                     >
-                        <MdAccountCircle className='text-xl' />
+                        {user?.image_url ? (
+                            <Image
+                                src={user?.image_url}
+                                width={24}
+                                height={24}
+                            />
+                        ) : (
+                            <MdAccountCircle className='text-xl' />
+                        )}
+
                         {isPortrait && (
                             <span className='ml-md font-bold'>Profile</span>
                         )}
