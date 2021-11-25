@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import Spinner from 'components/vectors/Spinner';
 
 const loading = () => (
-    <Spinner className='w-[280px] sticky top-[59.5px] full-height left-[0px] bg-skin-bg-contrast-light p-lg' />
+    <Spinner className='w-[280px] sticky full-height left-[0px] bg-skin-bg-contrast-light p-lg' />
 );
 
 const UserFilterer = dynamic(() => import('./UserFilterer'), { loading });
