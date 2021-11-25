@@ -100,6 +100,7 @@
 @layer utilities {
     .full-height {
         height: calc(100vh - 60px);
+        top: 59.5px;
     }
     
     .transparent {
@@ -134,20 +135,5 @@
         -webkit-box-orient: vertical;
         -moz-box-orient: vertical;
         overflow: hidden;
-    }
-
-    .active-profile-nav-link {
-        @apply relative text-primary font-semibold;
-    }
-    
-    .active-profile-nav-link:after {
-        content: '';
-        display: block;
-        position: absolute;
-        width: 100%;
-        height: 3px;
-        left: 0;
-        bottom: 0;
-        @apply bg-primary;
     }
 }
