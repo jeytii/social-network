@@ -2,6 +2,7 @@ import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
+import { useMemo } from 'react';
 import { useMediaQuery } from 'react-responsive';
 import {
     MdLibraryBooks,
@@ -50,6 +51,7 @@ const Bookmarks = dynamic(
 
 export default function Profile({ user }: { user: ProfileInfo | null }) {
     const isLandscapeTablet = useMediaQuery({ maxWidth: 720 });
+    const userData = useMemo(() => user, [user]);
     const { query, asPath } = useRouter();
     const { username, sections } = query;
     const section = Array.isArray(sections) ? sections.join('/') : null;
@@ -57,7 +59,7 @@ export default function Profile({ user }: { user: ProfileInfo | null }) {
     const stateClass = (condition: boolean) =>
         condition ? 'text-primary' : 'text-skin-text-light';
 
-    if (!user) {
+    if (!userData) {
         return <h1>User not found</h1>;
     }
 
@@ -67,7 +69,7 @@ export default function Profile({ user }: { user: ProfileInfo | null }) {
 
     return (
         <div>
-            <ProfileHeadline {...user} />
+            <ProfileHeadline {...userData} />
 
             <nav className='flex border-b border-skin-bg-contrast'>
                 <Link href={`/${username}`}>
