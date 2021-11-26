@@ -57,7 +57,9 @@ export default function Profile({ user }: { user: ProfileInfo | null }) {
     const section = Array.isArray(sections) ? sections.join('/') : null;
 
     const stateClass = (condition: boolean) =>
-        condition ? 'text-primary' : 'text-skin-text-light';
+        condition
+            ? 'relative text-primary after:absolute after:w-full after:h-[3px] after:bg-primary after:left-[0px] after:bottom-[0px]'
+            : 'text-skin-text-light';
 
     if (!userData) {
         return <h1>User not found</h1>;
