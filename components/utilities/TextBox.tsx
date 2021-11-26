@@ -1,6 +1,7 @@
 import { useMutation } from 'react-query';
 import useTextBody from 'hooks/useTextBody';
 import { Post } from 'types/post';
+import clsx from 'clsx';
 
 interface Variables {
     url: string;
@@ -39,7 +40,7 @@ export default function TextBox({
     const [hook, checkTextBodyLength, charactersLeft] = useTextBody(
         value || '',
     );
-    const { mutate, isLoading } = useMutation<
+    const { mutate, isLoading, isError } = useMutation<
         SuccessEventData | never,
         unknown,
         Variables
@@ -61,7 +62,12 @@ export default function TextBox({
     }
 
     return (
-        <form className='rounded-md bg-skin-bg-contrast-light border border-skin-bg-contrast'>
+        <form
+            className={clsx(
+                'rounded-md bg-skin-bg-contrast-light border',
+                isError ? 'border-danger' : 'border-skin-bg-contrast',
+            )}
+        >
             <textarea
                 className='block text-md text-skin-text w-full transparent resize-none rounded-t-md p-md disabled:opacity-50 disabled:cursor-not-allowed'
                 rows={3}
