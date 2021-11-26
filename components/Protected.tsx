@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import { ChangeEvent, ReactNode, useState } from 'react';
-import { useQueries, useQueryClient } from 'react-query';
+import { useQueries, useQueryClient, QueryKey } from 'react-query';
 import { useMediaQuery } from 'react-responsive';
 import { MdOutlineWbSunny, MdModeNight } from 'react-icons/md';
 import useRendered from 'hooks/useRendered';
@@ -14,6 +14,23 @@ import BottomNav from './layouts/BottomNav';
 import Spinner from './vectors/Spinner';
 import Logo from './Logo';
 
+interface EditItem {
+    queryKey: QueryKey;
+    slug: string;
+    label: string;
+    value: string;
+    placholder: string;
+    apiUrl: string;
+}
+
+interface DeleteItem {
+    queryKey: QueryKey;
+    slug: string;
+    title: string;
+    message: string;
+    apiUrl: string;
+}
+
 interface Props {
     title: string;
     children: ReactNode;
@@ -26,16 +43,14 @@ export default function Protected({ title, children }: Props) {
     const isMobile = useMediaQuery({ maxWidth: 480 });
     const queryClient = useQueryClient();
 
-    const [editPostModal, deletePostModal] = useQueries([
+    const [{ data: editPostModal }, { data: deletePostModal }] = useQueries([
         {
             queryKey: 'edit',
-            queryFn: () => queryClient.getQueryData('edit'),
-            initialData: null,
+            queryFn: () => queryClient.getQueryData<EditItem>('edit'),
         },
         {
             queryKey: 'delete',
-            queryFn: () => queryClient.getQueryData('delete'),
-            initialData: null,
+            queryFn: () => queryClient.getQueryData<DeleteItem>('delete'),
         },
         {
             queryKey: 'user',
@@ -67,6 +82,7 @@ export default function Protected({ title, children }: Props) {
                 </title>
             </Head>
 
+            {/* HEADER */}
             <header className='sticky top-[0px] flex items-center bg-skin-bg py-sm px-lg drop-shadow-md z-10 sm:px-md sm:gap-md'>
                 <a className='no-underline' href='/home' aria-label='Logo link'>
                     <Logo />
@@ -95,6 +111,7 @@ export default function Protected({ title, children }: Props) {
                 </label>
             </header>
 
+            {/* MAIN */}
             <section className='flex items-start'>
                 {!isMobile && <LeftSidebar />}
 
@@ -105,15 +122,14 @@ export default function Protected({ title, children }: Props) {
                 {isDesktop && <RightSidebar />}
             </section>
 
+            {/* BOTTOM NAV (mobile mode) */}
             {isMobile && <BottomNav />}
 
-            {!!editPostModal.data && (
-                <EditItemModal isOpen={!!editPostModal.data} />
-            )}
+            {/* Modal for editing a post or comment */}
+            {editPostModal && <EditItemModal isOpen={!!editPostModal} />}
 
-            {!!deletePostModal.data && (
-                <DeleteItemModal isOpen={!!deletePostModal.data} />
-            )}
+            {/* Modal for confirming the deletion of a post or comment */}
+            {deletePostModal && <DeleteItemModal isOpen={!!deletePostModal} />}
         </main>
     );
 }
