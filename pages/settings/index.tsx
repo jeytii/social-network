@@ -147,7 +147,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
             props: {
                 title: 'Settings',
                 isPrivate: true,
-                user: data.user,
+                user: data.data,
             },
         };
     } catch (e) {
