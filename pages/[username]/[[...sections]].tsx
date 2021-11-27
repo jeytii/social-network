@@ -3,13 +3,6 @@ import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { useMemo } from 'react';
-import { useMediaQuery } from 'react-responsive';
-import {
-    MdLibraryBooks,
-    MdThumbUp,
-    MdForum,
-    MdBookmarks,
-} from 'react-icons/md';
 import clsx from 'clsx';
 import ProfileHeadline from 'components/layouts/profile/Headline';
 import Spinner from 'components/vectors/Spinner';
@@ -38,7 +31,6 @@ const Comments = dynamic(() => import('components/layouts/profile/Comments'), {
 });
 
 export default function Profile({ user }: { user: ProfileInfo | null }) {
-    const isLandscapeTablet = useMediaQuery({ maxWidth: 720 });
     const userData = useMemo(() => user, [user]);
     const { query, asPath } = useRouter();
     const { username, sections } = query;
@@ -53,7 +45,7 @@ export default function Profile({ user }: { user: ProfileInfo | null }) {
         return <h1>User not found</h1>;
     }
 
-    if (!!section && !/^likes|comments|bookmarks$/.test(section)) {
+    if (!!section && !/^comments$/.test(section)) {
         return (
             <section className='p-lg text-center sm:px-md'>
                 <h1 className='text-skin-text-light opacity-80'>
@@ -76,26 +68,7 @@ export default function Profile({ user }: { user: ProfileInfo | null }) {
                             stateClass(asPath === `/${username}`),
                         )}
                     >
-                        {isLandscapeTablet ? (
-                            <MdLibraryBooks className='block m-auto' />
-                        ) : (
-                            'Posts'
-                        )}
-                    </span>
-                </Link>
-
-                <Link href={`/${username}/likes`}>
-                    <span
-                        className={clsx(
-                            'flex-1 text-md text-center py-sm cursor-pointer hover:bg-skin-bg-contrast',
-                            stateClass(asPath === `/${username}/likes`),
-                        )}
-                    >
-                        {isLandscapeTablet ? (
-                            <MdThumbUp className='block m-auto' />
-                        ) : (
-                            'Likes'
-                        )}
+                        Posts
                     </span>
                 </Link>
 
@@ -106,32 +79,14 @@ export default function Profile({ user }: { user: ProfileInfo | null }) {
                             stateClass(asPath === `/${username}/comments`),
                         )}
                     >
-                        {isLandscapeTablet ? (
-                            <MdForum className='block m-auto' />
-                        ) : (
-                            'Comments'
-                        )}
-                    </span>
-                </Link>
-
-                <Link href={`/${username}/bookmarks`}>
-                    <span
-                        className={clsx(
-                            'flex-1 text-md text-center py-sm cursor-pointer hover:bg-skin-bg-contrast',
-                            stateClass(asPath === `/${username}/bookmarks`),
-                        )}
-                    >
-                        {isLandscapeTablet ? (
-                            <MdBookmarks className='block m-auto' />
-                        ) : (
-                            'Bookmarks'
-                        )}
+                        Comments
                     </span>
                 </Link>
             </nav>
 
             {asPath === `/${username}` && (
                 <Posts
+                    className='p-lg sm:px-md'
                     queryKey={['profile.posts', user?.slug]}
                     url={`/api/profile/${user?.username}/posts`}
                     cacheTime={1000 * 60 * 2}
@@ -139,25 +94,7 @@ export default function Profile({ user }: { user: ProfileInfo | null }) {
                 />
             )}
 
-            {asPath === `/${username}/likes` && (
-                <Posts
-                    queryKey={['profile.likes', user?.slug]}
-                    url={`/api/profile/${user?.username}/likes`}
-                    cacheTime={1000 * 60 * 2}
-                    enabled
-                />
-            )}
-
             {asPath === `/${username}/comments` && <Comments />}
-
-            {asPath === `/${username}/bookmarks` && (
-                <Posts
-                    queryKey={['profile.bookmarks', user?.slug]}
-                    url={`/api/profile/${user?.username}/bookmarks`}
-                    cacheTime={1000 * 60 * 2}
-                    enabled
-                />
-            )}
         </div>
     );
 }
