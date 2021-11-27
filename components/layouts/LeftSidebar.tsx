@@ -6,10 +6,10 @@ import { useMediaQuery } from 'react-responsive';
 import {
     MdHome,
     MdOutlineHome,
-    MdGroups,
-    MdOutlineGroups,
-    MdNotifications,
-    MdOutlineNotifications,
+    MdThumbUp,
+    MdOutlineThumbUp,
+    MdBookmarks,
+    MdOutlineBookmarks,
     MdAccountCircle,
     MdSettings,
     MdOutlineSettings,
@@ -74,50 +74,46 @@ export default function LeftSidebar() {
                     </span>
                 </Link>
 
-                <Link href='/notifications'>
+                <Link href='/likes?s=posts'>
                     <span
                         className={clsx(
                             'flex items-center no-underline text-md p-lg cursor-pointer hover:bg-skin-bg-contrast-light',
-                            route === '/notifications'
+                            route === '/likes'
                                 ? 'text-primary'
                                 : 'text-skin-text-light',
                         )}
-                        aria-label='Notifications link'
+                        aria-label='Likes link'
                     >
-                        {route === '/notifications' ? (
-                            <MdNotifications className='text-xl' />
+                        {route === '/likes' ? (
+                            <MdThumbUp className='text-xl' />
                         ) : (
-                            <MdOutlineNotifications className='text-xl' />
+                            <MdOutlineThumbUp className='text-xl' />
                         )}
 
                         {isPortrait && (
-                            <span className='ml-md font-bold'>
-                                Notifications
-                            </span>
+                            <span className='ml-md font-bold'>Likes</span>
                         )}
                     </span>
                 </Link>
 
-                <Link href='/search'>
+                <Link href='/bookmarks'>
                     <span
                         className={clsx(
                             'flex items-center no-underline text-md p-lg cursor-pointer hover:bg-skin-bg-contrast-light',
-                            route === '/search'
+                            route === '/bookmarks'
                                 ? 'text-primary'
                                 : 'text-skin-text-light',
                         )}
-                        aria-label='Search link'
+                        aria-label='Bookmarks link'
                     >
-                        {route === '/search' ? (
-                            <MdGroups className='text-xl' />
+                        {route === '/bookmarks' ? (
+                            <MdBookmarks className='text-xl' />
                         ) : (
-                            <MdOutlineGroups className='text-xl' />
+                            <MdOutlineBookmarks className='text-xl' />
                         )}
 
                         {isPortrait && (
-                            <span className='ml-md font-bold'>
-                                Search people
-                            </span>
+                            <span className='ml-md font-bold'>Bookmarks</span>
                         )}
                     </span>
                 </Link>
