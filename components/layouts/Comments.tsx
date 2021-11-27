@@ -4,23 +4,22 @@ import Spinner from 'components/vectors/Spinner';
 import type { CommentPage } from 'types/page';
 import type { Comment as CommentType } from 'types/comment';
 
-const formatData = (
-    result: InfiniteData<CommentPage>,
-): InfiniteData<CommentType> => {
-    let pages: CommentType[] = [];
-
-    if (result.pages.length === 1) {
-        pages = result.pages[0].items;
+const formatData = ({ pageParams, pages }: InfiniteData<CommentPage>) => {
+    if (pages.length === 1) {
+        return {
+            pageParams,
+            pages: pages[0].items,
+        };
     }
 
-    if (result.pages.length > 1) {
-        pages = result.pages.flatMap(page => [...page.items]);
+    if (pages.length > 1) {
+        return {
+            pageParams,
+            pages: pages.flatMap(page => [...page.items]),
+        };
     }
 
-    return {
-        pageParams: result.pageParams,
-        pages,
-    };
+    return { pageParams, pages: [] };
 };
 
 export default function Comments({ slug }: { slug: string }) {
