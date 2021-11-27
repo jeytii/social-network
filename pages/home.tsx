@@ -3,6 +3,7 @@ import dynamic from 'next/dynamic';
 import { InfiniteData, useQueryClient } from 'react-query';
 import TextBox from 'components/utilities/TextBox';
 import Spinner from 'components/vectors/Spinner';
+import SortOptions from 'components/utilities/SortOptions';
 import { axiosServer } from 'config/axios';
 import type { Post } from 'types/post';
 import type { PostPage } from 'types/page';
@@ -47,7 +48,9 @@ export default function Home() {
                 successEvent={successEvent}
             />
 
-            <Posts />
+            <SortOptions className='block mt-lg' aria-label='Sorting options' />
+
+            <Posts queryKey='posts' url='/api/posts' />
         </div>
     );
 }
