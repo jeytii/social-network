@@ -1,35 +1,42 @@
+import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
-import { QueryFunctionContext, useInfiniteQuery } from 'react-query';
-import Spinner from 'components/vectors/Spinner';
+import { useInfiniteQuery, InfiniteData } from 'react-query';
+import clsx from 'clsx';
 import User from 'components/chunks/User';
-import { axiosClient, axiosServer } from 'config/axios';
+import Spinner from 'components/vectors/Spinner';
+import { axiosServer } from 'config/axios';
 import { UserPage } from 'types/page';
 import { User as UserType } from 'types/user';
-import { GetServerSideProps } from 'next';
-import clsx from 'clsx';
 
-async function getUsers({ pageParam = 0, meta }: QueryFunctionContext) {
-    const { data } = await axiosClient().get('/api/users', {
-        params: {
-            page: pageParam,
-            ...meta,
-        },
-    });
+const formatData = ({ pageParams, pages }: InfiniteData<UserPage>) => {
+    if (pages.length === 1) {
+        return {
+            pageParams,
+            pages: pages[0].items,
+        };
+    }
 
-    return data;
-}
+    if (pages.length > 1) {
+        return {
+            pageParams,
+            pages: pages.flatMap(page => [...page.items]),
+        };
+    }
+
+    return { pageParams, pages: [] };
+};
 
 export default function Search() {
     const { query } = useRouter();
     const { data, refetch, isLoading, isFetching, isSuccess } =
-        useInfiniteQuery<UserPage, unknown, UserType>('users', getUsers, {
+        useInfiniteQuery<UserPage, unknown, UserType>('users', {
             enabled: false,
-            meta: query,
-            select: ({ pageParams, pages }) => ({
-                pageParams,
-                pages: pages.flatMap(page => [...page.items]),
-            }),
+            meta: {
+                url: '/api/users',
+                ...query,
+            },
+            select: formatData,
         });
 
     useEffect(() => {
