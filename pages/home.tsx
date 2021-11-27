@@ -50,7 +50,7 @@ export default function Home() {
 
             <SortOptions className='block mt-lg' aria-label='Sorting options' />
 
-            <Posts queryKey='posts' url='/api/posts' />
+            <Posts className='mt-lg' queryKey='posts' url='/api/posts' />
         </div>
     );
 }

@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { useEffect } from 'react';
+import { useEffect, HTMLAttributes } from 'react';
 import { InfiniteData, QueryKey, useInfiniteQuery } from 'react-query';
 import clsx from 'clsx';
 import Post from 'components/chunks/post';
@@ -8,7 +8,7 @@ import Spinner from 'components/vectors/Spinner';
 import type { PostPage } from 'types/page';
 import type { Post as PostType } from 'types/post';
 
-interface Props {
+interface Props extends HTMLAttributes<HTMLElement> {
     queryKey: QueryKey;
     url: string;
     enabled?: boolean;
@@ -33,7 +33,7 @@ const formatData = ({ pageParams, pages }: InfiniteData<PostPage>) => {
     return { pageParams, pages: [] };
 };
 
-function Posts({ queryKey, url, enabled, cacheTime }: Props) {
+function Posts({ queryKey, url, enabled, cacheTime, ...props }: Props) {
     const { query } = useRouter();
     const { data, isLoading, isIdle, isSuccess, refetch } = useInfiniteQuery<
         PostPage,
@@ -68,7 +68,7 @@ function Posts({ queryKey, url, enabled, cacheTime }: Props) {
     }
 
     return (
-        <section className='p-lg sm:px-md'>
+        <section {...props}>
             {data.pages.map((post, index) => (
                 <Link key={post.slug} href={`/post/${post.slug}`}>
                     <Post
