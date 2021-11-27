@@ -95,7 +95,10 @@ export default function Searchbar() {
                                 : 'rounded-r-2xl',
                         )}
                     >
-                        <MdSearch className='text-lg text-skin-text-light' />
+                        <MdSearch
+                            className='text-md text-skin-text-light'
+                            viewBox='2 2 20 20'
+                        />
                     </div>
                 )}
 
