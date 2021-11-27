@@ -12,7 +12,6 @@ import {
 } from 'react-icons/md';
 import clsx from 'clsx';
 import ProfileHeadline from 'components/layouts/profile/Headline';
-import ProfileSectionNotFound from 'components/layouts/profile/NotFound';
 import Spinner from 'components/vectors/Spinner';
 import { axiosServer } from 'config/axios';
 
@@ -30,24 +29,13 @@ interface ProfileInfo {
     is_followed: boolean;
 }
 
-const Posts = dynamic(() => import('components/layouts/profile/Posts'), {
-    loading: () => <Spinner className='p-lg' />,
-});
-
-const Likes = dynamic(() => import('components/layouts/profile/Likes'), {
+const Posts = dynamic(() => import('components/layouts/Posts'), {
     loading: () => <Spinner className='p-lg' />,
 });
 
 const Comments = dynamic(() => import('components/layouts/profile/Comments'), {
     loading: () => <Spinner className='p-lg' />,
 });
-
-const Bookmarks = dynamic(
-    () => import('components/layouts/profile/Bookmarks'),
-    {
-        loading: () => <Spinner className='p-lg' />,
-    },
-);
 
 export default function Profile({ user }: { user: ProfileInfo | null }) {
     const isLandscapeTablet = useMediaQuery({ maxWidth: 720 });
@@ -66,7 +54,14 @@ export default function Profile({ user }: { user: ProfileInfo | null }) {
     }
 
     if (!!section && !/^likes|comments|bookmarks$/.test(section)) {
-        return <ProfileSectionNotFound />;
+        return (
+            <section className='p-lg text-center sm:px-md'>
+                <h1 className='text-skin-text-light opacity-80'>
+                    Oops! It looks like you&#39;re trying to redirect to an
+                    unknown page.
+                </h1>
+            </section>
+        );
     }
 
     return (
@@ -136,11 +131,33 @@ export default function Profile({ user }: { user: ProfileInfo | null }) {
             </nav>
 
             {asPath === `/${username}` && (
-                <Posts userSlug={userData.slug} username={userData.username} />
+                <Posts
+                    queryKey={['profile.posts', user?.slug]}
+                    url={`/api/profile/${user?.username}/posts`}
+                    cacheTime={1000 * 60 * 2}
+                    enabled
+                />
             )}
-            {asPath === `/${username}/likes` && <Likes />}
+
+            {asPath === `/${username}/likes` && (
+                <Posts
+                    queryKey={['profile.likes', user?.slug]}
+                    url={`/api/profile/${user?.username}/likes`}
+                    cacheTime={1000 * 60 * 2}
+                    enabled
+                />
+            )}
+
             {asPath === `/${username}/comments` && <Comments />}
-            {asPath === `/${username}/bookmarks` && <Bookmarks />}
+
+            {asPath === `/${username}/bookmarks` && (
+                <Posts
+                    queryKey={['profile.bookmarks', user?.slug]}
+                    url={`/api/profile/${user?.username}/bookmarks`}
+                    cacheTime={1000 * 60 * 2}
+                    enabled
+                />
+            )}
         </div>
     );
 }
