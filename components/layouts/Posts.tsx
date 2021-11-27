@@ -1,61 +1,63 @@
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { ChangeEvent, useEffect } from 'react';
-import { InfiniteData, useInfiniteQuery } from 'react-query';
+import { useEffect } from 'react';
+import { InfiniteData, QueryKey, useInfiniteQuery } from 'react-query';
+import clsx from 'clsx';
 import Post from 'components/chunks/post';
-import Select from 'components/utilities/Select';
 import Spinner from 'components/vectors/Spinner';
 import type { PostPage } from 'types/page';
 import type { Post as PostType } from 'types/post';
 
-const items = [
-    { label: 'Most recent', value: 'created_at' },
-    { label: 'Most liked', value: 'likes' },
-];
+interface Props {
+    queryKey: QueryKey;
+    url: string;
+    enabled?: boolean;
+    cacheTime?: number;
+}
 
-const formatData = (result: InfiniteData<PostPage>): InfiniteData<PostType> => {
-    let pages: PostType[] = [];
-
-    if (result.pages.length === 1) {
-        pages = result.pages[0].items;
+const formatData = ({ pageParams, pages }: InfiniteData<PostPage>) => {
+    if (pages.length === 1) {
+        return {
+            pageParams,
+            pages: pages[0].items,
+        };
     }
 
-    if (result.pages.length > 1) {
-        pages = result.pages.flatMap(page => [...page.items]);
+    if (pages.length > 1) {
+        return {
+            pageParams,
+            pages: pages.flatMap(page => [...page.items]),
+        };
     }
 
-    return {
-        pageParams: result.pageParams,
-        pages,
-    };
+    return { pageParams, pages: [] };
 };
 
-export default function Posts() {
-    const { query, replace } = useRouter();
+function Posts({ queryKey, url, enabled, cacheTime }: Props) {
+    const { query } = useRouter();
     const { data, isLoading, isIdle, isSuccess, refetch } = useInfiniteQuery<
         PostPage,
         unknown,
         PostType
-    >('posts', {
-        enabled: false,
-        meta: { url: '/api/posts', ...query },
+    >(queryKey, {
+        enabled,
+        meta: { url, ...query },
         getNextPageParam: last => last.next_offset ?? false,
         select: formatData,
+        cacheTime,
     });
 
-    function changeSortType(event: ChangeEvent<HTMLSelectElement>) {
-        replace(`/home?sort=${event.target.value}`);
-    }
-
     useEffect(() => {
-        refetch();
+        if (!enabled) {
+            refetch();
+        }
     }, [query]);
 
-    if (isLoading || isIdle) {
+    if (isLoading || isIdle || !data) {
         return <Spinner className='p-lg' />;
     }
 
-    if (isSuccess && !data?.pages.length) {
+    if (isSuccess && !data.pages.length) {
         return (
             <section className='p-lg'>
                 <h1 className='text-md text-skin-text-light text-center'>
@@ -66,24 +68,22 @@ export default function Posts() {
     }
 
     return (
-        <section className='mt-lg'>
-            <div className='block mt-lg' aria-label='Sorting options'>
-                <span className='text-skin-text text-sm'>Sort by:</span>
-                <Select
-                    className='text-skin-text-light text-sm bg-skin-bg ml-sm cursor-pointer'
-                    items={items}
-                    value={query.sort || 'created_at'}
-                    onChange={changeSortType}
-                />
-            </div>
-
-            <div>
-                {data?.pages.map(post => (
-                    <Link key={post.slug} href={`/post/${post.slug}`}>
-                        <Post className='cursor-pointer mt-lg' {...post} />
-                    </Link>
-                ))}
-            </div>
+        <section className='p-lg sm:px-md'>
+            {data.pages.map((post, index) => (
+                <Link key={post.slug} href={`/post/${post.slug}`}>
+                    <Post
+                        className={clsx('cursor-pointer', !!index && 'mt-lg')}
+                        {...post}
+                    />
+                </Link>
+            ))}
         </section>
     );
 }
+
+Posts.defaultProps = {
+    enabled: false,
+    cacheTime: 1000 * 60 * 5,
+};
+
+export default Posts;
