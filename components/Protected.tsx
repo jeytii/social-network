@@ -1,8 +1,9 @@
 import Head from 'next/head';
-import { ChangeEvent, ReactNode, useState } from 'react';
+import Link from 'next/link';
+import { ReactNode } from 'react';
 import { useQueries, useQueryClient, QueryKey } from 'react-query';
 import { useMediaQuery } from 'react-responsive';
-import { MdOutlineWbSunny, MdModeNight } from 'react-icons/md';
+import { MdOutlineNotifications } from 'react-icons/md';
 import useRendered from 'hooks/useRendered';
 import { axiosClient } from 'config/axios';
 import EditItemModal from 'components/layouts/modal/EditItem';
@@ -37,10 +38,9 @@ interface Props {
 }
 
 export default function Protected({ title, children }: Props) {
-    const [nightMode, setNightMode] = useState<boolean>(false);
-    const rendered = useRendered();
     const isDesktop = useMediaQuery({ minWidth: 1024 });
     const isMobile = useMediaQuery({ maxWidth: 480 });
+    const rendered = useRendered();
     const queryClient = useQueryClient();
 
     const [{ data: editPostModal }, { data: deletePostModal }] = useQueries([
@@ -62,18 +62,6 @@ export default function Protected({ title, children }: Props) {
         },
     ]);
 
-    function toggleDarkMode(event: ChangeEvent<HTMLInputElement>) {
-        const { checked } = event.target;
-
-        setNightMode(checked);
-
-        if (checked) {
-            document.body.classList.add('theme-dark');
-        } else {
-            document.body.classList.remove('theme-dark');
-        }
-    }
-
     return (
         <main className='bg-skin-bg h-screen overflow-auto'>
             <Head>
@@ -90,25 +78,18 @@ export default function Protected({ title, children }: Props) {
 
                 <Searchbar />
 
-                <label
-                    className='cursor-pointer ml-auto'
-                    htmlFor='theme-toggler'
-                    title='Toggle theme'
-                    aria-label='Toggle theme'
-                >
-                    <input
-                        className='hidden'
-                        type='checkbox'
-                        id='theme-toggler'
-                        onChange={toggleDarkMode}
-                    />
+                <Link href='/notifications'>
+                    <div className='relative cursor-pointer ml-auto'>
+                        <span className='absolute top-[-11px] right-[-9px] w-[20px] h-[20px] flex items-center justify-center bg-danger text-xs rounded-full p-xs'>
+                            9+
+                        </span>
 
-                    {nightMode ? (
-                        <MdModeNight className='text-skin-text-light text-lg' />
-                    ) : (
-                        <MdOutlineWbSunny className='text-skin-text-light text-lg' />
-                    )}
-                </label>
+                        <MdOutlineNotifications
+                            className='text-skin-text-light text-lg'
+                            viewBox='2 2 20 20'
+                        />
+                    </div>
+                </Link>
             </header>
 
             {/* MAIN */}
