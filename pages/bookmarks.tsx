@@ -1,11 +1,15 @@
 import { GetServerSideProps } from 'next';
 import { axiosServer } from 'config/axios';
+import Posts from 'components/layouts/Posts';
 
 export default function Bookmarks() {
     return (
-        <section>
-            <h1>Bookmarks</h1>
-        </section>
+        <Posts
+            className='p-lg sm:px-md'
+            queryKey='profile.bookmarks'
+            url='/api/profile/bookmarks'
+            enabled
+        />
     );
 }
 
