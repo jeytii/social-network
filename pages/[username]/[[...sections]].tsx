@@ -135,7 +135,9 @@ export default function Profile({ user }: { user: ProfileInfo | null }) {
                 </Link>
             </nav>
 
-            {asPath === `/${username}` && <Posts />}
+            {asPath === `/${username}` && (
+                <Posts userSlug={userData.slug} username={userData.username} />
+            )}
             {asPath === `/${username}/likes` && <Likes />}
             {asPath === `/${username}/comments` && <Comments />}
             {asPath === `/${username}/bookmarks` && <Bookmarks />}
