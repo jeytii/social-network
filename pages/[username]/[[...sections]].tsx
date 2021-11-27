@@ -45,7 +45,7 @@ export default function Profile({ user }: { user: ProfileInfo | null }) {
         return <h1>User not found</h1>;
     }
 
-    if (!!section && !/^comments$/.test(section)) {
+    if (!!section && !/^comments|followers|following$/.test(section)) {
         return (
             <section className='p-lg text-center sm:px-md'>
                 <h1 className='text-skin-text-light opacity-80'>
