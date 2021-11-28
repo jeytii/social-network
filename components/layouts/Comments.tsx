@@ -1,8 +1,19 @@
-import { InfiniteData, useInfiniteQuery } from 'react-query';
+import Link from 'next/link';
+import { HTMLAttributes } from 'react';
+import { useInfiniteQuery, InfiniteData, QueryKey } from 'react-query';
 import Comment from 'components/chunks/Comment';
 import Spinner from 'components/vectors/Spinner';
 import type { CommentPage } from 'types/page';
 import type { Comment as CommentType } from 'types/comment';
+import clsx from 'clsx';
+
+interface Props extends HTMLAttributes<HTMLElement> {
+    queryKey: QueryKey;
+    url: string;
+    slug?: string;
+    hasLink?: boolean;
+    cacheTime?: number;
+}
 
 const formatData = ({ pageParams, pages }: InfiniteData<CommentPage>) => {
     if (pages.length === 1) {
@@ -22,26 +33,31 @@ const formatData = ({ pageParams, pages }: InfiniteData<CommentPage>) => {
     return { pageParams, pages: [] };
 };
 
-export default function Comments({ slug }: { slug: string }) {
+export default function Comments({
+    queryKey,
+    url,
+    slug,
+    hasLink,
+    cacheTime,
+    ...props
+}: Props) {
+    const meta = slug ? { url, post: slug } : { url };
     const { data, isLoading, isSuccess } = useInfiniteQuery<
         CommentPage,
         unknown,
         CommentType
-    >(['comments', slug], {
-        meta: {
-            url: '/api/comments',
-            post: slug,
-        },
+    >(queryKey, {
+        meta,
         getNextPageParam: last => last.next_offset ?? false,
         select: formatData,
-        cacheTime: 1000 * 60 * 2,
+        cacheTime,
     });
 
-    if (isLoading) {
+    if (isLoading || !data) {
         return <Spinner className='p-lg' />;
     }
 
-    if (isSuccess && !data?.pages.length) {
+    if (isSuccess && !data.pages.length) {
         return (
             <section className='p-lg'>
                 <h1 className='text-md text-skin-text-light text-center'>
@@ -52,10 +68,37 @@ export default function Comments({ slug }: { slug: string }) {
     }
 
     return (
-        <section className='mt-lg'>
-            {data?.pages.map(comment => (
-                <Comment key={comment.slug} className='mt-lg' {...comment} />
-            ))}
+        <section {...props}>
+            {data.pages.map((comment, index) => {
+                if (hasLink) {
+                    return (
+                        <Link href={`/post/${comment.post_slug}`}>
+                            <Comment
+                                key={comment.slug}
+                                className={clsx(
+                                    'cursor-pointer',
+                                    !!index && 'mt-lg',
+                                )}
+                                {...comment}
+                            />
+                        </Link>
+                    );
+                }
+
+                return (
+                    <Comment
+                        key={comment.slug}
+                        className={index ? 'mt-lg' : ''}
+                        {...comment}
+                    />
+                );
+            })}
         </section>
     );
 }
+
+Comments.defaultProps = {
+    slug: undefined,
+    hasLink: false,
+    cacheTime: 1000 * 60 * 5,
+};
