@@ -1,9 +1,18 @@
 import { GetServerSideProps } from 'next';
+import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import clsx from 'clsx';
+import Spinner from 'components/vectors/Spinner';
 import { axiosServer } from 'config/axios';
-import Posts from 'components/layouts/Posts';
+
+const Posts = dynamic(() => import('components/layouts/Posts'), {
+    loading: () => <Spinner className='p-lg' />,
+});
+
+const Comments = dynamic(() => import('components/layouts/Comments'), {
+    loading: () => <Spinner className='p-lg' />,
+});
 
 const isActive = (condition: boolean) =>
     condition
@@ -51,15 +60,20 @@ export default function Likes({ invalid }: { invalid: boolean | undefined }) {
             </nav>
 
             {query.s === 'posts' && (
-                <section className='p-lg'>
-                    <h1>Liked Posts</h1>
-                </section>
+                <Posts
+                    className='p-lg'
+                    queryKey='profile.likes.posts'
+                    url='/api/profile/likes/posts'
+                    enabled
+                />
             )}
 
             {query.s === 'comments' && (
-                <section className='p-lg'>
-                    <h1>Liked Comments</h1>
-                </section>
+                <Comments
+                    queryKey='profile.likes.comments'
+                    url='/api/profile/likes/comments'
+                    hasLink
+                />
             )}
         </section>
     );
