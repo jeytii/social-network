@@ -61,7 +61,11 @@ export default function ViewPost({ slug }: { slug: string }) {
 
             <CommentBox slug={slug} />
 
-            <Comments slug={slug} />
+            <Comments
+                queryKey={['comments', slug]}
+                url='/api/comments'
+                slug={slug}
+            />
         </div>
     );
 }
