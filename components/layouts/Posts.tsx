@@ -60,8 +60,8 @@ function Posts({ queryKey, url, enabled, cacheTime, ...props }: Props) {
     if (isSuccess && !data.pages.length) {
         return (
             <section className='p-lg'>
-                <h1 className='text-md text-skin-text-light text-center'>
-                    No posts to show.
+                <h1 className='text-md font-bold text-skin-text-light opacity-50 text-center'>
+                    No post to show.
                 </h1>
             </section>
         );

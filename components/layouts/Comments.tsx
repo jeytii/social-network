@@ -60,8 +60,8 @@ export default function Comments({
     if (isSuccess && !data.pages.length) {
         return (
             <section className='p-lg'>
-                <h1 className='text-md text-skin-text-light text-center'>
-                    No comments to show.
+                <h1 className='text-md font-bold text-skin-text-light opacity-50 text-center'>
+                    No comment to show.
                 </h1>
             </section>
         );
