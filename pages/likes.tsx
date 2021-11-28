@@ -64,14 +64,17 @@ export default function Likes({ invalid }: { invalid: boolean | undefined }) {
                     className='p-lg'
                     queryKey='profile.likes.posts'
                     url='/api/profile/likes/posts'
+                    cacheTime={Infinity}
                     enabled
                 />
             )}
 
             {query.s === 'comments' && (
                 <Comments
+                    className='p-lg'
                     queryKey='profile.likes.comments'
                     url='/api/profile/likes/comments'
+                    cacheTime={Infinity}
                     hasLink
                 />
             )}
