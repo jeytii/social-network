@@ -8,6 +8,7 @@ export default function Bookmarks() {
             className='p-lg sm:px-md'
             queryKey='profile.bookmarks'
             url='/api/profile/bookmarks'
+            cacheTime={Infinity}
             enabled
         />
     );
