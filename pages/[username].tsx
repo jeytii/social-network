@@ -16,6 +16,8 @@ interface ProfileInfo {
     created_at: string;
     bio: string;
     image_url: string | null;
+    posts_count: number;
+    comments_count: number;
     followers_count: number;
     following_count: number;
     is_self: boolean;
@@ -32,6 +34,10 @@ const Posts = dynamic(() => import('components/layouts/Posts'), {
 });
 
 const Comments = dynamic(() => import('components/layouts/Comments'), {
+    loading: () => <Spinner className='p-lg' />,
+});
+
+const Users = dynamic(() => import('components/layouts/Users'), {
     loading: () => <Spinner className='p-lg' />,
 });
 
@@ -65,23 +71,67 @@ export default function Profile({ invalid, user }: Props) {
                 <Link href={`/${username}`} shallow>
                     <span
                         className={clsx(
-                            'flex-1 text-md text-center py-sm cursor-pointer hover:bg-skin-bg-contrast',
+                            'flex-1 text-md text-center py-sm cursor-pointer hover:bg-skin-bg-contrast md:text-sm sm:text-xs',
                             isActive(!section),
                         )}
                     >
-                        Posts
+                        <span className='block font-bold'>
+                            {userData.posts_count}
+                        </span>
+                        <span>
+                            {userData.posts_count > 1 ? 'Posts' : 'Post'}
+                        </span>
                     </span>
                 </Link>
 
                 <Link href={`/${username}?s=comments`} shallow>
                     <span
                         className={clsx(
-                            'flex-1 text-md text-center py-sm cursor-pointer hover:bg-skin-bg-contrast',
+                            'flex-1 text-md text-center py-sm cursor-pointer hover:bg-skin-bg-contrast md:text-sm sm:text-xs',
                             isActive(section === 'comments'),
                         )}
                     >
-                        Comments
+                        <span className='block font-bold'>
+                            {userData.comments_count}
+                        </span>
+                        <span>
+                            {userData.comments_count > 1
+                                ? 'Comments'
+                                : 'Comment'}
+                        </span>
                     </span>
+                </Link>
+
+                <Link href={`/${username}?s=followers`} shallow>
+                    <div
+                        className={clsx(
+                            'flex-1 text-md text-center py-sm cursor-pointer hover:bg-skin-bg-contrast md:text-sm sm:text-xs',
+                            isActive(section === 'followers'),
+                        )}
+                    >
+                        <span className='block font-bold'>
+                            {userData.followers_count}
+                        </span>
+                        <span>
+                            {userData.followers_count > 1
+                                ? 'Followers'
+                                : 'Follower'}
+                        </span>
+                    </div>
+                </Link>
+
+                <Link href={`/${username}?s=following`} shallow>
+                    <div
+                        className={clsx(
+                            'flex-1 text-md text-center py-sm cursor-pointer hover:bg-skin-bg-contrast md:text-sm sm:text-xs',
+                            isActive(section === 'following'),
+                        )}
+                    >
+                        <span className='block font-bold'>
+                            {userData.following_count}
+                        </span>
+                        <span>Following</span>
+                    </div>
                 </Link>
             </nav>
 
@@ -97,11 +147,31 @@ export default function Profile({ invalid, user }: Props) {
 
             {section === 'comments' && (
                 <Comments
-                    className='p-lg'
+                    className='p-lg sm:px-md'
                     queryKey={['profile.comments', userData.slug]}
                     url={`/api/profile/${userData.username}/comments`}
                     cacheTime={1000 * 60 * 2}
                     hasLink
+                />
+            )}
+
+            {section === 'followers' && (
+                <Users
+                    className='p-lg sm:px-md'
+                    queryKey={['profile.followers', userData.slug]}
+                    url={`/api/profile/${userData.username}/followers`}
+                    cacheTime={1000 * 60 * 2}
+                    enabled
+                />
+            )}
+
+            {section === 'following' && (
+                <Users
+                    className='p-lg sm:px-md'
+                    queryKey={['profile.following', userData.slug]}
+                    url={`/api/profile/${userData.username}/following`}
+                    cacheTime={1000 * 60 * 2}
+                    enabled
                 />
             )}
         </div>
