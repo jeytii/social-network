@@ -5,7 +5,6 @@ import {
     MdOutlineCake,
     MdCalendarToday,
 } from 'react-icons/md';
-import TextLink from 'components/utilities/TextLink';
 import FollowButton from 'components/utilities/FollowButton';
 
 interface ProfileInfo {
@@ -16,8 +15,6 @@ interface ProfileInfo {
     created_at: string;
     bio: string;
     image_url: string | null;
-    followers_count: number;
-    following_count: number;
     is_self: boolean;
     is_followed: boolean;
 }
@@ -30,8 +27,6 @@ export default function ProfileHeadline({
     created_at,
     bio,
     image_url,
-    followers_count,
-    following_count,
     is_self,
     is_followed,
 }: ProfileInfo) {
@@ -59,7 +54,7 @@ export default function ProfileHeadline({
                             {name}
                         </span>
                         <span className='block text-skin-text-light text-md'>
-                            @{username}
+                            {username}
                         </span>
                     </figcaption>
                 </figure>
@@ -77,53 +72,31 @@ export default function ProfileHeadline({
                 )}
             </section>
 
+            <div className='flex items-center mt-sm sm:justify-center'>
+                <MdOutlineCake
+                    className='text-md text-skin-text-light'
+                    viewBox='2 2 20 20'
+                />
+                <span className='text-md text-skin-text-light ml-sm'>
+                    {birth_date}
+                </span>
+            </div>
+
+            <div className='flex items-center mt-sm sm:justify-center xs:ml-auto'>
+                <MdCalendarToday
+                    className='text-md text-skin-text-light'
+                    viewBox='2 2 20 20'
+                />
+                <span className='text-md text-skin-text-light ml-sm'>
+                    Joined on {created_at}
+                </span>
+            </div>
+
             {!!bio && (
-                <p className='paragraph-md text-skin-text mt-lg sm:paragraph-sm'>
+                <p className='paragraph-md text-skin-text-light mt-sm sm:text-center'>
                     {bio}
                 </p>
             )}
-
-            <div className='flex items-center mt-lg xs:block sm:justify-center'>
-                <div className='flex items-center sm:justify-center'>
-                    <MdOutlineCake
-                        className='text-md text-skin-text-light sm:text-sm'
-                        viewBox='2 2 20 20'
-                    />
-                    <span className='text-md text-skin-text-light ml-sm'>
-                        {birth_date}
-                    </span>
-                </div>
-
-                <div className='flex items-center ml-xl sm:justify-center xs:ml-auto xs:mt-sm'>
-                    <MdCalendarToday
-                        className='text-md text-skin-text-light sm:text-sm'
-                        viewBox='2 2 20 20'
-                    />
-                    <span className='text-md text-skin-text-light ml-sm'>
-                        {created_at}
-                    </span>
-                </div>
-            </div>
-
-            <div className='flex items-center mt-lg sm:justify-center'>
-                <TextLink className='text-md' href='/followers'>
-                    <b className='text-skin-text font-bold'>
-                        {followers_count}
-                    </b>
-                    <span className='text-skin-text-light ml-xs'>
-                        Followers
-                    </span>
-                </TextLink>
-
-                <TextLink className='text-md ml-xl' href='/following'>
-                    <b className='text-skin-text font-bold'>
-                        {following_count}
-                    </b>
-                    <span className='text-skin-text-light ml-xs'>
-                        Following
-                    </span>
-                </TextLink>
-            </div>
         </div>
     );
 }
