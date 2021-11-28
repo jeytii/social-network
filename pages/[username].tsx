@@ -31,7 +31,7 @@ const Posts = dynamic(() => import('components/layouts/Posts'), {
     loading: () => <Spinner className='p-lg' />,
 });
 
-const Comments = dynamic(() => import('components/layouts/profile/Comments'), {
+const Comments = dynamic(() => import('components/layouts/Comments'), {
     loading: () => <Spinner className='p-lg' />,
 });
 
@@ -88,14 +88,22 @@ export default function Profile({ invalid, user }: Props) {
             {!section && (
                 <Posts
                     className='p-lg sm:px-md'
-                    queryKey={['profile.posts', user?.slug]}
-                    url={`/api/profile/${user?.username}/posts`}
+                    queryKey={['profile.posts', userData.slug]}
+                    url={`/api/profile/${userData.username}/posts`}
                     cacheTime={1000 * 60 * 2}
                     enabled
                 />
             )}
 
-            {section === 'comments' && <Comments />}
+            {section === 'comments' && (
+                <Comments
+                    className='p-lg'
+                    queryKey={['profile.comments', userData.slug]}
+                    url={`/api/profile/${userData.username}/comments`}
+                    cacheTime={1000 * 60 * 2}
+                    hasLink
+                />
+            )}
         </div>
     );
 }
