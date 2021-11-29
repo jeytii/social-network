@@ -1,4 +1,4 @@
-import { HTMLAttributes } from 'react';
+import { forwardRef, HTMLAttributes, Ref } from 'react';
 import clsx from 'clsx';
 import BasicInfo from 'components/utilities/BasicInfo';
 import MoreOptionsButton from 'components/utilities/MoreOptionsButton';
@@ -7,23 +7,27 @@ import type { Comment as CommentType } from 'types/comment';
 
 type Props = CommentType & HTMLAttributes<HTMLElement>;
 
-export default function Comment({
-    className,
-    slug,
-    post_slug,
-    body,
-    likes_count,
-    is_own_comment,
-    is_liked,
-    is_edited,
-    timestamp,
-    user,
-    ...props
-}: Props) {
+function Comment(
+    {
+        className,
+        slug,
+        post_slug,
+        body,
+        likes_count,
+        is_own_comment,
+        is_liked,
+        is_edited,
+        timestamp,
+        user,
+        ...props
+    }: Props,
+    ref: Ref<HTMLElement>,
+) {
     const { is_self, is_followed, ...userProps } = user;
 
     return (
         <article
+            ref={ref}
             className={clsx('bg-skin-bg-contrast rounded-md p-md', className)}
             {...props}
         >
@@ -68,3 +72,5 @@ export default function Comment({
         </article>
     );
 }
+
+export default forwardRef(Comment);
