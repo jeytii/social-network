@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { useEffect, HTMLAttributes } from 'react';
+import { HTMLAttributes } from 'react';
 import { QueryKey } from 'react-query';
 import clsx from 'clsx';
 import Post from 'components/chunks/post';
@@ -12,36 +12,19 @@ import type { Post as PostType } from 'types/post';
 interface Props extends HTMLAttributes<HTMLElement> {
     queryKey: QueryKey;
     url: string;
-    enabled?: boolean;
     cacheTime?: number;
 }
 
-function Posts({ queryKey, url, enabled, cacheTime, ...props }: Props) {
+export default function Posts({ queryKey, url, cacheTime, ...props }: Props) {
     const { query } = useRouter();
-    const {
-        data,
-        ref,
-        isLoading,
-        isFetching,
-        isFetchingNextPage,
-        isSuccess,
-        refetch,
-        remove,
-    } = useInfiniteScroll<PostType, PostPage>(
-        queryKey,
-        { url, ...query },
-        cacheTime as number,
-        enabled,
-    );
+    const { data, ref, isLoading, isFetchingNextPage, isSuccess } =
+        useInfiniteScroll<PostType, PostPage>(
+            queryKey,
+            { url, ...query },
+            cacheTime as number,
+        );
 
-    useEffect(() => {
-        if (!enabled) {
-            remove();
-            refetch();
-        }
-    }, [query]);
-
-    if ((isLoading || isFetching) && !isFetchingNextPage) {
+    if (isLoading) {
         return <Spinner className='p-lg' />;
     }
 
@@ -75,8 +58,5 @@ function Posts({ queryKey, url, enabled, cacheTime, ...props }: Props) {
 }
 
 Posts.defaultProps = {
-    enabled: false,
     cacheTime: 1000 * 60 * 5,
 };
-
-export default Posts;
