@@ -1,8 +1,9 @@
 import { KeyboardEvent } from 'react';
 import { useMutation, useQueryClient, InfiniteData } from 'react-query';
 import useTextBody from 'hooks/useTextBody';
-import type { Comment } from 'types/comment';
 import type { CommentPage } from 'types/page';
+import type { Post } from 'types/post';
+import type { Comment } from 'types/comment';
 
 interface Variables {
     url: string;
@@ -43,15 +44,13 @@ export default function CommentBox({ slug }: { slug: string }) {
     }
 
     async function onSuccess({ data }: ResponseBody) {
-        // Update the number of comments on the current post in news feed.
-        await queryClient.invalidateQueries('posts', {
-            refetchInactive: true,
-            refetchPage: () => true,
-        });
+        // Update the number of comments of the currently previewed post.
+        queryClient.setQueryData<Post | undefined>(['post', slug], current => {
+            if (!current) {
+                return undefined;
+            }
 
-        // Update the number of comments on the currently previewed post.
-        await queryClient.invalidateQueries(['post', slug], {
-            refetchInactive: true,
+            return { ...current, comments_count: current.comments_count + 1 };
         });
 
         // Create a comment.

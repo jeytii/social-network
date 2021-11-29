@@ -1,14 +1,46 @@
-import { ForwardedRef, forwardRef, HTMLAttributes, useState } from 'react';
+import { useCallback, ForwardedRef, forwardRef, HTMLAttributes } from 'react';
+import { InfiniteData, useQueryClient } from 'react-query';
 import { MdOutlineChatBubbleOutline } from 'react-icons/md';
 import clsx from 'clsx';
 import BasicInfo from 'components/utilities/BasicInfo';
 import MoreOptionsButton from 'components/utilities/MoreOptionsButton';
-import type { Post as PostType } from 'types/post';
 import LikeButton from 'components/chunks/LikeButton';
-import { useQueryClient } from 'react-query';
+import type { PostPage } from 'types/page';
+import type { Post as PostType } from 'types/post';
 import BookmarkButton from './BookmarkButton';
 
 type Props = PostType & HTMLAttributes<HTMLElement>;
+type QueryData = InfiniteData<PostPage> | undefined;
+
+const set = (
+    current: QueryData,
+    slug: string,
+    condition: boolean,
+    actionType: 'like' | 'bookmark',
+): QueryData => {
+    if (!current) {
+        return undefined;
+    }
+
+    const posts = current.pages.flatMap(page => [...page.items]);
+
+    posts.forEach(post => {
+        if (post.slug === slug) {
+            const p = post;
+
+            if (actionType === 'like') {
+                p.is_liked = condition;
+                p.likes_count = condition
+                    ? p.likes_count + 1
+                    : p.likes_count - 1;
+            } else {
+                p.is_bookmarked = condition;
+            }
+        }
+    });
+
+    return current;
+};
 
 function Post(
     {
@@ -27,16 +59,36 @@ function Post(
     }: Props,
     ref: ForwardedRef<HTMLElement>,
 ) {
-    const [bookmarked, setBookmarked] = useState<boolean>(is_bookmarked);
     const queryClient = useQueryClient();
     const { is_self, ...userProps } = user;
 
-    async function successEvent() {
-        await queryClient.invalidateQueries('posts', {
-            refetchInactive: true,
-            refetchPage: () => true,
-        });
-    }
+    const onSuccess = useCallback(
+        (condition: boolean, actionType: 'like' | 'bookmark') => {
+            queryClient.setQueryData<QueryData>('posts', current =>
+                set(current, slug, condition, actionType),
+            );
+
+            queryClient.setQueryData<QueryData>(
+                ['profile.posts', user.slug],
+                current => set(current, slug, condition, actionType),
+            );
+
+            queryClient.setQueryData<QueryData>('profile.bookmarks', current =>
+                set(current, slug, condition, actionType),
+            );
+
+            queryClient.setQueryData<QueryData>(
+                'profile.likes.posts',
+                current => set(current, slug, condition, actionType),
+            );
+
+            queryClient.setQueryData<QueryData>(
+                'profile.likes.comments',
+                current => set(current, slug, condition, actionType),
+            );
+        },
+        [],
+    );
 
     return (
         <article
@@ -87,7 +139,7 @@ function Post(
                     route={`/api/posts/${slug}`}
                     condition={is_liked}
                     count={likes_count}
-                    successEvent={successEvent}
+                    onSuccess={onSuccess}
                 />
 
                 <button
@@ -99,9 +151,9 @@ function Post(
                 </button>
 
                 <BookmarkButton
-                    postSlug={slug}
-                    condition={bookmarked}
-                    stateEvent={setBookmarked}
+                    route={`/api/posts/${slug}`}
+                    condition={is_bookmarked}
+                    onSuccess={onSuccess}
                 />
             </section>
         </article>
