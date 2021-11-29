@@ -1,9 +1,10 @@
 import { useRouter } from 'next/router';
 import { HTMLAttributes, useEffect } from 'react';
-import { useInfiniteQuery, InfiniteData, QueryKey } from 'react-query';
+import { QueryKey } from 'react-query';
 import clsx from 'clsx';
 import User from 'components/chunks/User';
 import Spinner from 'components/vectors/Spinner';
+import useInfiniteScroll from 'hooks/useInfiniteScroll';
 import { UserPage } from 'types/page';
 import { User as UserType } from 'types/user';
 
@@ -14,24 +15,6 @@ interface Props extends HTMLAttributes<HTMLElement> {
     cacheTime?: number;
 }
 
-const formatData = ({ pageParams, pages }: InfiniteData<UserPage>) => {
-    if (pages.length === 1) {
-        return {
-            pageParams,
-            pages: pages[0].items,
-        };
-    }
-
-    if (pages.length > 1) {
-        return {
-            pageParams,
-            pages: pages.flatMap(page => [...page.items]),
-        };
-    }
-
-    return { pageParams, pages: [] };
-};
-
 export default function Users({
     queryKey,
     url,
@@ -40,21 +23,31 @@ export default function Users({
     ...props
 }: Props) {
     const { query } = useRouter();
-    const { data, refetch, isLoading, isFetching, isSuccess } =
-        useInfiniteQuery<UserPage, unknown, UserType>(queryKey, {
-            enabled,
-            meta: { url, ...query },
-            select: formatData,
-            cacheTime,
-        });
+
+    const {
+        data,
+        ref,
+        isLoading,
+        isFetching,
+        isFetchingNextPage,
+        isSuccess,
+        refetch,
+        remove,
+    } = useInfiniteScroll<UserType, UserPage, HTMLDivElement>(
+        queryKey,
+        { url, ...query },
+        cacheTime as number,
+        enabled,
+    );
 
     useEffect(() => {
         if (!enabled) {
+            remove();
             refetch();
         }
     }, [query]);
 
-    if (isLoading || isFetching) {
+    if ((isLoading || isFetching) && !isFetchingNextPage) {
         return <Spinner className='p-lg' />;
     }
 
@@ -70,17 +63,22 @@ export default function Users({
 
     return (
         <section {...props}>
-            {data?.pages.map((user, index) => (
-                <User
-                    key={user.slug}
-                    className={clsx(
-                        'bg-skin-bg-contrast-light border border-skin-bg-contrast p-sm hover:bg-skin-bg-contrast',
-                        index ? 'mt-lg' : 'mt-auto',
-                    )}
-                    imageSize={50}
-                    {...user}
-                />
-            ))}
+            <div>
+                {data?.pages.map((user, i) => (
+                    <User
+                        key={user.slug}
+                        ref={i === data.pages.length - 1 ? ref : null}
+                        className={clsx(
+                            'bg-skin-bg-contrast-light border border-skin-bg-contrast p-sm hover:bg-skin-bg-contrast',
+                            i ? 'mt-lg' : 'mt-auto',
+                        )}
+                        imageSize={50}
+                        {...user}
+                    />
+                ))}
+            </div>
+
+            {isFetchingNextPage && <Spinner className='mt-lg' />}
         </section>
     );
 }

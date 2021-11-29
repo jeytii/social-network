@@ -1,11 +1,12 @@
 import Link from 'next/link';
 import { HTMLAttributes } from 'react';
-import { useInfiniteQuery, InfiniteData, QueryKey } from 'react-query';
+import { QueryKey } from 'react-query';
+import clsx from 'clsx';
 import Comment from 'components/chunks/Comment';
 import Spinner from 'components/vectors/Spinner';
+import useInfiniteScroll from 'hooks/useInfiniteScroll';
 import type { CommentPage } from 'types/page';
 import type { Comment as CommentType } from 'types/comment';
-import clsx from 'clsx';
 
 interface Props extends HTMLAttributes<HTMLElement> {
     queryKey: QueryKey;
@@ -14,24 +15,6 @@ interface Props extends HTMLAttributes<HTMLElement> {
     hasLink?: boolean;
     cacheTime?: number;
 }
-
-const formatData = ({ pageParams, pages }: InfiniteData<CommentPage>) => {
-    if (pages.length === 1) {
-        return {
-            pageParams,
-            pages: pages[0].items,
-        };
-    }
-
-    if (pages.length > 1) {
-        return {
-            pageParams,
-            pages: pages.flatMap(page => [...page.items]),
-        };
-    }
-
-    return { pageParams, pages: [] };
-};
 
 export default function Comments({
     queryKey,
@@ -42,16 +25,12 @@ export default function Comments({
     ...props
 }: Props) {
     const meta = slug ? { url, post: slug } : { url };
-    const { data, isLoading, isSuccess } = useInfiniteQuery<
-        CommentPage,
-        unknown,
-        CommentType
-    >(queryKey, {
-        meta,
-        getNextPageParam: last => last.next_offset ?? false,
-        select: formatData,
-        cacheTime,
-    });
+    const { data, ref, isLoading, isFetchingNextPage, isSuccess } =
+        useInfiniteScroll<CommentType, CommentPage>(
+            queryKey,
+            meta,
+            cacheTime as number,
+        );
 
     if (isLoading || !data) {
         return <Spinner className='p-lg' />;
@@ -69,30 +48,38 @@ export default function Comments({
 
     return (
         <section {...props}>
-            {data.pages.map((comment, index) => {
-                if (hasLink) {
-                    return (
-                        <Link href={`/post/${comment.post_slug}`}>
-                            <Comment
-                                key={comment.slug}
-                                className={clsx(
-                                    'cursor-pointer',
-                                    !!index && 'mt-lg',
-                                )}
-                                {...comment}
-                            />
-                        </Link>
-                    );
-                }
+            <div>
+                {data.pages.map((comment, i) => {
+                    if (hasLink) {
+                        return (
+                            <Link href={`/post/${comment.post_slug}`}>
+                                <Comment
+                                    key={comment.slug}
+                                    ref={
+                                        i === data.pages.length - 1 ? ref : null
+                                    }
+                                    className={clsx(
+                                        'cursor-pointer',
+                                        i && 'mt-lg',
+                                    )}
+                                    {...comment}
+                                />
+                            </Link>
+                        );
+                    }
 
-                return (
-                    <Comment
-                        key={comment.slug}
-                        className={index ? 'mt-lg' : ''}
-                        {...comment}
-                    />
-                );
-            })}
+                    return (
+                        <Comment
+                            key={comment.slug}
+                            ref={i === data.pages.length - 1 ? ref : null}
+                            className={i ? 'mt-lg' : ''}
+                            {...comment}
+                        />
+                    );
+                })}
+            </div>
+
+            {isFetchingNextPage && <Spinner className='mt-lg' />}
         </section>
     );
 }
