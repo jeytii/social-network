@@ -65,7 +65,6 @@ export default function Likes({ invalid }: { invalid: boolean | undefined }) {
                     queryKey='profile.likes.posts'
                     url='/api/profile/likes/posts'
                     cacheTime={Infinity}
-                    enabled
                 />
             )}
 

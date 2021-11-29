@@ -9,7 +9,6 @@ export default function Bookmarks() {
             queryKey='profile.bookmarks'
             url='/api/profile/bookmarks'
             cacheTime={Infinity}
-            enabled
         />
     );
 }

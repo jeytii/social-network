@@ -141,7 +141,6 @@ export default function Profile({ invalid, user }: Props) {
                     queryKey={['profile.posts', userData.slug]}
                     url={`/api/profile/${userData.username}/posts`}
                     cacheTime={1000 * 60 * 2}
-                    enabled
                 />
             )}
 
