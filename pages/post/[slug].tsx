@@ -1,12 +1,16 @@
 import { GetServerSideProps } from 'next';
+import dynamic from 'next/dynamic';
 import { useEffect } from 'react';
 import { useQuery, useQueryClient, QueryFunctionContext } from 'react-query';
 import Post from 'components/chunks/post';
-import Comments from 'components/layouts/Comments';
 import CommentBox from 'components/chunks/CommentBox';
 import Spinner from 'components/vectors/Spinner';
 import { axiosClient, axiosServer } from 'config/axios';
 import type { Post as PostType } from 'types/post';
+
+const Comments = dynamic(() => import('components/layouts/Comments'), {
+    loading: () => <Spinner className='mt-lg' />,
+});
 
 const getPost = async (ctx: QueryFunctionContext) => {
     try {
@@ -26,19 +30,15 @@ const getPost = async (ctx: QueryFunctionContext) => {
 
 export default function ViewPost({ slug }: { slug: string }) {
     const queryClient = useQueryClient();
-    const { data, isIdle, isError, error } = useQuery<PostType, Error>(
+    const { data, isIdle, isError, error, remove } = useQuery<PostType, Error>(
         ['post', slug],
         getPost,
-        {
-            enabled: queryClient.getQueryData(['post', slug]) === undefined,
-            meta: { slug },
-            cacheTime: 1000 * 60 * 2,
-        },
+        { meta: { slug } },
     );
 
     useEffect(() => {
         return () => {
-            queryClient.removeQueries(['post', slug]);
+            remove();
             queryClient.removeQueries(['comments', slug]);
         };
     }, []);
@@ -49,9 +49,11 @@ export default function ViewPost({ slug }: { slug: string }) {
 
     if (isError || !data) {
         return (
-            <h1 className='text-md text-skin-text-light text-center p-lg'>
-                {error?.message}
-            </h1>
+            <section className='p-lg'>
+                <h1 className='text-md font-bold text-skin-text-light opacity-50 text-center'>
+                    {error?.message}
+                </h1>
+            </section>
         );
     }
 
@@ -62,6 +64,7 @@ export default function ViewPost({ slug }: { slug: string }) {
             <CommentBox slug={slug} />
 
             <Comments
+                className='mt-lg'
                 queryKey={['comments', slug]}
                 url='/api/comments'
                 slug={slug}
