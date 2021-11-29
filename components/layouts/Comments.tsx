@@ -49,34 +49,25 @@ export default function Comments({
     return (
         <section {...props}>
             <div>
-                {data.pages.map((comment, i) => {
-                    if (hasLink) {
-                        return (
-                            <Link href={`/post/${comment.post_slug}`}>
-                                <Comment
-                                    key={comment.slug}
-                                    ref={
-                                        i === data.pages.length - 1 ? ref : null
-                                    }
-                                    className={clsx(
-                                        'cursor-pointer',
-                                        i && 'mt-lg',
-                                    )}
-                                    {...comment}
-                                />
-                            </Link>
-                        );
-                    }
-
-                    return (
+                {data.pages.map((comment, i) =>
+                    hasLink ? (
+                        <Link href={`/post/${comment.post_slug}`}>
+                            <Comment
+                                key={comment.slug}
+                                ref={i === data.pages.length - 1 ? ref : null}
+                                className={clsx('cursor-pointer', i && 'mt-lg')}
+                                {...comment}
+                            />
+                        </Link>
+                    ) : (
                         <Comment
                             key={comment.slug}
                             ref={i === data.pages.length - 1 ? ref : null}
                             className={i ? 'mt-lg' : ''}
                             {...comment}
                         />
-                    );
-                })}
+                    ),
+                )}
             </div>
 
             {isFetchingNextPage && <Spinner className='mt-lg' />}
