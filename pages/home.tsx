@@ -4,8 +4,9 @@ import { InfiniteData, useQueryClient } from 'react-query';
 import TextBox from 'components/utilities/TextBox';
 import Spinner from 'components/vectors/Spinner';
 import { axiosServer } from 'config/axios';
-import type { Post } from 'types/post';
 import type { PostPage } from 'types/page';
+import type { User } from 'types/user';
+import type { Post } from 'types/post';
 
 interface SuccessEventData {
     data: {
@@ -22,14 +23,29 @@ export default function Home() {
     const queryClient = useQueryClient();
 
     const successEvent = ({ data }: SuccessEventData) => {
+        const user = queryClient.getQueryData<User>('user');
+
         queryClient.setQueryData<InfiniteData<PostPage> | undefined>(
             'posts',
             current => {
-                if (current) {
-                    current.pages[0].items.unshift(data.data);
-
-                    return current;
+                if (!current) {
+                    return undefined;
                 }
+
+                current.pages[0].items.unshift(data.data);
+
+                return current;
+            },
+        );
+
+        queryClient.setQueryData<InfiniteData<PostPage> | undefined>(
+            ['profile.posts', user?.slug],
+            current => {
+                if (!current) {
+                    return undefined;
+                }
+
+                current.pages[0].items.unshift(data.data);
 
                 return current;
             },

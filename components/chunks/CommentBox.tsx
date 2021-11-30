@@ -2,6 +2,7 @@ import { KeyboardEvent } from 'react';
 import { useMutation, useQueryClient, InfiniteData } from 'react-query';
 import useTextBody from 'hooks/useTextBody';
 import type { CommentPage } from 'types/page';
+import type { User } from 'types/user';
 import type { Post } from 'types/post';
 import type { Comment } from 'types/comment';
 
@@ -44,6 +45,8 @@ export default function CommentBox({ slug }: { slug: string }) {
     }
 
     async function onSuccess({ data }: ResponseBody) {
+        const user = queryClient.getQueryData<User>('user');
+
         // Update the number of comments of the currently previewed post.
         queryClient.setQueryData<Post | undefined>(['post', slug], current => {
             if (!current) {
@@ -57,6 +60,20 @@ export default function CommentBox({ slug }: { slug: string }) {
         queryClient.setQueryData<InfiniteData<CommentPage> | undefined>(
             ['comments', slug],
             current => {
+                current?.pages[0].items.unshift(data.data);
+
+                return current;
+            },
+        );
+
+        // Add the comment to profile's list of comments.
+        queryClient.setQueryData<InfiniteData<CommentPage> | undefined>(
+            ['profile.comemnts', user?.slug],
+            current => {
+                if (!current) {
+                    return undefined;
+                }
+
                 current?.pages[0].items.unshift(data.data);
 
                 return current;
