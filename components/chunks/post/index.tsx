@@ -81,11 +81,6 @@ function Post(
                 'profile.likes.posts',
                 current => set(current, slug, condition, actionType),
             );
-
-            queryClient.setQueryData<QueryData>(
-                'profile.likes.comments',
-                current => set(current, slug, condition, actionType),
-            );
         },
         [],
     );
