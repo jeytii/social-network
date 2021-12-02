@@ -18,13 +18,9 @@ const set = (
     condition: boolean,
     actionType: 'like' | 'bookmark',
 ): QueryData => {
-    if (!current) {
-        return undefined;
-    }
+    const posts = current?.pages.flatMap(page => [...page.items]);
 
-    const posts = current.pages.flatMap(page => [...page.items]);
-
-    posts.forEach(post => {
+    posts?.forEach(post => {
         if (post.slug === slug) {
             const p = post;
 
@@ -63,24 +59,48 @@ function Post(
     const { is_self, ...userProps } = user;
 
     const onSuccess = useCallback(
-        (condition: boolean, actionType: 'like' | 'bookmark') => {
-            queryClient.setQueryData<QueryData>('posts', current =>
-                set(current, slug, condition, actionType),
-            );
+        async (condition: boolean, actionType: 'like' | 'bookmark') => {
+            if (queryClient.getQueryData('posts')) {
+                queryClient.setQueryData<QueryData>('posts', current =>
+                    set(current, slug, condition, actionType),
+                );
+            }
 
-            queryClient.setQueryData<QueryData>(
-                ['profile.posts', user.slug],
-                current => set(current, slug, condition, actionType),
-            );
+            if (queryClient.getQueryData(['profile.posts', user.slug])) {
+                queryClient.setQueryData<QueryData>(
+                    ['profile.posts', user.slug],
+                    current => set(current, slug, condition, actionType),
+                );
+            }
 
-            queryClient.setQueryData<QueryData>('profile.bookmarks', current =>
-                set(current, slug, condition, actionType),
-            );
+            if (queryClient.getQueryData('profile.bookmarks')) {
+                queryClient.setQueryData<QueryData>(
+                    'profile.bookmarks',
+                    current => set(current, slug, condition, actionType),
+                );
+            }
 
-            queryClient.setQueryData<QueryData>(
-                'profile.likes.posts',
-                current => set(current, slug, condition, actionType),
-            );
+            if (actionType === 'like') {
+                await queryClient.invalidateQueries<PostPage>(
+                    'profile.likes.posts',
+                    {
+                        refetchActive: true,
+                        refetchInactive: true,
+                        refetchPage: () => true,
+                    },
+                );
+            }
+
+            if (actionType === 'bookmark') {
+                await queryClient.invalidateQueries<PostPage>(
+                    'profile.bookmarks',
+                    {
+                        refetchActive: true,
+                        refetchInactive: true,
+                        refetchPage: () => true,
+                    },
+                );
+            }
         },
         [],
     );

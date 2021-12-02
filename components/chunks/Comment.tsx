@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import { forwardRef, HTMLAttributes, Ref, useCallback } from 'react';
 import { InfiniteData, useQueryClient } from 'react-query';
 import clsx from 'clsx';
@@ -15,13 +16,9 @@ const set = (
     slug: string,
     condition: boolean,
 ): QueryData => {
-    if (!current) {
-        return undefined;
-    }
+    const comments = current?.pages.flatMap(page => [...page.items]);
 
-    const comments = current.pages.flatMap(page => [...page.items]);
-
-    comments.forEach(comment => {
+    comments?.forEach(comment => {
         if (comment.slug === slug) {
             const c = comment;
 
@@ -50,17 +47,33 @@ function Comment(
     ref: Ref<HTMLElement>,
 ) {
     const queryClient = useQueryClient();
+    const { asPath } = useRouter();
     const { is_self, is_followed, ...userProps } = user;
 
-    const onSuccess = useCallback((condition: boolean) => {
-        queryClient.setQueryData<QueryData>('profile.likes.comments', current =>
-            set(current, slug, condition),
-        );
+    const onSuccess = useCallback(async (condition: boolean) => {
+        if (queryClient.getQueryData('profile.likes.comments')) {
+            queryClient.setQueryData<QueryData>(
+                'profile.likes.comments',
+                current => set(current, slug, condition),
+            );
+        }
 
-        queryClient.setQueryData<QueryData>(
-            ['profile.comments', user.slug],
-            current => set(current, slug, condition),
-        );
+        if (queryClient.getQueryData(['profile.comments', user.slug])) {
+            queryClient.setQueryData<QueryData>(
+                ['profile.comments', user.slug],
+                current => set(current, slug, condition),
+            );
+        }
+
+        if (asPath === '/likes?s=comments' && !condition) {
+            await queryClient.invalidateQueries<CommentPage>(
+                'profile.likes.comments',
+                {
+                    refetchPage: page =>
+                        !!page.items.find(item => item.slug === slug),
+                },
+            );
+        }
     }, []);
 
     return (

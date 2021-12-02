@@ -1,7 +1,12 @@
 import { KeyboardEvent } from 'react';
-import { useMutation, useQueryClient, InfiniteData } from 'react-query';
+import {
+    useMutation,
+    useQueryClient,
+    InfiniteData,
+    QueryKey,
+} from 'react-query';
 import useTextBody from 'hooks/useTextBody';
-import type { CommentPage } from 'types/page';
+import type { CommentPage, PostPage } from 'types/page';
 import type { User } from 'types/user';
 import type { Post } from 'types/post';
 import type { Comment } from 'types/comment';
@@ -28,6 +33,16 @@ export default function CommentBox({ slug }: { slug: string }) {
         'create',
         { onSuccess },
     );
+
+    const exists = (queryKey: QueryKey, itemSlug: string) => {
+        const data =
+            queryClient.getQueryData<InfiniteData<PostPage | CommentPage>>(
+                queryKey,
+            );
+        const items = data?.pages.flatMap(page => [...page.items]);
+
+        return data && !!items?.find(item => item.slug === itemSlug);
+    };
 
     function monitorKeyPress(event: KeyboardEvent<HTMLTextAreaElement>) {
         if (event.key === 'Enter' && !event.shiftKey) {
@@ -66,19 +81,50 @@ export default function CommentBox({ slug }: { slug: string }) {
             },
         );
 
+        if (exists('posts', slug)) {
+            await queryClient.invalidateQueries<PostPage>('posts', {
+                refetchActive: true,
+                refetchInactive: true,
+                refetchPage: page =>
+                    !!page.items.find(item => item.slug === slug),
+            });
+        }
+
+        if (exists(['profile.posts', user?.slug], slug)) {
+            await queryClient.invalidateQueries<PostPage>('profile.posts', {
+                refetchActive: true,
+                refetchInactive: true,
+                refetchPage: page =>
+                    !!page.items.find(item => item.slug === slug),
+            });
+        }
+
+        if (exists('profile.bookmarks', slug)) {
+            await queryClient.invalidateQueries<PostPage>('profile.bookmarks', {
+                refetchActive: true,
+                refetchInactive: true,
+                refetchPage: page =>
+                    !!page.items.find(item => item.slug === slug),
+            });
+        }
+
+        if (exists('profile.likes.posts', slug)) {
+            await queryClient.invalidateQueries<PostPage>(
+                'profile.likes.posts',
+                {
+                    refetchActive: true,
+                    refetchInactive: true,
+                    refetchPage: page =>
+                        !!page.items.find(item => item.slug === slug),
+                },
+            );
+        }
+
         // Add the comment to profile's list of comments.
-        queryClient.setQueryData<InfiniteData<CommentPage> | undefined>(
-            ['profile.comemnts', user?.slug],
-            current => {
-                if (!current) {
-                    return undefined;
-                }
-
-                current?.pages[0].items.unshift(data.data);
-
-                return current;
-            },
-        );
+        await queryClient.invalidateQueries(['profile.comments', user?.slug], {
+            refetchActive: false,
+            refetchInactive: true,
+        });
 
         hook.resetValue();
     }

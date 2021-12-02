@@ -1,19 +1,10 @@
 import { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
-import { InfiniteData, useQueryClient } from 'react-query';
+import { useQueryClient } from 'react-query';
 import TextBox from 'components/utilities/TextBox';
 import Spinner from 'components/vectors/Spinner';
 import { axiosServer } from 'config/axios';
-import type { PostPage } from 'types/page';
 import type { User } from 'types/user';
-import type { Post } from 'types/post';
-
-interface SuccessEventData {
-    data: {
-        status: number;
-        data: Post;
-    };
-}
 
 const Posts = dynamic(() => import('components/layouts/Posts'), {
     loading: () => <Spinner className='p-lg' />,
@@ -22,35 +13,18 @@ const Posts = dynamic(() => import('components/layouts/Posts'), {
 export default function Home() {
     const queryClient = useQueryClient();
 
-    const successEvent = ({ data }: SuccessEventData) => {
+    async function successEvent() {
         const user = queryClient.getQueryData<User>('user');
 
-        queryClient.setQueryData<InfiniteData<PostPage> | undefined>(
-            'posts',
-            current => {
-                if (!current) {
-                    return undefined;
-                }
+        await queryClient.invalidateQueries('posts', {
+            refetchPage: () => true,
+        });
 
-                current.pages[0].items.unshift(data.data);
-
-                return current;
-            },
-        );
-
-        queryClient.setQueryData<InfiniteData<PostPage> | undefined>(
-            ['profile.posts', user?.slug],
-            current => {
-                if (!current) {
-                    return undefined;
-                }
-
-                current.pages[0].items.unshift(data.data);
-
-                return current;
-            },
-        );
-    };
+        await queryClient.invalidateQueries(['profile.posts', user?.slug], {
+            refetchInactive: true,
+            refetchPage: () => true,
+        });
+    }
 
     return (
         <div className='p-lg sm:px-md'>
