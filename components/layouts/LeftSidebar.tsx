@@ -19,9 +19,15 @@ import { User } from 'types/user';
 
 export default function LeftSidebar() {
     const isPortrait = useMediaQuery({ minWidth: 721 });
-    const { route } = useRouter();
+    const { route, asPath } = useRouter();
     const queryClient = useQueryClient();
     const user = queryClient.getQueryData<User>('user');
+
+    const activeClass =
+        'relative after:absolute after:w-[5px] after:h-full after:bg-primary after:left-[0px] after:top-[0px]';
+
+    const profileIsActive =
+        asPath === `/${user?.username}` || route === '/edit-profile';
 
     return (
         <aside className='w-[200px] sticky full-height left-[0px] bg-skin-bg-contrast-light md:w-auto'>
@@ -31,7 +37,7 @@ export default function LeftSidebar() {
                         className={clsx(
                             'flex items-center no-underline text-md p-lg cursor-pointer hover:bg-skin-bg-contrast-light',
                             route === '/home'
-                                ? 'text-primary'
+                                ? [activeClass, 'text-primary']
                                 : 'text-skin-text-light',
                         )}
                         aria-label='Home link'
@@ -51,10 +57,8 @@ export default function LeftSidebar() {
                 <Link href={`/${user?.username}`}>
                     <span
                         className={clsx(
-                            'flex items-center no-underline text-md p-lg cursor-pointer hover:bg-skin-bg-contrast-light',
-                            route === '/foo'
-                                ? 'text-primary'
-                                : 'text-skin-text-light',
+                            'flex items-center no-underline text-md text-skin-text-light p-lg cursor-pointer hover:bg-skin-bg-contrast-light',
+                            profileIsActive && activeClass,
                         )}
                         aria-label='Profile link'
                     >
@@ -69,7 +73,16 @@ export default function LeftSidebar() {
                         )}
 
                         {isPortrait && (
-                            <span className='ml-md font-bold'>Profile</span>
+                            <span
+                                className={clsx(
+                                    'ml-md font-bold',
+                                    profileIsActive
+                                        ? 'text-primary'
+                                        : 'text-skin-text-light',
+                                )}
+                            >
+                                Profile
+                            </span>
                         )}
                     </span>
                 </Link>
@@ -79,7 +92,7 @@ export default function LeftSidebar() {
                         className={clsx(
                             'flex items-center no-underline text-md p-lg cursor-pointer hover:bg-skin-bg-contrast-light',
                             route === '/likes'
-                                ? 'text-primary'
+                                ? [activeClass, 'text-primary']
                                 : 'text-skin-text-light',
                         )}
                         aria-label='Likes link'
@@ -101,7 +114,7 @@ export default function LeftSidebar() {
                         className={clsx(
                             'flex items-center no-underline text-md p-lg cursor-pointer hover:bg-skin-bg-contrast-light',
                             route === '/bookmarks'
-                                ? 'text-primary'
+                                ? [activeClass, 'text-primary']
                                 : 'text-skin-text-light',
                         )}
                         aria-label='Bookmarks link'
@@ -123,7 +136,7 @@ export default function LeftSidebar() {
                         className={clsx(
                             'flex items-center no-underline text-md p-lg cursor-pointer hover:bg-skin-bg-contrast-light',
                             route === '/settings'
-                                ? 'text-primary'
+                                ? [activeClass, 'text-primary']
                                 : 'text-skin-text-light',
                         )}
                         aria-label='Settings link'
