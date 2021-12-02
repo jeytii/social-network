@@ -33,6 +33,7 @@ export default function LikeButton({
             mutatePrevious(true);
         } catch (e) {
             setLiked(false);
+            setLikesCount(current => current - 1);
         }
     }
 
@@ -46,6 +47,7 @@ export default function LikeButton({
             mutatePrevious(false);
         } catch (e) {
             setLiked(true);
+            setLikesCount(current => current + 1);
         }
     }
 
