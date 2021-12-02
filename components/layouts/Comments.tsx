@@ -51,9 +51,11 @@ export default function Comments({
             <div>
                 {data.pages.map((comment, i) =>
                     hasLink ? (
-                        <Link href={`/post/${comment.post_slug}`}>
+                        <Link
+                            key={comment.slug}
+                            href={`/post/${comment.post_slug}`}
+                        >
                             <Comment
-                                key={comment.slug}
                                 ref={i === data.pages.length - 1 ? ref : null}
                                 className={clsx('cursor-pointer', i && 'mt-lg')}
                                 {...comment}
