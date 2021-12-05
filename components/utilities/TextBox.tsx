@@ -20,10 +20,10 @@ interface SuccessEventData {
 interface Props {
     buttonLabel: string;
     value: string;
-    placeholder: string;
+    placeholder?: string;
     apiUrl: string;
     apiMethod: 'post' | 'put';
-    successEvent(
+    onSuccess(
         response: SuccessEventData | never,
         variables: { body: string },
     ): void;
@@ -35,7 +35,7 @@ export default function TextBox({
     placeholder,
     apiUrl,
     apiMethod,
-    successEvent,
+    onSuccess,
 }: Props) {
     const [hook, checkTextBodyLength, charactersLeft] = useTextBody(
         value || '',
@@ -46,7 +46,7 @@ export default function TextBox({
         Variables
     >(apiMethod === 'put' ? 'update' : 'create', {
         onSuccess(response, variables) {
-            successEvent(response, variables.data);
+            onSuccess(response, variables.data);
 
             if (apiMethod === 'post') {
                 hook.resetValue();
@@ -100,3 +100,7 @@ export default function TextBox({
         </form>
     );
 }
+
+TextBox.defaultProps = {
+    placeholder: "What's on your mind?",
+};
