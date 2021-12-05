@@ -1,36 +1,21 @@
 import Head from 'next/head';
 import Link from 'next/link';
 import { ReactNode } from 'react';
-import { useQueries, useQueryClient, QueryKey } from 'react-query';
+import { useQueries, useQueryClient } from 'react-query';
 import { useMediaQuery } from 'react-responsive';
 import { MdOutlineNotifications } from 'react-icons/md';
 import useRendered from 'hooks/useRendered';
 import { axiosClient } from 'config/axios';
-import EditItemModal from 'components/layouts/modal/EditItem';
 import DeleteItemModal from 'components/layouts/modal/DeleteItem';
+import type { ModifyItem } from 'types/item';
+import EditPostModal from './layouts/modal/EditPost';
+import EditCommentModal from './layouts/modal/EditComment';
 import Searchbar from './layouts/Searchbar';
 import LeftSidebar from './layouts/LeftSidebar';
 import RightSidebar from './layouts/right-sidebar';
 import BottomNav from './layouts/BottomNav';
 import Spinner from './vectors/Spinner';
 import Logo from './Logo';
-
-interface EditItem {
-    queryKey: QueryKey;
-    slug: string;
-    label: string;
-    value: string;
-    placholder: string;
-    apiUrl: string;
-}
-
-interface DeleteItem {
-    queryKey: QueryKey;
-    slug: string;
-    title: string;
-    message: string;
-    apiUrl: string;
-}
 
 interface Props {
     title: string;
@@ -43,14 +28,14 @@ export default function Protected({ title, children }: Props) {
     const rendered = useRendered();
     const queryClient = useQueryClient();
 
-    const [{ data: editPostModal }, { data: deletePostModal }] = useQueries([
+    const [{ data: editItem }, { data: deletePostModal }] = useQueries([
         {
             queryKey: 'edit',
-            queryFn: () => queryClient.getQueryData<EditItem>('edit'),
+            queryFn: () => queryClient.getQueryData<ModifyItem>('edit'),
         },
         {
             queryKey: 'delete',
-            queryFn: () => queryClient.getQueryData<DeleteItem>('delete'),
+            queryFn: () => queryClient.getQueryData('delete'),
         },
         {
             queryKey: 'user',
@@ -106,8 +91,17 @@ export default function Protected({ title, children }: Props) {
             {/* BOTTOM NAV (mobile mode) */}
             {isMobile && <BottomNav />}
 
-            {/* Modal for editing a post or comment */}
-            {editPostModal && <EditItemModal isOpen={!!editPostModal} />}
+            {/* Modal for editing a post */}
+            {editItem && editItem.type === 'post' && (
+                <EditPostModal isOpen={editItem && editItem.type === 'post'} />
+            )}
+
+            {/* Modal for editing a comment */}
+            {editItem && editItem.type === 'comment' && (
+                <EditCommentModal
+                    isOpen={editItem && editItem.type === 'comment'}
+                />
+            )}
 
             {/* Modal for confirming the deletion of a post or comment */}
             {deletePostModal && <DeleteItemModal isOpen={!!deletePostModal} />}
