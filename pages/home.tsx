@@ -13,7 +13,7 @@ const Posts = dynamic(() => import('components/layouts/Posts'), {
 export default function Home() {
     const queryClient = useQueryClient();
 
-    async function successEvent() {
+    async function onSuccess() {
         const user = queryClient.getQueryData<User>('user');
 
         await queryClient.invalidateQueries('posts', {
@@ -29,12 +29,11 @@ export default function Home() {
     return (
         <div className='p-lg sm:px-md'>
             <TextBox
-                placeholder="What's on your mind?"
                 buttonLabel='Post'
                 value=''
                 apiUrl='/api/posts'
                 apiMethod='post'
-                successEvent={successEvent}
+                onSuccess={onSuccess}
             />
 
             <Posts className='mt-lg' queryKey='posts' url='/api/posts' />
