@@ -87,21 +87,9 @@ function Comment(
 
                 {is_own_comment && (
                     <MoreOptionsButton
-                        className='relative ml-auto'
-                        queryKey={['comments', post_slug]}
+                        type='comment'
                         slug={slug}
-                        edit={{
-                            label: 'Edit comment',
-                            value: body,
-                            placeholder: 'Edit comment',
-                            apiUrl: `/api/comments/${slug}`,
-                        }}
-                        delete={{
-                            title: 'Confirmation to delete comment',
-                            message:
-                                'Are you sure you want to delete this comment?',
-                            apiUrl: `/api/comments/${slug}`,
-                        }}
+                        value={body}
                     />
                 )}
             </div>

@@ -120,21 +120,9 @@ function Post(
 
                     {(is_own_post || is_self) && (
                         <MoreOptionsButton
-                            className='relative ml-auto'
-                            queryKey='posts'
+                            type='post'
                             slug={slug}
-                            edit={{
-                                label: 'Edit post',
-                                value: body,
-                                placeholder: 'Edit post',
-                                apiUrl: `/api/posts/${slug}`,
-                            }}
-                            delete={{
-                                title: 'Confirmation to delete post',
-                                message:
-                                    'Are you sure you want to delete this post?',
-                                apiUrl: `/api/posts/${slug}`,
-                            }}
+                            value={body}
                         />
                     )}
                 </div>
