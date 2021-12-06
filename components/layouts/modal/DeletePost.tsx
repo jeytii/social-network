@@ -1,75 +1,52 @@
-import { useEffect } from 'react';
-import {
-    useQueryClient,
-    useMutation,
-    InfiniteData,
-    QueryKey,
-} from 'react-query';
+import { useQueryClient, useMutation } from 'react-query';
 import { Dialog } from '@headlessui/react';
-import type { PostPage, CommentPage } from 'types/page';
+import type { ModifyItem } from 'types/item';
+import { PostPage } from 'types/page';
 import Modal from '.';
-
-type SetQueryData = InfiniteData<PostPage | CommentPage> | undefined;
 
 interface Variables {
     url: string;
 }
 
-interface DeleteItem {
-    queryKey: QueryKey;
-    slug: string;
-    title: string;
-    message: string;
-    apiUrl: string;
-}
-
-export default function ConfirmDeletePostModal({
-    isOpen,
-}: {
-    isOpen: boolean;
-}) {
+export default function DeletePostModal({ isOpen }: { isOpen: boolean }) {
     const queryClient = useQueryClient();
-    const item = queryClient.getQueryData<DeleteItem>('delete');
+    const item = queryClient.getQueryData<ModifyItem>('delete');
     const { mutate, isLoading } = useMutation<unknown, unknown, Variables>(
         'delete',
         { onSuccess },
     );
 
+    const queries = [
+        { key: 'posts', path: '/home' },
+        { key: ['profile.posts', item?.parentSlug], path: '/[username]' },
+        { key: 'profile.likes.posts', path: '/likes' },
+        { key: 'profile.bookmarks', path: '/bookmarks' },
+    ];
+
     function onSuccess() {
-        if (item) {
-            queryClient.setQueryData<SetQueryData>(item.queryKey, current => {
-                current?.pages.forEach(page => {
-                    const index = page.items.findIndex(
-                        post => post.slug === item.slug,
-                    );
+        queries.forEach(async query => {
+            await queryClient.invalidateQueries<PostPage>(query.key, {
+                exact: true,
+                refetchActive: true,
+                refetchInactive: true,
+                refetchPage: (page, index, allPages) => {
+                    const posts = allPages.flatMap(p => [...p.items]);
 
-                    if (index !== -1) {
-                        page.items.splice(index, 1);
-                    }
-                });
-
-                return current;
+                    return !!posts.find(post => post.slug === item?.slug);
+                },
             });
-        }
+        });
 
         closeModal();
     }
 
     function deleteItem() {
-        if (item) {
-            mutate({ url: item.apiUrl });
-        }
+        mutate({ url: `/api/posts/${item?.slug}` });
     }
 
     function closeModal() {
         queryClient.setQueryData('delete', null);
     }
-
-    useEffect(() => {
-        return () => {
-            queryClient.removeQueries('delete');
-        };
-    }, []);
 
     if (!item) {
         return null;
@@ -82,12 +59,12 @@ export default function ConfirmDeletePostModal({
                     as='h3'
                     className='text-md font-bold leading-6 text-skin-text'
                 >
-                    {item.title}
+                    Confirmation to delete post
                 </Dialog.Title>
             </header>
 
             <p className='paragraph-md text-skin-text p-md bg-skin-bg-contrast'>
-                {item.message}
+                Delete the selected post?
             </p>
 
             <div className='p-md'>

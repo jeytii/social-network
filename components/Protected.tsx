@@ -6,8 +6,9 @@ import { useMediaQuery } from 'react-responsive';
 import { MdOutlineNotifications } from 'react-icons/md';
 import useRendered from 'hooks/useRendered';
 import { axiosClient } from 'config/axios';
-import DeleteItemModal from 'components/layouts/modal/DeleteItem';
 import type { ModifyItem } from 'types/item';
+import DeletePostModal from './layouts/modal/DeletePost';
+import DeleteCommentModal from './layouts/modal/DeleteComment';
 import EditPostModal from './layouts/modal/EditPost';
 import EditCommentModal from './layouts/modal/EditComment';
 import Searchbar from './layouts/Searchbar';
@@ -28,14 +29,14 @@ export default function Protected({ title, children }: Props) {
     const rendered = useRendered();
     const queryClient = useQueryClient();
 
-    const [{ data: editItem }, { data: deletePostModal }] = useQueries([
+    const [{ data: editItem }, { data: deleteItem }] = useQueries([
         {
             queryKey: 'edit',
             queryFn: () => queryClient.getQueryData<ModifyItem>('edit'),
         },
         {
             queryKey: 'delete',
-            queryFn: () => queryClient.getQueryData('delete'),
+            queryFn: () => queryClient.getQueryData<ModifyItem>('delete'),
         },
         {
             queryKey: 'user',
@@ -103,8 +104,19 @@ export default function Protected({ title, children }: Props) {
                 />
             )}
 
-            {/* Modal for confirming the deletion of a post or comment */}
-            {deletePostModal && <DeleteItemModal isOpen={!!deletePostModal} />}
+            {/* Confirmation modal for deleting a post */}
+            {deleteItem && deleteItem.type === 'post' && (
+                <DeletePostModal
+                    isOpen={deleteItem && deleteItem.type === 'post'}
+                />
+            )}
+
+            {/* Confirmation modal for deleting a comment */}
+            {deleteItem && deleteItem.type === 'comment' && (
+                <DeleteCommentModal
+                    isOpen={deleteItem && deleteItem.type === 'comment'}
+                />
+            )}
         </main>
     );
 }
