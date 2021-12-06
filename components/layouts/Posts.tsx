@@ -1,7 +1,6 @@
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import { HTMLAttributes } from 'react';
-import { QueryKey } from 'react-query';
+import { QueryKey, UseInfiniteQueryOptions } from 'react-query';
 import clsx from 'clsx';
 import Post from 'components/chunks/post';
 import Spinner from 'components/vectors/Spinner';
@@ -9,20 +8,23 @@ import useInfiniteScroll from 'hooks/useInfiniteScroll';
 import type { PostPage } from 'types/page';
 import type { Post as PostType } from 'types/post';
 
-interface Props extends HTMLAttributes<HTMLElement> {
+interface Props extends UseInfiniteQueryOptions<PostPage, unknown, PostType> {
+    className: string;
     queryKey: QueryKey;
     url: string;
-    cacheTime?: number;
 }
 
-export default function Posts({ queryKey, url, cacheTime, ...props }: Props) {
+export default function Posts({ className, url, ...props }: Props) {
     const { query } = useRouter();
     const { data, ref, isLoading, isFetchingNextPage, isSuccess } =
-        useInfiniteScroll<PostType, PostPage>(
-            queryKey,
-            { url, ...query },
-            cacheTime as number,
-        );
+        useInfiniteScroll({
+            ...props,
+            meta: { url, ...query },
+            select: ({ pageParams, pages }) => ({
+                pageParams,
+                pages: pages.flatMap(page => [...page.items]),
+            }),
+        });
 
     if (isLoading) {
         return <Spinner className='p-lg' />;
@@ -39,7 +41,7 @@ export default function Posts({ queryKey, url, cacheTime, ...props }: Props) {
     }
 
     return (
-        <section {...props}>
+        <section className={className}>
             <div>
                 {data?.pages.map((post, i) => (
                     <Link key={post.slug} href={`/post/${post.slug}`}>
@@ -56,7 +58,3 @@ export default function Posts({ queryKey, url, cacheTime, ...props }: Props) {
         </section>
     );
 }
-
-Posts.defaultProps = {
-    cacheTime: 1000 * 60 * 5,
-};

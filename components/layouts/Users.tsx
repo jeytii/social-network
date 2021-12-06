@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
-import { HTMLAttributes, useEffect } from 'react';
-import { QueryKey } from 'react-query';
+import { useEffect } from 'react';
+import { QueryKey, UseInfiniteQueryOptions } from 'react-query';
 import clsx from 'clsx';
 import User from 'components/chunks/User';
 import Spinner from 'components/vectors/Spinner';
@@ -8,20 +8,13 @@ import useInfiniteScroll from 'hooks/useInfiniteScroll';
 import { UserPage } from 'types/page';
 import { User as UserType } from 'types/user';
 
-interface Props extends HTMLAttributes<HTMLElement> {
+interface Props extends UseInfiniteQueryOptions<UserPage, unknown, UserType> {
+    className: string;
     queryKey: QueryKey;
     url: string;
-    enabled?: boolean;
-    cacheTime?: number;
 }
 
-export default function Users({
-    queryKey,
-    url,
-    enabled,
-    cacheTime,
-    ...props
-}: Props) {
+export default function Users({ className, url, enabled, ...props }: Props) {
     const { query } = useRouter();
 
     const {
@@ -33,12 +26,15 @@ export default function Users({
         isSuccess,
         refetch,
         remove,
-    } = useInfiniteScroll<UserType, UserPage, HTMLDivElement>(
-        queryKey,
-        { url, ...query },
-        cacheTime as number,
+    } = useInfiniteScroll({
+        ...props,
         enabled,
-    );
+        meta: { url, ...query },
+        select: ({ pageParams, pages }) => ({
+            pageParams,
+            pages: pages.flatMap(page => [...page.items]),
+        }),
+    });
 
     useEffect(() => {
         if (!enabled) {
@@ -62,7 +58,7 @@ export default function Users({
     }
 
     return (
-        <section {...props}>
+        <section className={className}>
             <div>
                 {data?.pages.map((user, i) => (
                     <User
@@ -82,8 +78,3 @@ export default function Users({
         </section>
     );
 }
-
-Users.defaultProps = {
-    enabled: false,
-    cacheTime: 1000 * 60 * 5,
-};

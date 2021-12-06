@@ -1,6 +1,5 @@
 import Link from 'next/link';
-import { HTMLAttributes } from 'react';
-import { QueryKey } from 'react-query';
+import { QueryKey, UseInfiniteQueryOptions } from 'react-query';
 import clsx from 'clsx';
 import Comment from 'components/chunks/Comment';
 import Spinner from 'components/vectors/Spinner';
@@ -8,29 +7,32 @@ import useInfiniteScroll from 'hooks/useInfiniteScroll';
 import type { CommentPage } from 'types/page';
 import type { Comment as CommentType } from 'types/comment';
 
-interface Props extends HTMLAttributes<HTMLElement> {
+interface Props
+    extends UseInfiniteQueryOptions<CommentPage, unknown, CommentType> {
+    className: string;
     queryKey: QueryKey;
     url: string;
     slug?: string;
     hasLink?: boolean;
-    cacheTime?: number;
 }
 
 export default function Comments({
-    queryKey,
+    className,
     url,
     slug,
     hasLink,
-    cacheTime,
     ...props
 }: Props) {
     const meta = slug ? { url, post: slug } : { url };
     const { data, ref, isLoading, isFetchingNextPage, isSuccess } =
-        useInfiniteScroll<CommentType, CommentPage>(
-            queryKey,
+        useInfiniteScroll({
+            ...props,
             meta,
-            cacheTime as number,
-        );
+            select: ({ pageParams, pages }) => ({
+                pageParams,
+                pages: pages.flatMap(page => [...page.items]),
+            }),
+        });
 
     if (isLoading || !data) {
         return <Spinner className='p-lg' />;
@@ -47,7 +49,7 @@ export default function Comments({
     }
 
     return (
-        <section {...props}>
+        <section className={className}>
             <div>
                 {data.pages.map((comment, i) =>
                     hasLink ? (
@@ -80,5 +82,4 @@ export default function Comments({
 Comments.defaultProps = {
     slug: undefined,
     hasLink: false,
-    cacheTime: 1000 * 60 * 5,
 };
