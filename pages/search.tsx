@@ -3,7 +3,14 @@ import { axiosServer } from 'config/axios';
 import Users from 'components/layouts/Users';
 
 export default function Search() {
-    return <Users className='p-lg' queryKey='users' url='/api/users' />;
+    return (
+        <Users
+            className='p-lg'
+            queryKey='users'
+            url='/api/users'
+            enabled={false}
+        />
+    );
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
