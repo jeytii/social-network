@@ -1,46 +1,30 @@
-import { useCallback, useRef, Ref } from 'react';
+import { useCallback, useRef } from 'react';
 import {
     QueryKey,
     useInfiniteQuery,
-    UseInfiniteQueryResult,
+    UseInfiniteQueryOptions,
 } from 'react-query';
+import { CommentPage, PostPage, UserPage } from 'types/page';
+import { User } from 'types/user';
+import { Post } from 'types/post';
+import { Comment } from 'types/comment';
 
-type Meta = Record<string, string | number | boolean | undefined>;
+type Page = UserPage | PostPage | CommentPage;
+type Model = User | Post | Comment;
 
-interface ReturnType<V> {
-    ref: Ref<V>;
+interface Props<T, U> extends UseInfiniteQueryOptions<T, unknown, U> {
+    queryKey: QueryKey;
 }
 
-export default function useInfiniteScroll<T, U, V = HTMLElement>(
-    queryKey: QueryKey,
-    meta: Meta,
-    cacheTime: number,
-    enabled = true,
-): ReturnType<V> & UseInfiniteQueryResult<T> {
+export default function useInfiniteScroll<T extends Page, U extends Model>({
+    queryKey,
+    ...opts
+}: Props<T, U>) {
     const observer = useRef<IntersectionObserver | null>();
 
-    const query = useInfiniteQuery<U, unknown, T>(queryKey, {
-        enabled,
-        meta,
+    const query = useInfiniteQuery(queryKey, {
+        ...opts,
         getNextPageParam: last => last.next_offset ?? false,
-        cacheTime,
-        select({ pageParams, pages }) {
-            if (pages.length === 1) {
-                return {
-                    pageParams,
-                    pages: pages[0].items,
-                };
-            }
-
-            if (pages.length > 1) {
-                return {
-                    pageParams,
-                    pages: pages.flatMap(page => [...page.items]),
-                };
-            }
-
-            return { pageParams, pages: [] };
-        },
     });
 
     const ref = useCallback(
