@@ -7,7 +7,7 @@ export default function useDebounceClick(
     condition: boolean,
     postFn: CallableFunction,
     deleteFn: CallableFunction,
-    delay = 1000,
+    delay = 500,
 ): HookReturnType {
     const ref = useRef<boolean>();
     const debounce = useDebouncedCallback(() => {
