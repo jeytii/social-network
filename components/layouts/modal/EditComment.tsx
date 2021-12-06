@@ -25,26 +25,20 @@ const update = (current: QueryData, slug: string, body: string): QueryData => {
 export default function EditCommentModal({ isOpen }: { isOpen: boolean }) {
     const queryClient = useQueryClient();
     const item = queryClient.getQueryData<ModifyItem>('edit');
+    const queryKeys = [
+        'comments',
+        'profile.comments',
+        'profile.likes.comments',
+    ];
 
     function onSuccess(_: never, { body }: { body: string }) {
-        if (queryClient.getQueryData('comments', { exact: false })) {
-            queryClient.setQueryData<QueryData>('comments', current =>
-                update(current, item?.slug as string, body),
-            );
-        }
-
-        if (queryClient.getQueryData('profile.likes.comments')) {
-            queryClient.setQueryData<QueryData>(
-                'profile.likes.comments',
-                current => update(current, item?.slug as string, body),
-            );
-        }
-
-        if (queryClient.getQueryData('profile.comments', { exact: false })) {
-            queryClient.setQueryData<QueryData>('profile.comments', current =>
-                update(current, item?.slug as string, body),
-            );
-        }
+        queryKeys.forEach(key => {
+            if (queryClient.getQueryData(key)) {
+                queryClient.setQueryData<QueryData>(key, current =>
+                    update(current, item?.slug as string, body),
+                );
+            }
+        });
 
         closeModal();
     }

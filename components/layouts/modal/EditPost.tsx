@@ -25,20 +25,16 @@ const update = (current: QueryData, slug: string, body: string): QueryData => {
 export default function EditPostModal({ isOpen }: { isOpen: boolean }) {
     const queryClient = useQueryClient();
     const item = queryClient.getQueryData<ModifyItem>('edit');
+    const queryKeys = ['posts', 'profile.likes.posts', 'profile.bookmarks'];
 
     function onSuccess(_: never, { body }: { body: string }) {
-        if (queryClient.getQueryData('posts')) {
-            queryClient.setQueryData<QueryData>('posts', current =>
-                update(current, item?.slug as string, body),
-            );
-        }
-
-        if (queryClient.getQueryData('profile.likes.posts')) {
-            queryClient.setQueryData<QueryData>(
-                'profile.likes.posts',
-                current => update(current, item?.slug as string, body),
-            );
-        }
+        queryKeys.forEach(key => {
+            if (queryClient.getQueryData(key)) {
+                queryClient.setQueryData<QueryData>(key, current =>
+                    update(current, item?.slug as string, body),
+                );
+            }
+        });
 
         closeModal();
     }
