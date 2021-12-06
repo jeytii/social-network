@@ -16,6 +16,8 @@ export default function Home() {
     async function onSuccess() {
         const user = queryClient.getQueryData<User>('user');
 
+        await queryClient.cancelQueries('posts');
+
         await queryClient.invalidateQueries('posts', {
             refetchPage: () => true,
         });
@@ -36,7 +38,13 @@ export default function Home() {
                 onSuccess={onSuccess}
             />
 
-            <Posts className='mt-lg' queryKey='posts' url='/api/posts' />
+            <Posts
+                className='mt-lg'
+                queryKey='posts'
+                url='/api/posts'
+                refetchInterval={1000 * 60}
+                refetchIntervalInBackground
+            />
         </div>
     );
 }

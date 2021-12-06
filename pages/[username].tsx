@@ -141,6 +141,8 @@ export default function Profile({ invalid, user }: Props) {
                     queryKey={['profile.posts', userData.slug]}
                     url={`/api/profile/${userData.username}/posts`}
                     cacheTime={1000 * 60 * 2}
+                    refetchInterval={1000 * 30}
+                    refetchIntervalInBackground
                 />
             )}
 
@@ -150,6 +152,8 @@ export default function Profile({ invalid, user }: Props) {
                     queryKey={['profile.comments', userData.slug]}
                     url={`/api/profile/${userData.username}/comments`}
                     cacheTime={1000 * 60 * 2}
+                    refetchInterval={1000 * 30}
+                    refetchIntervalInBackground
                     hasLink
                 />
             )}
@@ -160,7 +164,8 @@ export default function Profile({ invalid, user }: Props) {
                     queryKey={['profile.followers', userData.slug]}
                     url={`/api/profile/${userData.username}/followers`}
                     cacheTime={1000 * 60 * 2}
-                    enabled
+                    refetchInterval={1000 * 30}
+                    refetchIntervalInBackground
                 />
             )}
 
@@ -170,7 +175,8 @@ export default function Profile({ invalid, user }: Props) {
                     queryKey={['profile.following', userData.slug]}
                     url={`/api/profile/${userData.username}/following`}
                     cacheTime={1000 * 60 * 2}
-                    enabled
+                    refetchInterval={1000 * 30}
+                    refetchIntervalInBackground
                 />
             )}
         </div>

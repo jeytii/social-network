@@ -65,6 +65,8 @@ export default function Likes({ invalid }: { invalid: boolean | undefined }) {
                     queryKey='profile.likes.posts'
                     url='/api/profile/likes/posts'
                     cacheTime={Infinity}
+                    refetchInterval={1000 * 30}
+                    refetchIntervalInBackground
                 />
             )}
 
@@ -74,6 +76,8 @@ export default function Likes({ invalid }: { invalid: boolean | undefined }) {
                     queryKey='profile.likes.comments'
                     url='/api/profile/likes/comments'
                     cacheTime={Infinity}
+                    refetchInterval={1000 * 30}
+                    refetchIntervalInBackground
                     hasLink
                 />
             )}

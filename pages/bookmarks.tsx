@@ -9,6 +9,8 @@ export default function Bookmarks() {
             queryKey='profile.bookmarks'
             url='/api/profile/bookmarks'
             cacheTime={Infinity}
+            refetchInterval={1000 * 30}
+            refetchIntervalInBackground
         />
     );
 }
