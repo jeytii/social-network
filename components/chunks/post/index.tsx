@@ -102,6 +102,7 @@ function Post(
                     {(is_own_post || is_self) && (
                         <MoreOptionsButton
                             type='post'
+                            parentSlug={user.slug}
                             slug={slug}
                             value={body}
                         />

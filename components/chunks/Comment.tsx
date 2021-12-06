@@ -67,6 +67,7 @@ function Comment(
                 {is_own_comment && (
                     <MoreOptionsButton
                         type='comment'
+                        parentSlug={post_slug}
                         slug={slug}
                         value={body}
                     />
