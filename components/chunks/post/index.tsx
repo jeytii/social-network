@@ -1,42 +1,13 @@
-import { useCallback, ForwardedRef, forwardRef, HTMLAttributes } from 'react';
-import { InfiniteData, useQueryClient } from 'react-query';
+import { ForwardedRef, forwardRef, HTMLAttributes } from 'react';
 import { MdOutlineChatBubbleOutline } from 'react-icons/md';
 import clsx from 'clsx';
 import BasicInfo from 'components/utilities/BasicInfo';
 import MoreOptionsButton from 'components/utilities/MoreOptionsButton';
 import LikeButton from 'components/chunks/LikeButton';
-import type { PostPage } from 'types/page';
 import type { Post as PostType } from 'types/post';
 import BookmarkButton from './BookmarkButton';
 
 type Props = PostType & HTMLAttributes<HTMLElement>;
-type QueryData = InfiniteData<PostPage> | undefined;
-
-const set = (
-    current: QueryData,
-    slug: string,
-    condition: boolean,
-    actionType: 'like' | 'bookmark',
-): QueryData => {
-    const posts = current?.pages.flatMap(page => [...page.items]);
-
-    posts?.forEach(post => {
-        if (post.slug === slug) {
-            const p = post;
-
-            if (actionType === 'like') {
-                p.is_liked = condition;
-                p.likes_count = condition
-                    ? p.likes_count + 1
-                    : p.likes_count - 1;
-            } else {
-                p.is_bookmarked = condition;
-            }
-        }
-    });
-
-    return current;
-};
 
 function Post(
     {
@@ -55,55 +26,7 @@ function Post(
     }: Props,
     ref: ForwardedRef<HTMLElement>,
 ) {
-    const queryClient = useQueryClient();
     const { is_self, ...userProps } = user;
-
-    const onSuccess = useCallback(
-        async (condition: boolean, actionType: 'like' | 'bookmark') => {
-            if (queryClient.getQueryData('posts')) {
-                queryClient.setQueryData<QueryData>('posts', current =>
-                    set(current, slug, condition, actionType),
-                );
-            }
-
-            if (queryClient.getQueryData(['profile.posts', user.slug])) {
-                queryClient.setQueryData<QueryData>(
-                    ['profile.posts', user.slug],
-                    current => set(current, slug, condition, actionType),
-                );
-            }
-
-            if (queryClient.getQueryData('profile.bookmarks')) {
-                queryClient.setQueryData<QueryData>(
-                    'profile.bookmarks',
-                    current => set(current, slug, condition, actionType),
-                );
-            }
-
-            if (actionType === 'like') {
-                await queryClient.invalidateQueries<PostPage>(
-                    'profile.likes.posts',
-                    {
-                        refetchActive: true,
-                        refetchInactive: true,
-                        refetchPage: () => true,
-                    },
-                );
-            }
-
-            if (actionType === 'bookmark') {
-                await queryClient.invalidateQueries<PostPage>(
-                    'profile.bookmarks',
-                    {
-                        refetchActive: true,
-                        refetchInactive: true,
-                        refetchPage: () => true,
-                    },
-                );
-            }
-        },
-        [],
-    );
 
     return (
         <article
@@ -142,7 +65,6 @@ function Post(
                     route={`/api/posts/${slug}`}
                     condition={is_liked}
                     count={likes_count}
-                    onSuccess={onSuccess}
                 />
 
                 <button
@@ -156,7 +78,6 @@ function Post(
                 <BookmarkButton
                     route={`/api/posts/${slug}`}
                     condition={is_bookmarked}
-                    onSuccess={onSuccess}
                 />
             </section>
         </article>

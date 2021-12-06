@@ -1,34 +1,11 @@
-import { useRouter } from 'next/router';
-import { forwardRef, HTMLAttributes, Ref, useCallback } from 'react';
-import { InfiniteData, useQueryClient } from 'react-query';
+import { forwardRef, HTMLAttributes, Ref } from 'react';
 import clsx from 'clsx';
 import BasicInfo from 'components/utilities/BasicInfo';
 import MoreOptionsButton from 'components/utilities/MoreOptionsButton';
 import LikeButton from 'components/chunks/LikeButton';
-import type { CommentPage } from 'types/page';
 import type { Comment as CommentType } from 'types/comment';
 
 type Props = CommentType & HTMLAttributes<HTMLElement>;
-type QueryData = InfiniteData<CommentPage> | undefined;
-
-const set = (
-    current: QueryData,
-    slug: string,
-    condition: boolean,
-): QueryData => {
-    const comments = current?.pages.flatMap(page => [...page.items]);
-
-    comments?.forEach(comment => {
-        if (comment.slug === slug) {
-            const c = comment;
-
-            c.is_liked = condition;
-            c.likes_count = condition ? c.likes_count + 1 : c.likes_count - 1;
-        }
-    });
-
-    return current;
-};
 
 function Comment(
     {
@@ -46,35 +23,7 @@ function Comment(
     }: Props,
     ref: Ref<HTMLElement>,
 ) {
-    const queryClient = useQueryClient();
-    const { asPath } = useRouter();
     const { is_self, is_followed, ...userProps } = user;
-
-    const onSuccess = useCallback(async (condition: boolean) => {
-        if (queryClient.getQueryData('profile.likes.comments')) {
-            queryClient.setQueryData<QueryData>(
-                'profile.likes.comments',
-                current => set(current, slug, condition),
-            );
-        }
-
-        if (queryClient.getQueryData(['profile.comments', user.slug])) {
-            queryClient.setQueryData<QueryData>(
-                ['profile.comments', user.slug],
-                current => set(current, slug, condition),
-            );
-        }
-
-        if (asPath === '/likes?s=comments' && !condition) {
-            await queryClient.invalidateQueries<CommentPage>(
-                'profile.likes.comments',
-                {
-                    refetchPage: page =>
-                        !!page.items.find(item => item.slug === slug),
-                },
-            );
-        }
-    }, []);
 
     return (
         <article
@@ -106,7 +55,6 @@ function Comment(
                     route={`/api/comments/${slug}`}
                     condition={is_liked}
                     count={likes_count}
-                    onSuccess={onSuccess}
                 />
             </div>
         </article>

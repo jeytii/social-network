@@ -7,10 +7,9 @@ import { axiosClient } from 'config/axios';
 interface Props {
     route: string;
     condition: boolean;
-    onSuccess(liked: boolean, actionType: 'like' | 'bookmark'): void;
 }
 
-export default function BookmarkButton({ route, condition, onSuccess }: Props) {
+export default function BookmarkButton({ route, condition }: Props) {
     const [bookmarked, setBookmarked] = useState<boolean>(condition);
     const [debounce, mutatePreviousState] = useDebounceClick(
         bookmarked,
@@ -22,7 +21,6 @@ export default function BookmarkButton({ route, condition, onSuccess }: Props) {
         try {
             await axiosClient().post(`${route}/bookmark`);
 
-            onSuccess(true, 'bookmark');
             mutatePreviousState(true);
         } catch (e) {
             setBookmarked(false);
@@ -33,7 +31,6 @@ export default function BookmarkButton({ route, condition, onSuccess }: Props) {
         try {
             await axiosClient().delete(`${route}/unbookmark`);
 
-            onSuccess(false, 'bookmark');
             mutatePreviousState(false);
         } catch (e) {
             setBookmarked(true);
