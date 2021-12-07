@@ -3,6 +3,7 @@ import { MdClose } from 'react-icons/md';
 import TextBox from 'components/utilities/TextBox';
 import type { CommentPage } from 'types/page';
 import type { ModifyItem } from 'types/item';
+import type { User } from 'types/user';
 import Modal from '.';
 
 type QueryData = InfiniteData<CommentPage> | undefined;
@@ -24,10 +25,11 @@ const update = (current: QueryData, slug: string, body: string): QueryData => {
 
 export default function EditCommentModal({ isOpen }: { isOpen: boolean }) {
     const queryClient = useQueryClient();
+    const user = queryClient.getQueryData<User>('user');
     const item = queryClient.getQueryData<ModifyItem>('edit');
     const queryKeys = [
-        'comments',
-        'profile.comments',
+        ['comments', item?.parentSlug],
+        ['profile.comments', user?.slug],
         'profile.likes.comments',
     ];
 

@@ -3,6 +3,7 @@ import { MdClose } from 'react-icons/md';
 import TextBox from 'components/utilities/TextBox';
 import type { PostPage } from 'types/page';
 import type { ModifyItem } from 'types/item';
+import type { User } from 'types/user';
 import Modal from '.';
 
 type QueryData = InfiniteData<PostPage> | undefined;
@@ -25,7 +26,13 @@ const update = (current: QueryData, slug: string, body: string): QueryData => {
 export default function EditPostModal({ isOpen }: { isOpen: boolean }) {
     const queryClient = useQueryClient();
     const item = queryClient.getQueryData<ModifyItem>('edit');
-    const queryKeys = ['posts', 'profile.likes.posts', 'profile.bookmarks'];
+    const user = queryClient.getQueryData<User>('user');
+    const queryKeys = [
+        'posts',
+        ['profile.posts', user?.slug],
+        'profile.likes.posts',
+        'profile.bookmarks',
+    ];
 
     function onSuccess(_: never, { body }: { body: string }) {
         queryKeys.forEach(key => {
