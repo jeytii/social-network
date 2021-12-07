@@ -2,6 +2,7 @@ import { useQueryClient, useMutation, InfiniteData } from 'react-query';
 import { Dialog } from '@headlessui/react';
 import type { ModifyItem } from 'types/item';
 import { PostPage } from 'types/page';
+import { useRouter } from 'next/router';
 import Modal from '.';
 
 interface Variables {
@@ -9,6 +10,7 @@ interface Variables {
 }
 
 export default function DeletePostModal({ isOpen }: { isOpen: boolean }) {
+    const { route } = useRouter();
     const queryClient = useQueryClient();
     const item = queryClient.getQueryData<ModifyItem>('delete');
     const { mutate, isLoading } = useMutation<unknown, unknown, Variables>(
@@ -16,31 +18,40 @@ export default function DeletePostModal({ isOpen }: { isOpen: boolean }) {
         { onSuccess },
     );
 
-    const queryKeys = [
-        'posts',
-        ['profile.posts', item?.parentSlug],
-        'profile.likes.posts',
-        'profile.bookmarks',
+    const queries = [
+        { key: 'posts', path: '/home' },
+        { key: ['profile.posts', item?.parentSlug], path: '/[username]' },
+        { key: 'profile.likes.posts', path: '/likes' },
+        { key: 'profile.bookmarks', path: '/bookmarks' },
     ];
 
     function onSuccess() {
-        queryKeys.forEach(key => {
-            queryClient.setQueryData<InfiniteData<PostPage> | undefined>(
-                key,
-                current => {
-                    current?.pages.forEach(page => {
-                        const index = page.items.findIndex(
-                            post => post.slug === item?.slug,
-                        );
+        queries.forEach(async query => {
+            if (queryClient.getQueryData(query.key)) {
+                if (route === query.path) {
+                    queryClient.setQueryData<
+                        InfiniteData<PostPage> | undefined
+                    >(query.key, current => {
+                        current?.pages.forEach(page => {
+                            const index = page.items.findIndex(
+                                post => post.slug === item?.slug,
+                            );
 
-                        if (index !== -1) {
-                            page.items.splice(index, 1);
-                        }
+                            if (index !== -1) {
+                                page.items.splice(index, 1);
+                            }
+                        });
+
+                        return current;
                     });
-
-                    return current;
-                },
-            );
+                } else {
+                    await queryClient.invalidateQueries(query.key, {
+                        exact: true,
+                        refetchActive: true,
+                        refetchInactive: true,
+                    });
+                }
+            }
         });
 
         closeModal();
