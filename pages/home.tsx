@@ -28,14 +28,16 @@ export default function Home() {
         await queryClient.cancelQueries('posts');
 
         queryKeys.forEach(key => {
-            queryClient.setQueryData<InfiniteData<PostPage> | undefined>(
-                key,
-                current => {
-                    current?.pages[0].items.unshift(data.data);
+            if (queryClient.getQueryData(key)) {
+                queryClient.setQueryData<InfiniteData<PostPage> | undefined>(
+                    key,
+                    current => {
+                        current?.pages[0].items.unshift(data.data);
 
-                    return current;
-                },
-            );
+                        return current;
+                    },
+                );
+            }
         });
     }
 
