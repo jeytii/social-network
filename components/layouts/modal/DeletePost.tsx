@@ -1,4 +1,4 @@
-import { useQueryClient, useMutation } from 'react-query';
+import { useQueryClient, useMutation, InfiniteData } from 'react-query';
 import { Dialog } from '@headlessui/react';
 import type { ModifyItem } from 'types/item';
 import { PostPage } from 'types/page';
@@ -16,25 +16,31 @@ export default function DeletePostModal({ isOpen }: { isOpen: boolean }) {
         { onSuccess },
     );
 
-    const queries = [
-        { key: 'posts', path: '/home' },
-        { key: ['profile.posts', item?.parentSlug], path: '/[username]' },
-        { key: 'profile.likes.posts', path: '/likes' },
-        { key: 'profile.bookmarks', path: '/bookmarks' },
+    const queryKeys = [
+        'posts',
+        ['profile.posts', item?.parentSlug],
+        'profile.likes.posts',
+        'profile.bookmarks',
     ];
 
     function onSuccess() {
-        queries.forEach(async query => {
-            await queryClient.invalidateQueries<PostPage>(query.key, {
-                exact: true,
-                refetchActive: true,
-                refetchInactive: true,
-                refetchPage: (page, index, allPages) => {
-                    const posts = allPages.flatMap(p => [...p.items]);
+        queryKeys.forEach(key => {
+            queryClient.setQueryData<InfiniteData<PostPage> | undefined>(
+                key,
+                current => {
+                    current?.pages.forEach(page => {
+                        const index = page.items.findIndex(
+                            post => post.slug === item?.slug,
+                        );
 
-                    return !!posts.find(post => post.slug === item?.slug);
+                        if (index !== -1) {
+                            page.items.splice(index, 1);
+                        }
+                    });
+
+                    return current;
                 },
-            });
+            );
         });
 
         closeModal();

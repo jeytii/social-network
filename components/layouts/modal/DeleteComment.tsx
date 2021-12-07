@@ -1,6 +1,6 @@
-import { useQueryClient, useMutation } from 'react-query';
+import { useQueryClient, useMutation, InfiniteData } from 'react-query';
 import { Dialog } from '@headlessui/react';
-import type { CommentPage } from 'types/page';
+import type { CommentPage, PostPage } from 'types/page';
 import type { ModifyItem } from 'types/item';
 import type { User } from 'types/user';
 import Modal from '.';
@@ -19,25 +19,59 @@ export default function DeleteCommentModal({ isOpen }: { isOpen: boolean }) {
     );
 
     const queries = [
-        { key: ['comments', item?.parentSlug], path: '/post/[slug]' },
-        { key: ['profile.comments', user?.slug], path: '/[username]' },
-        { key: 'profile.likes.comments', path: '/likes' },
+        ['comments', item?.parentSlug],
+        ['profile.comments', user?.slug],
+        'profile.likes.comments',
     ];
 
-    function onSuccess() {
-        queries.forEach(async query => {
-            await queryClient.invalidateQueries<CommentPage>(query.key, {
-                exact: true,
-                refetchActive: true,
-                refetchInactive: true,
-                refetchPage: (page, index, allPages) => {
-                    const comments = allPages.flatMap(p => [...p.items]);
+    const postQueries = [
+        'posts',
+        ['profile.posts', user?.slug],
+        'profile.likes.posts',
+        'profile.bookmarks',
+    ];
 
-                    return !!comments.find(
-                        comment => comment.slug === item?.slug,
-                    );
+    async function onSuccess() {
+        queries.forEach(query => {
+            queryClient.setQueryData<InfiniteData<CommentPage> | undefined>(
+                query,
+                current => {
+                    current?.pages.forEach(page => {
+                        const index = page.items.findIndex(
+                            comment => comment.slug === item?.slug,
+                        );
+
+                        if (index !== -1) {
+                            page.items.splice(index, 1);
+                        }
+                    });
+
+                    return current;
                 },
-            });
+            );
+        });
+
+        postQueries.forEach(query => {
+            if (queryClient.getQueryData(query)) {
+                queryClient.setQueryData<InfiniteData<PostPage> | undefined>(
+                    query,
+                    current => {
+                        const posts = current?.pages.flatMap(page => [
+                            ...page.items,
+                        ]);
+
+                        posts?.forEach(post => {
+                            if (post.slug === item?.parentSlug) {
+                                const p = post;
+
+                                p.comments_count -= 1;
+                            }
+                        });
+
+                        return current;
+                    },
+                );
+            }
         });
 
         closeModal();

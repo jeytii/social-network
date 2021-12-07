@@ -1,10 +1,19 @@
 import { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
-import { useQueryClient } from 'react-query';
+import { useQueryClient, InfiniteData } from 'react-query';
 import TextBox from 'components/utilities/TextBox';
 import Spinner from 'components/vectors/Spinner';
 import { axiosServer } from 'config/axios';
 import type { User } from 'types/user';
+import type { Post } from 'types/post';
+import { PostPage } from 'types/page';
+
+interface ResponseData {
+    data: {
+        status: number;
+        data: Post;
+    };
+}
 
 const Posts = dynamic(() => import('components/layouts/Posts'), {
     loading: () => <Spinner className='p-lg' />,
@@ -12,19 +21,21 @@ const Posts = dynamic(() => import('components/layouts/Posts'), {
 
 export default function Home() {
     const queryClient = useQueryClient();
+    const user = queryClient.getQueryData<User>('user');
+    const queryKeys = ['posts', ['profile.posts', user?.slug]];
 
-    async function onSuccess() {
-        const user = queryClient.getQueryData<User>('user');
-
+    async function onSuccess({ data }: ResponseData) {
         await queryClient.cancelQueries('posts');
 
-        await queryClient.invalidateQueries('posts', {
-            refetchPage: () => true,
-        });
+        queryKeys.forEach(key => {
+            queryClient.setQueryData<InfiniteData<PostPage> | undefined>(
+                key,
+                current => {
+                    current?.pages[0].items.unshift(data.data);
 
-        await queryClient.invalidateQueries(['profile.posts', user?.slug], {
-            refetchInactive: true,
-            refetchPage: () => true,
+                    return current;
+                },
+            );
         });
     }
 
