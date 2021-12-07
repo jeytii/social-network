@@ -10,7 +10,7 @@ interface Variables {
     };
 }
 
-interface SuccessEventData {
+interface ResponseData {
     data: {
         status: number;
         data: Post;
@@ -24,7 +24,7 @@ interface Props {
     apiUrl: string;
     apiMethod: 'post' | 'put';
     onSuccess(
-        response: SuccessEventData | never,
+        response: ResponseData | never,
         variables: { body: string },
     ): void;
 }
@@ -41,7 +41,7 @@ export default function TextBox({
         value || '',
     );
     const { mutate, isLoading, isError } = useMutation<
-        SuccessEventData | never,
+        ResponseData | never,
         unknown,
         Variables
     >(apiMethod === 'put' ? 'update' : 'create', {
