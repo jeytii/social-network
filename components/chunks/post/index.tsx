@@ -13,10 +13,11 @@ type Props = PostType & HTMLAttributes<HTMLElement>;
 type QueryData = InfiniteData<PostPage> | undefined;
 
 const update = (
+    type: 'like' | 'bookmark',
     current: QueryData,
     slug: string,
     condition: boolean,
-    type: 'like' | 'bookmark',
+    count?: number,
 ) => {
     const posts = current?.pages.flatMap(page => [...page.items]);
 
@@ -24,11 +25,9 @@ const update = (
         if (post.slug === slug) {
             const p = post;
 
-            if (type === 'like') {
+            if (type === 'like' && count !== undefined) {
                 p.is_liked = condition;
-                p.likes_count = condition
-                    ? p.likes_count + 1
-                    : p.likes_count - 1;
+                p.likes_count = count;
             }
 
             if (type === 'bookmark') {
@@ -66,21 +65,21 @@ function Post(
         'profile.bookmarks',
     ];
 
-    async function onLikeSuccess(condition: boolean) {
+    function onLikeSuccess(condition: boolean, count: number) {
         queryKeys.forEach(key => {
             if (queryClient.getQueryData(key)) {
                 queryClient.setQueryData<QueryData>(key, current =>
-                    update(current, slug, condition, 'like'),
+                    update('like', current, slug, condition, count),
                 );
             }
         });
     }
 
-    async function onBookmarkSuccess(condition: boolean) {
+    function onBookmarkSuccess(condition: boolean) {
         queryKeys.forEach(key => {
             if (queryClient.getQueryData(key)) {
                 queryClient.setQueryData<QueryData>(key, current =>
-                    update(current, slug, condition, 'bookmark'),
+                    update('bookmark', current, slug, condition),
                 );
             }
         });

@@ -10,7 +10,12 @@ import type { Comment as CommentType } from 'types/comment';
 type Props = CommentType & HTMLAttributes<HTMLElement>;
 type QueryData = InfiniteData<CommentPage> | undefined;
 
-const update = (current: QueryData, slug: string, condition: boolean) => {
+const update = (
+    current: QueryData,
+    slug: string,
+    condition: boolean,
+    count: number,
+) => {
     const comments = current?.pages.flatMap(page => [...page.items]);
 
     comments?.forEach(comment => {
@@ -18,7 +23,7 @@ const update = (current: QueryData, slug: string, condition: boolean) => {
             const c = comment;
 
             c.is_liked = condition;
-            c.likes_count = condition ? c.likes_count + 1 : c.likes_count - 1;
+            c.likes_count = count;
         }
     });
 
@@ -43,13 +48,17 @@ function Comment(
 ) {
     const queryClient = useQueryClient();
     const { is_self, is_followed, ...userProps } = user;
-    const queryKeys = ['profile.comments', 'profile.likes.comments'];
+    const queryKeys = [
+        ['comments', post_slug],
+        ['profile.comments', user.slug],
+        'profile.likes.comments',
+    ];
 
-    async function onSuccess(condition: boolean) {
+    function onSuccess(condition: boolean, count: number) {
         queryKeys.forEach(key => {
             if (queryClient.getQueryData(key)) {
                 queryClient.setQueryData<QueryData>(key, current =>
-                    update(current, slug, condition),
+                    update(current, slug, condition, count),
                 );
             }
         });

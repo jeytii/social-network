@@ -8,7 +8,7 @@ interface Props extends HTMLAttributes<HTMLButtonElement> {
     route: string;
     condition: boolean;
     count: number;
-    onSuccess(condition: boolean): void;
+    onSuccess(condition: boolean, count: number): void;
 }
 
 export default function LikeButton({
@@ -27,7 +27,7 @@ export default function LikeButton({
         try {
             const { data } = await axiosClient().post(`${route}/like`);
 
-            onSuccess(true);
+            onSuccess(true, data.data);
             setLikesCount(data.data);
             mutatePrevious(true);
         } catch (e) {
@@ -40,7 +40,7 @@ export default function LikeButton({
         try {
             const { data } = await axiosClient().delete(`${route}/dislike`);
 
-            onSuccess(false);
+            onSuccess(false, data.data);
             setLikesCount(data.data);
             mutatePrevious(false);
         } catch (e) {
