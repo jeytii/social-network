@@ -108,7 +108,7 @@
     }
 
     .textfield {
-        @apply block w-full bg-skin-bg-contrast text-skin-text border border-skin-bg-contrast p-sm rounded-md;
+        @apply block w-full bg-skin-bg-contrast text-md text-skin-text border border-skin-bg-contrast p-sm rounded-md;
     }
 
     .modal-wrapper {
