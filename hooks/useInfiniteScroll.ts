@@ -4,13 +4,14 @@ import {
     useInfiniteQuery,
     UseInfiniteQueryOptions,
 } from 'react-query';
-import { CommentPage, PostPage, UserPage } from 'types/page';
+import { UserPage, PostPage, CommentPage, NotificationPage } from 'types/page';
 import { User } from 'types/user';
 import { Post } from 'types/post';
 import { Comment } from 'types/comment';
+import { Notification } from 'types/notification';
 
-type Page = UserPage | PostPage | CommentPage;
-type Model = User | Post | Comment;
+type Page = UserPage | PostPage | CommentPage | NotificationPage;
+type Model = User | Post | Comment | Notification;
 
 interface Props<T, U> extends UseInfiniteQueryOptions<T, unknown, U> {
     queryKey: QueryKey;
