@@ -107,6 +107,10 @@
         background: transparent;
     }
 
+    .text-white {
+        color: #fff;
+    }
+
     .textfield {
         @apply block w-full bg-skin-bg-contrast text-md text-skin-text border border-skin-bg-contrast p-sm rounded-md;
     }
