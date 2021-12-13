@@ -1,4 +1,4 @@
-import { useState, MouseEvent } from 'react';
+import { useState, MouseEvent, useEffect } from 'react';
 import clsx from 'clsx';
 import useDebounceClick from 'hooks/useDebounceClick';
 import { axiosClient } from 'config/axios';
@@ -15,6 +15,10 @@ export default function FollowButton({ userSlug, condition }: Props) {
         follow,
         unfollow,
     );
+
+    useEffect(() => {
+        setFollowed(condition);
+    }, [userSlug]);
 
     async function follow() {
         try {
