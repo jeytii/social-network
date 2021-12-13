@@ -1,9 +1,7 @@
 import Head from 'next/head';
-import Link from 'next/link';
 import { ReactNode } from 'react';
 import { useQueries, useQueryClient } from 'react-query';
 import { useMediaQuery } from 'react-responsive';
-import { MdOutlineNotifications } from 'react-icons/md';
 import useRendered from 'hooks/useRendered';
 import { axiosClient } from 'config/axios';
 import type { ModifyItem } from 'types/item';
@@ -15,6 +13,7 @@ import Searchbar from './layouts/Searchbar';
 import LeftSidebar from './layouts/LeftSidebar';
 import RightSidebar from './layouts/right-sidebar';
 import BottomNav from './layouts/BottomNav';
+import NotificationBell from './utilities/NotificationBell';
 import Spinner from './vectors/Spinner';
 import Logo from './Logo';
 
@@ -64,18 +63,7 @@ export default function Protected({ title, children }: Props) {
 
                 <Searchbar />
 
-                <Link href='/notifications'>
-                    <div className='relative cursor-pointer ml-auto'>
-                        <span className='absolute top-[-11px] right-[-9px] w-[20px] h-[20px] flex items-center justify-center bg-danger text-xs rounded-full p-xs'>
-                            9+
-                        </span>
-
-                        <MdOutlineNotifications
-                            className='text-skin-text-light text-lg'
-                            viewBox='2 2 20 20'
-                        />
-                    </div>
-                </Link>
+                <NotificationBell />
             </header>
 
             {/* MAIN */}
