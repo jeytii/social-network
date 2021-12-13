@@ -14,7 +14,7 @@ const Notification = forwardRef(
         const { name, image_url } = props.user;
 
         return (
-            <Link href={props.path}>
+            <Link href={props.url}>
                 <figure
                     ref={ref}
                     className={clsx(
@@ -43,9 +43,11 @@ const Notification = forwardRef(
                         />
                     )}
 
-                    <p className='text-md ml-sm sm:text-sm'>
-                        <b>{name}</b> <span>{props.message}</span>
-                    </p>
+                    <figcaption className='ml-sm'>
+                        <p className='text-md sm:text-sm'>
+                            <b>{name}</b> <span>{props.message}</span>
+                        </p>
+                    </figcaption>
                 </figure>
             </Link>
         );
