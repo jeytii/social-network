@@ -1,8 +1,7 @@
 export interface Notification {
     slug: string;
     message: string;
-    action: number;
-    path: string;
+    url: string;
     is_read: boolean;
     user: {
         name: string;
