@@ -46,7 +46,7 @@ module.exports = {
             },
         },
         fontFamily: {
-            sans: ['Roboto', 'sans-serif'],
+            sans: ['Arimo', 'sans-serif'],
         },
         fontSize: {
             xl: '24px',
