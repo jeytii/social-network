@@ -34,7 +34,6 @@ export default function Index() {
     const [loading, setLoading] = useState<boolean>(false);
     const {
         register,
-        watch,
         getValues,
         setError,
         clearErrors,
@@ -42,8 +41,6 @@ export default function Index() {
     } = useForm({
         defaultValues: fields,
     });
-
-    const [username, password] = watch(['username', 'password']);
 
     function processFormErrors(error: AxiosError) {
         const formErrors = error.response?.data.errors;
@@ -127,8 +124,8 @@ export default function Index() {
 
     return (
         <div className='py-md'>
-            <main className='max-w-[480px] m-auto rounded-md bg-skin-bg-contrast p-lg'>
-                <h1 className='text-lg font-bold text-skin-text-light text-center'>
+            <main className='max-w-[420px] m-auto rounded-md bg-skin-bg-contrast p-lg'>
+                <h1 className='text-lg text-skin-text-light text-center'>
                     Sign in to your account
                 </h1>
 
@@ -178,7 +175,7 @@ export default function Index() {
                     </div>
                 )}
 
-                <form className='py-lg' onSubmit={submit}>
+                <form className='py-sm' onSubmit={submit}>
                     <InputField
                         type='text'
                         label='Username or email address'
@@ -199,9 +196,7 @@ export default function Index() {
                     <button
                         type='submit'
                         className='button button-primary w-full py-sm mt-lg'
-                        disabled={
-                            !username.length || !password.length || loading
-                        }
+                        disabled={loading}
                     >
                         Sign in
                     </button>
@@ -215,7 +210,7 @@ export default function Index() {
                     </Link>
                 </div>
 
-                <div className='text-center mt-sm'>
+                <div className='text-center mt-xs'>
                     <Link href='/forgot-password'>
                         <span className='inline-block text-skin-text-light text-md no-underline cursor-pointer'>
                             Forgot password
@@ -228,13 +223,13 @@ export default function Index() {
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+    const props = {
+        title: 'Welcome to Sosyal.me',
+        isPrivate: false,
+    };
+
     if (!req.cookies || !req.cookies.token) {
-        return {
-            props: {
-                title: 'Welcome to Sosyal.me',
-                isPrivate: false,
-            },
-        };
+        return { props };
     }
 
     try {
@@ -247,11 +242,6 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
             },
         };
     } catch (e) {
-        return {
-            props: {
-                title: 'Welcome to Sosyal.me',
-                isPrivate: false,
-            },
-        };
+        return { props };
     }
 };
