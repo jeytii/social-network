@@ -1,14 +1,16 @@
 import { GetServerSideProps } from 'next';
+import { InfiniteData, useMutation, useQueryClient } from 'react-query';
 import { MdOutlineChecklist } from 'react-icons/md';
+import clsx from 'clsx';
 import Notification from 'components/chunks/Notification';
 import Spinner from 'components/vectors/Spinner';
 import useInfiniteScroll from 'hooks/useInfiniteScroll';
 import { axiosServer } from 'config/axios';
-import { NotificationPage } from 'types/page';
-import { Notification as NotificationType } from 'types/notification';
-import clsx from 'clsx';
+import type { NotificationPage } from 'types/page';
+import type { Notification as NotificationType } from 'types/notification';
 
 export default function Notifications() {
+    const queryClient = useQueryClient();
     const { data, ref, isLoading, isFetchingNextPage, isSuccess } =
         useInfiniteScroll<NotificationPage, NotificationType>({
             queryKey: 'notifications',
@@ -21,6 +23,32 @@ export default function Notifications() {
                 pages: pages.flatMap(page => [...page.items]),
             }),
         });
+
+    const { mutate } = useMutation<unknown, unknown, { url: string }>(
+        'update',
+        {
+            onSuccess() {
+                const notifs =
+                    queryClient.getQueryData<InfiniteData<NotificationPage>>(
+                        'notifications',
+                    );
+
+                notifs?.pages.forEach(page => {
+                    page.items.forEach(item => {
+                        const clone = item;
+
+                        clone.is_read = true;
+                    });
+                });
+            },
+        },
+    );
+
+    function readAll() {
+        mutate({
+            url: '/api/notifications/read/all',
+        });
+    }
 
     if (isLoading) {
         return <Spinner className='p-lg' />;
@@ -45,6 +73,7 @@ export default function Notifications() {
                     className='p-sm rounded-full ml-auto hover:bg-primary-lighter'
                     type='button'
                     title='Mark all as read'
+                    onClick={readAll}
                 >
                     <MdOutlineChecklist className='text-primary text-xl' />
                 </button>
@@ -67,13 +96,15 @@ export default function Notifications() {
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+    const defaultReturn = {
+        redirect: {
+            destination: '/',
+            permanent: false,
+        },
+    };
+
     if (!req.cookies || !req.cookies.token) {
-        return {
-            redirect: {
-                destination: '/',
-                permanent: false,
-            },
-        };
+        return defaultReturn;
     }
 
     try {
@@ -86,11 +117,6 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
             },
         };
     } catch (e) {
-        return {
-            redirect: {
-                destination: '/',
-                permanent: false,
-            },
-        };
+        return defaultReturn;
     }
 };

@@ -1,21 +1,28 @@
-import { FormEvent, useState } from 'react';
+import { GetServerSideProps } from 'next';
+import { useRouter } from 'next/router';
+import { FormEvent } from 'react';
+import { useMutation } from 'react-query';
 import { useForm } from 'react-hook-form';
+import { AxiosError, AxiosResponse } from 'axios';
 import InputField from 'components/utilities/InputField';
 import Radio from 'components/utilities/Radio';
-import { axiosClient, axiosServer } from 'config/axios';
-import { useRouter } from 'next/router';
-import { GetServerSideProps } from 'next';
+import { axiosServer } from 'config/axios';
 
-interface FormDataError {
-    name: string[];
-    email: string[];
-    username: string[];
-    phone_number: string[];
-    password: string[];
-    password_confirmation: string[];
-    birth_date: string[];
-    gender: string[];
-    method: string[];
+interface RequestBody {
+    name: string;
+    email: string;
+    username: string;
+    phone_number: string;
+    password: string;
+    password_confirmation: string;
+    birth_date: string;
+    gender: 'Male' | 'Female' | null;
+    method: string | null;
+}
+
+interface Variables {
+    url: string;
+    data: RequestBody;
 }
 
 const fields = {
@@ -31,7 +38,6 @@ const fields = {
 };
 
 export default function Register() {
-    const [loading, setLoading] = useState<boolean>(false);
     const { push } = useRouter();
     const {
         register,
@@ -40,8 +46,33 @@ export default function Register() {
         setError,
         clearErrors,
         formState: { errors },
-    } = useForm({
+    } = useForm<RequestBody>({
         defaultValues: fields,
+    });
+
+    const { mutate, isLoading } = useMutation<
+        AxiosResponse,
+        AxiosError,
+        Variables
+    >('create', {
+        onSuccess({ data }) {
+            push(data.url);
+        },
+        onError(error) {
+            const e = error.response?.data.errors;
+            const keys = Object.keys(fields);
+
+            keys.forEach(key => {
+                if (e[key]) {
+                    setError(key as keyof RequestBody, {
+                        type: 'manual',
+                        message: e[key][0],
+                    });
+                } else {
+                    clearErrors(key as keyof RequestBody);
+                }
+            });
+        },
     });
 
     const [gender, method] = watch(['gender', 'method']);
@@ -49,44 +80,25 @@ export default function Register() {
     async function submit(event: FormEvent) {
         event.preventDefault();
 
-        setLoading(true);
-
-        try {
-            const { data } = await axiosClient().post('/register', getValues());
-
-            push(data.url);
-        } catch (error) {
-            const e = error.response?.data.errors;
-            const keys = Object.keys(fields);
-
-            keys.forEach(key => {
-                if (e[key]) {
-                    setError(key as keyof FormDataError, {
-                        type: 'manual',
-                        message: e[key][0],
-                    });
-                } else {
-                    clearErrors(key as keyof FormDataError);
-                }
-            });
-
-            setLoading(false);
-        }
+        mutate({
+            url: '/register',
+            data: getValues(),
+        });
     }
 
     return (
         <div className='py-md'>
-            <main className='max-w-[480px] m-auto rounded-md bg-skin-bg-contrast p-lg'>
-                <h1 className='text-lg font-bold text-skin-text-light text-center'>
+            <main className='max-w-[420px] m-auto rounded-md bg-skin-bg-contrast p-lg'>
+                <h1 className='text-lg text-skin-text-light text-center'>
                     Create an account
                 </h1>
 
-                <form className='mt-lg' onSubmit={submit}>
+                <form className='mt-sm' onSubmit={submit}>
                     <InputField
                         type='text'
                         label='Name'
                         error={errors.name?.message}
-                        disabled={loading}
+                        disabled={isLoading}
                         {...register('name')}
                     />
 
@@ -94,8 +106,9 @@ export default function Register() {
                         containerClassName='mt-lg'
                         type='email'
                         label='Email address'
+                        placeholder='sample@domain.com'
                         error={errors.email?.message}
-                        disabled={loading}
+                        disabled={isLoading}
                         {...register('email')}
                     />
 
@@ -104,7 +117,7 @@ export default function Register() {
                         type='text'
                         label='Username'
                         error={errors.username?.message}
-                        disabled={loading}
+                        disabled={isLoading}
                         {...register('username')}
                     />
 
@@ -114,7 +127,7 @@ export default function Register() {
                         label='Phone number'
                         placeholder='09123456789'
                         error={errors.phone_number?.message}
-                        disabled={loading}
+                        disabled={isLoading}
                         {...register('phone_number')}
                     />
 
@@ -123,7 +136,7 @@ export default function Register() {
                         type='password'
                         label='Password'
                         error={errors.password?.message}
-                        disabled={loading}
+                        disabled={isLoading}
                         {...register('password')}
                     />
 
@@ -132,7 +145,7 @@ export default function Register() {
                         type='password'
                         label='Confirm password'
                         error={errors.password_confirmation?.message}
-                        disabled={loading}
+                        disabled={isLoading}
                         {...register('password_confirmation')}
                     />
 
@@ -142,7 +155,7 @@ export default function Register() {
                         type='date'
                         label='Birth date'
                         error={errors.birth_date?.message}
-                        disabled={loading}
+                        disabled={isLoading}
                         {...register('birth_date')}
                     />
 
@@ -158,7 +171,7 @@ export default function Register() {
                                 label='Male'
                                 value='Male'
                                 checked={gender === 'Male'}
-                                disabled={loading}
+                                disabled={isLoading}
                                 {...register('gender')}
                             />
 
@@ -168,7 +181,7 @@ export default function Register() {
                                 label='Female'
                                 value='Female'
                                 checked={gender === 'Female'}
-                                disabled={loading}
+                                disabled={isLoading}
                                 {...register('gender')}
                             />
                         </div>
@@ -192,7 +205,7 @@ export default function Register() {
                                 label='Email'
                                 value='email'
                                 checked={method === 'email'}
-                                disabled={loading}
+                                disabled={isLoading}
                                 {...register('method')}
                             />
 
@@ -202,7 +215,7 @@ export default function Register() {
                                 label='SMS'
                                 value='sms'
                                 checked={method === 'sms'}
-                                disabled={loading}
+                                disabled={isLoading}
                                 {...register('method')}
                             />
                         </div>
@@ -217,7 +230,7 @@ export default function Register() {
                     <button
                         type='submit'
                         className='button button-primary w-full py-sm mt-lg'
-                        disabled={loading}
+                        disabled={isLoading}
                     >
                         Sign up
                     </button>
@@ -228,13 +241,13 @@ export default function Register() {
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+    const props = {
+        title: 'Create an account',
+        isPrivate: false,
+    };
+
     if (!req.cookies || !req.cookies.token) {
-        return {
-            props: {
-                title: 'Create an account - Sosyal.me',
-                isPrivate: false,
-            },
-        };
+        return { props };
     }
 
     try {
@@ -247,11 +260,6 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
             },
         };
     } catch (e) {
-        return {
-            props: {
-                title: 'Create an account - Sosyal.me',
-                isPrivate: false,
-            },
-        };
+        return { props };
     }
 };

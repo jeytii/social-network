@@ -1,115 +1,115 @@
+import { GetServerSideProps } from 'next';
 import { FormEvent, useState } from 'react';
+import { useMutation } from 'react-query';
 import { useForm } from 'react-hook-form';
-import { AxiosError } from 'axios';
+import { AxiosError, AxiosResponse } from 'axios';
 import clsx from 'clsx';
 import InputField from 'components/utilities/InputField';
 import Radio from 'components/utilities/Radio';
-import { axiosClient } from 'config/axios';
+import { axiosServer } from 'config/axios';
 
-interface AlertNotifcation {
+interface AlertNotification {
     status: number;
     message: string;
 }
 
-interface FormDataError {
-    email: string[];
-    method: string[];
+interface FieldValues {
+    email: string;
+    method: 'email' | 'sms';
 }
 
-const fields = {
-    email: '',
-    method: 'email',
-};
+interface Variables {
+    url: string;
+    data: FieldValues;
+}
 
 export default function ForgotPassword() {
     const [alertNotification, setAlertNotification] =
-        useState<AlertNotifcation | null>(null);
-    const [loading, setLoading] = useState<boolean>(false);
+        useState<AlertNotification | null>(null);
+
     const { register, watch, getValues, setError, clearErrors, formState } =
-        useForm({
-            defaultValues: fields,
+        useForm<FieldValues>({
+            defaultValues: {
+                email: '',
+                method: 'email',
+            },
         });
 
-    const method = watch('method');
+    const { mutate, isLoading } = useMutation<
+        AxiosResponse,
+        AxiosError,
+        Variables
+    >('create', {
+        onSuccess({ data }) {
+            setAlertNotification(data);
+        },
+        onError({ response }) {
+            const message = response?.data.message;
+            const errors = response?.data.errors;
 
-    function processFormErrors(error: AxiosError) {
-        const formErrors = error.response?.data.errors;
-        const keys = Object.keys(fields);
+            if (response?.status === 422) {
+                const keys: ['email', 'method'] = ['email', 'method'];
 
-        if (alertNotification) {
-            setAlertNotification(null);
-        }
+                if (alertNotification) {
+                    setAlertNotification(null);
+                }
 
-        keys.forEach(key => {
-            if (formErrors[key]) {
-                setError(key as keyof FormDataError, {
-                    type: 'manual',
-                    message: formErrors[key][0],
+                keys.forEach(key => {
+                    if (errors[key]) {
+                        setError(key, {
+                            type: 'manual',
+                            message: errors[key][0],
+                        });
+                    } else {
+                        clearErrors(key);
+                    }
                 });
             } else {
-                clearErrors(key as keyof FormDataError);
+                clearErrors();
+                setAlertNotification({
+                    status: response?.status as number,
+                    message,
+                });
             }
-        });
-    }
+        },
+    });
+
+    const method = watch('method');
 
     async function submit(event: FormEvent) {
         event.preventDefault();
 
-        setLoading(true);
-
-        try {
-            const { data } = await axiosClient().post(
-                '/forgot-password',
-                getValues(),
-            );
-
-            setLoading(false);
-            setAlertNotification(data);
-        } catch (error: AxiosError) {
-            const { status, data } = error.response;
-
-            setLoading(false);
-
-            if (status === 422) {
-                processFormErrors(error);
-            } else {
-                clearErrors();
-                setAlertNotification({
-                    status,
-                    message: data.message,
-                });
-            }
-        }
+        mutate({
+            url: '/forgot-password',
+            data: getValues(),
+        });
     }
 
     return (
         <div className='py-md'>
-            <main className='max-w-[480px] m-auto rounded-md bg-skin-bg-contrast p-lg'>
-                {!!alertNotification && (
+            <main className='max-w-[420px] m-auto rounded-md bg-skin-bg-contrast p-lg'>
+                {alertNotification && (
                     <div
                         className={clsx(
                             'border rounded-md p-sm',
                             alertNotification.status === 200
-                                ? 'bg-primary-lighter text-primary border-primary'
-                                : 'bg-danger-lighter text-danger border-danger',
+                                ? 'bg-primary-lighter text-primary border-primary-lighter'
+                                : 'bg-danger-lighter text-danger border-danger-lighter',
                         )}
                     >
                         <p className='text-md m-0'>
-                            {/* After successfully making a request, you should
-                                reset your password within <b>30 minutes</b>.
-                                Otherwise, send another request. */}
                             {alertNotification.message}
                         </p>
                     </div>
                 )}
 
-                <form className='mt-lg' onSubmit={submit}>
+                <form onSubmit={submit}>
                     <InputField
                         id='email'
                         type='email'
-                        label='Email address'
+                        label='Email address or phone number'
                         error={formState.errors.email?.message}
-                        disabled={loading}
+                        disabled={isLoading}
                         {...register('email')}
                     />
 
@@ -125,7 +125,7 @@ export default function ForgotPassword() {
                                 label='Email'
                                 value='email'
                                 checked={method === 'email'}
-                                disabled={loading}
+                                disabled={isLoading}
                                 {...register('method')}
                             />
 
@@ -135,7 +135,7 @@ export default function ForgotPassword() {
                                 label='SMS'
                                 value='sms'
                                 checked={method === 'sms'}
-                                disabled={loading}
+                                disabled={isLoading}
                                 {...register('method')}
                             />
                         </div>
@@ -150,9 +150,9 @@ export default function ForgotPassword() {
                     <button
                         type='submit'
                         className='button button-primary w-full py-sm mt-lg'
-                        disabled={loading}
+                        disabled={isLoading}
                     >
-                        Send request
+                        Send password reset request
                     </button>
                 </form>
             </main>
@@ -160,9 +160,26 @@ export default function ForgotPassword() {
     );
 }
 
-export const getServerSideProps = () => ({
-    props: {
-        title: 'Forgot password - Sosyal.me',
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+    const props = {
+        title: 'Forgot password',
         isPrivate: false,
-    },
-});
+    };
+
+    if (!req.cookies || !req.cookies.token) {
+        return { props };
+    }
+
+    try {
+        await axiosServer(req.cookies.token).get('/private');
+
+        return {
+            redirect: {
+                destination: '/home',
+                permanent: false,
+            },
+        };
+    } catch (e) {
+        return { props };
+    }
+};
