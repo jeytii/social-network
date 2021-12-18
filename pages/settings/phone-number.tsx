@@ -139,13 +139,17 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     }
 
     try {
-        const { data } = await axiosServer(req.cookies.token).get('/private');
+        const responses = await Promise.all([
+            axiosServer(req.cookies.token).get('/private'),
+            axiosServer(req.cookies.token).get('/api/notifications/count'),
+        ]);
 
         return {
             props: {
                 title: 'Change phone number',
                 isPrivate: true,
-                phone_number: data.data.phone_number,
+                phone_number: responses[0].data.data.phone_number,
+                notificationsCount: responses[1].data.data,
             },
         };
     } catch (e) {

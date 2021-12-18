@@ -143,13 +143,17 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     }
 
     try {
-        const { data } = await axiosServer(req.cookies.token).get('/private');
+        const responses = await Promise.all([
+            axiosServer(req.cookies.token).get('/private'),
+            axiosServer(req.cookies.token).get('/api/notifications/count'),
+        ]);
 
         return {
             props: {
                 title: 'Settings',
                 isPrivate: true,
-                user: data.data,
+                user: responses[0].data.data,
+                notificationsCount: responses[1].data.data,
             },
         };
     } catch (e) {

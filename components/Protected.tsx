@@ -19,33 +19,43 @@ import Logo from './Logo';
 
 interface Props {
     title: string;
+    notificationsCount: number;
     children: ReactNode;
 }
 
-export default function Protected({ title, children }: Props) {
+export default function Protected({
+    title,
+    notificationsCount,
+    children,
+}: Props) {
     const isDesktop = useMediaQuery({ minWidth: 1024 });
     const isMobile = useMediaQuery({ maxWidth: 480 });
     const rendered = useRendered();
     const queryClient = useQueryClient();
 
-    const [{ data: editItem }, { data: deleteItem }] = useQueries([
-        {
-            queryKey: 'edit',
-            queryFn: () => queryClient.getQueryData<ModifyItem>('edit'),
-        },
-        {
-            queryKey: 'delete',
-            queryFn: () => queryClient.getQueryData<ModifyItem>('delete'),
-        },
-        {
-            queryKey: 'user',
-            queryFn: async () => {
-                const { data } = await axiosClient().get('/api/users/auth');
-
-                return data.data;
+    const [{ data: editItem }, { data: deleteItem }, { data: notifsCount }] =
+        useQueries([
+            {
+                queryKey: 'edit',
+                queryFn: () => queryClient.getQueryData<ModifyItem>('edit'),
             },
-        },
-    ]);
+            {
+                queryKey: 'delete',
+                queryFn: () => queryClient.getQueryData<ModifyItem>('delete'),
+            },
+            {
+                queryKey: 'notificationsCount',
+                initialData: notificationsCount,
+            },
+            {
+                queryKey: 'user',
+                queryFn: async () => {
+                    const { data } = await axiosClient().get('/api/users/auth');
+
+                    return data.data;
+                },
+            },
+        ]);
 
     return (
         <main className='bg-skin-bg h-screen overflow-auto'>
@@ -63,7 +73,7 @@ export default function Protected({ title, children }: Props) {
 
                 <Searchbar />
 
-                <NotificationBell />
+                <NotificationBell count={notifsCount as number} />
             </header>
 
             {/* MAIN */}

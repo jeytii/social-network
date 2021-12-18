@@ -132,13 +132,17 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     }
 
     try {
-        const { data } = await axiosServer(req.cookies.token).get('/private');
+        const responses = await Promise.all([
+            axiosServer(req.cookies.token).get('/private'),
+            axiosServer(req.cookies.token).get('/api/notifications/count'),
+        ]);
 
         return {
             props: {
                 title: 'Change email address',
                 isPrivate: true,
-                email: data.data.email,
+                email: responses[0].data.data.email,
+                notificationsCount: responses[1].data.data,
             },
         };
     } catch (e) {

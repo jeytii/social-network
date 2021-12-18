@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useQueryClient } from 'react-query';
 import { MdOutlineNotifications } from 'react-icons/md';
 import Echo from 'laravel-echo';
@@ -31,19 +31,13 @@ const authorizer = channel => ({
     },
 });
 
-export default function NotificationBell() {
-    const [count, setCount] = useState<number>(0);
+export default function NotificationBell({
+    count,
+}: {
+    count: number | undefined;
+}) {
     const queryClient = useQueryClient();
     const user = queryClient.getQueryData<User>('user');
-
-    async function getCount() {
-        const { data } = await axiosClient().get('/api/notifications/count');
-        setCount(data.data);
-    }
-
-    useEffect(() => {
-        getCount();
-    }, []);
 
     useEffect(() => {
         const echo = new Echo({
@@ -59,7 +53,7 @@ export default function NotificationBell() {
         if (user?.slug) {
             echo.private(`notify.user.${user.slug}`).notification(
                 (data: NotificationData) => {
-                    setCount(data.count);
+                    queryClient.setQueryData('notificationsCount', data.count);
                 },
             );
         }

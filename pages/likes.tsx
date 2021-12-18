@@ -101,12 +101,16 @@ export const getServerSideProps: GetServerSideProps = async ({
     }
 
     try {
-        await axiosServer(req.cookies.token).get('/private');
+        const responses = await Promise.all([
+            axiosServer(req.cookies.token).get('/private'),
+            axiosServer(req.cookies.token).get('/api/notifications/count'),
+        ]);
 
         const sections = ['posts', 'comments'];
         const props = {
             title: 'Likes',
             isPrivate: true,
+            notificationsCount: responses[1].data.data,
         };
 
         if (!query.s) {

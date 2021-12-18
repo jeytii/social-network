@@ -5,13 +5,14 @@ import Protected from './Protected';
 interface Props {
     title: string;
     isPrivate: boolean;
+    notificationsCount: number;
     children: ReactNode;
 }
 
-export default function Root({ title, isPrivate, children }: Props) {
+export default function Root({ isPrivate, children, ...props }: Props) {
     if (!isPrivate) {
-        return <Public title={title}>{children}</Public>;
+        return <Public {...props}>{children}</Public>;
     }
 
-    return <Protected title={title}>{children}</Protected>;
+    return <Protected {...props}>{children}</Protected>;
 }

@@ -33,8 +33,6 @@ const queryClient = new QueryClient({
 });
 
 function MyApp({ Component, pageProps }: AppProps) {
-    const { title, isPrivate, ...props } = pageProps;
-
     queryClient.setMutationDefaults('create', {
         mutationFn: ({ url, data }) => axiosClient().post(url, data),
     });
@@ -50,8 +48,8 @@ function MyApp({ Component, pageProps }: AppProps) {
     return (
         <QueryClientProvider client={queryClient}>
             <ReactQueryDevtools />
-            <Root title={title} isPrivate={isPrivate}>
-                <Component {...props} />
+            <Root {...pageProps}>
+                <Component {...pageProps} />
             </Root>
         </QueryClientProvider>
     );

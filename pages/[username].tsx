@@ -200,12 +200,16 @@ export const getServerSideProps: GetServerSideProps = async ({
     }
 
     try {
-        await axiosServer(req.cookies.token).get('/private');
+        const responses = await Promise.all([
+            axiosServer(req.cookies.token).get('/private'),
+            axiosServer(req.cookies.token).get('/api/notifications/count'),
+        ]);
 
         const errorProps = {
             title: 'Not found',
             isPrivate: true,
             invalid: true,
+            notificationsCount: responses[1].data.data,
         };
 
         try {

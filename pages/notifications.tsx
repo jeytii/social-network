@@ -1,4 +1,5 @@
 import { GetServerSideProps } from 'next';
+import { useEffect } from 'react';
 import { InfiniteData, useMutation, useQueryClient } from 'react-query';
 import { MdOutlineChecklist } from 'react-icons/md';
 import clsx from 'clsx';
@@ -11,6 +12,7 @@ import type { Notification as NotificationType } from 'types/notification';
 
 export default function Notifications() {
     const queryClient = useQueryClient();
+    const notificationsCount = queryClient.getQueryData('notificationsCount');
     const { data, ref, isLoading, isFetchingNextPage, isSuccess } =
         useInfiniteScroll<NotificationPage, NotificationType>({
             queryKey: 'notifications',
@@ -24,7 +26,7 @@ export default function Notifications() {
             }),
         });
 
-    const { mutate } = useMutation<unknown, unknown, { url: string }>(
+    const { mutate: read } = useMutation<unknown, unknown, { url: string }>(
         'update',
         {
             onSuccess() {
@@ -44,11 +46,26 @@ export default function Notifications() {
         },
     );
 
+    const { mutate: peekAll } = useMutation<unknown, unknown, { url: string }>(
+        'update',
+        {
+            onSuccess() {
+                queryClient.setQueryData('notificationsCount', 0);
+            },
+        },
+    );
+
     function readAll() {
-        mutate({
+        read({
             url: '/api/notifications/read/all',
         });
     }
+
+    useEffect(() => {
+        if (notificationsCount) {
+            peekAll({ url: '/api/notifications/peek' });
+        }
+    }, []);
 
     if (isLoading) {
         return <Spinner className='p-lg' />;
@@ -108,12 +125,16 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     }
 
     try {
-        await axiosServer(req.cookies.token).get('/private');
+        const responses = await Promise.all([
+            axiosServer(req.cookies.token).get('/private'),
+            axiosServer(req.cookies.token).get('/api/notifications/count'),
+        ]);
 
         return {
             props: {
                 title: 'Notifications',
                 isPrivate: true,
+                notificationsCount: responses[1].data.data,
             },
         };
     } catch (e) {

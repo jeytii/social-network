@@ -148,12 +148,16 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     }
 
     try {
-        await axiosServer(req.cookies.token).get('/private');
+        const responses = await Promise.all([
+            axiosServer(req.cookies.token).get('/private'),
+            axiosServer(req.cookies.token).get('/api/notifications/count'),
+        ]);
 
         return {
             props: {
                 title: 'Change password',
                 isPrivate: true,
+                notificationsCount: responses[1].data.data,
             },
         };
     } catch (e) {
