@@ -77,13 +77,15 @@ export const getServerSideProps: GetServerSideProps = async ({
     params,
     req,
 }) => {
+    const defaultReturn = {
+        redirect: {
+            destination: '/',
+            permanent: false,
+        },
+    };
+
     if (!req.cookies || !req.cookies.token) {
-        return {
-            redirect: {
-                destination: '/',
-                permanent: false,
-            },
-        };
+        return defaultReturn;
     }
 
     try {
@@ -97,11 +99,6 @@ export const getServerSideProps: GetServerSideProps = async ({
             },
         };
     } catch (e) {
-        return {
-            redirect: {
-                destination: '/',
-                permanent: false,
-            },
-        };
+        return defaultReturn;
     }
 };

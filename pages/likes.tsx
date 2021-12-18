@@ -89,13 +89,15 @@ export const getServerSideProps: GetServerSideProps = async ({
     req,
     query,
 }) => {
+    const defaultReturn = {
+        redirect: {
+            destination: '/',
+            permanent: false,
+        },
+    };
+
     if (!req.cookies || !req.cookies.token) {
-        return {
-            redirect: {
-                destination: '/',
-                permanent: false,
-            },
-        };
+        return defaultReturn;
     }
 
     try {
@@ -129,11 +131,6 @@ export const getServerSideProps: GetServerSideProps = async ({
 
         return { props };
     } catch (e) {
-        return {
-            redirect: {
-                destination: '/',
-                permanent: false,
-            },
-        };
+        return defaultReturn;
     }
 };

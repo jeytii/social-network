@@ -131,13 +131,15 @@ export default function Settings({ user }: { user: User }) {
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+    const defaultReturn = {
+        redirect: {
+            destination: '/',
+            permanent: false,
+        },
+    };
+
     if (!req.cookies || !req.cookies.token) {
-        return {
-            redirect: {
-                destination: '/',
-                permanent: false,
-            },
-        };
+        return defaultReturn;
     }
 
     try {
@@ -151,11 +153,6 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
             },
         };
     } catch (e) {
-        return {
-            redirect: {
-                destination: '/',
-                permanent: false,
-            },
-        };
+        return defaultReturn;
     }
 };

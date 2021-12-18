@@ -188,19 +188,21 @@ export const getServerSideProps: GetServerSideProps = async ({
     params,
     query,
 }) => {
+    const defaultReturn = {
+        redirect: {
+            destination: '/',
+            permanent: false,
+        },
+    };
+
     if (!req.cookies || !req.cookies.token) {
-        return {
-            redirect: {
-                destination: '/',
-                permanent: false,
-            },
-        };
+        return defaultReturn;
     }
 
     try {
-        axiosServer(req.cookies.token).get('/private');
+        await axiosServer(req.cookies.token).get('/private');
 
-        const props = {
+        const errorProps = {
             title: 'Not found',
             isPrivate: true,
             invalid: true,
@@ -214,26 +216,21 @@ export const getServerSideProps: GetServerSideProps = async ({
             const sections = ['comments', 'followers', 'following'];
 
             if (!!query.s && !sections.includes(query.s as string)) {
-                return { props };
+                return { props: errorProps };
             }
 
             return {
                 props: {
-                    ...props,
+                    ...errorProps,
                     title: data.data.name,
                     user: data.data,
                     invalid: false,
                 },
             };
         } catch (e) {
-            return { props };
+            return { props: errorProps };
         }
     } catch (e) {
-        return {
-            redirect: {
-                destination: '/',
-                permanent: false,
-            },
-        };
+        return defaultReturn;
     }
 };

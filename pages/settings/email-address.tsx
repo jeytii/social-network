@@ -120,13 +120,15 @@ export default function ChangeEmailAddress({ email }: { email: string }) {
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+    const defaultReturn = {
+        redirect: {
+            destination: '/',
+            permanent: false,
+        },
+    };
+
     if (!req.cookies || !req.cookies.token) {
-        return {
-            redirect: {
-                destination: '/',
-                permanent: false,
-            },
-        };
+        return defaultReturn;
     }
 
     try {
@@ -136,15 +138,10 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
             props: {
                 title: 'Change email address',
                 isPrivate: true,
-                email: data.user.email,
+                email: data.data.email,
             },
         };
     } catch (e) {
-        return {
-            redirect: {
-                destination: '/',
-                permanent: false,
-            },
-        };
+        return defaultReturn;
     }
 };

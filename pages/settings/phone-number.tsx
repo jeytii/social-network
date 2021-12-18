@@ -127,13 +127,15 @@ export default function ChangePhoneNumber({
 }
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+    const defaultReturn = {
+        redirect: {
+            destination: '/',
+            permanent: false,
+        },
+    };
+
     if (!req.cookies || !req.cookies.token) {
-        return {
-            redirect: {
-                destination: '/',
-                permanent: false,
-            },
-        };
+        return defaultReturn;
     }
 
     try {
@@ -143,15 +145,10 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
             props: {
                 title: 'Change phone number',
                 isPrivate: true,
-                phone_number: data.user.phone_number,
+                phone_number: data.data.phone_number,
             },
         };
     } catch (e) {
-        return {
-            redirect: {
-                destination: '/',
-                permanent: false,
-            },
-        };
+        return defaultReturn;
     }
 };
