@@ -10,7 +10,6 @@ interface User {
     slug: string;
     email: string;
     username: string;
-    phone_number: string;
     gender: string;
     image_url: string | null;
 }
@@ -84,23 +83,6 @@ export default function Settings({ user }: { user: User }) {
                 </div>
 
                 <Link href='/settings/email-address'>
-                    <span className='text-sm text-primary cursor-pointer ml-auto hover:text-primary-dark'>
-                        Change
-                    </span>
-                </Link>
-            </section>
-
-            <section className='flex items-center bg-skin-bg-contrast rounded-md p-md mt-lg'>
-                <div>
-                    <span className='block text-md text-skin-text-light font-bold'>
-                        Phone number
-                    </span>
-                    <span className='block text-md text-skin-text'>
-                        {user.phone_number}
-                    </span>
-                </div>
-
-                <Link href='/settings/phone-number'>
                     <span className='text-sm text-primary cursor-pointer ml-auto hover:text-primary-dark'>
                         Change
                     </span>

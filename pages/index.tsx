@@ -109,12 +109,11 @@ export default function Index() {
         }
     }
 
-    async function resendVerificationCode(method: 'email' | 'sms') {
+    async function resendVerificationCode() {
         setLoading(true);
 
         await axiosClient().post('/verify/resend', {
             username: unauthorizedError?.username,
-            method,
         });
 
         setLoading(false);
@@ -145,30 +144,14 @@ export default function Index() {
                     <div className='bg-danger-lighter text-danger p-md border-danger rounded-md mt-lg'>
                         <p className='text-md ml-sm'>
                             Please verify your account first before logging in.
-                            If you did not receive a verification code, request
-                            for another one through{' '}
+                            If you did not receive a verification code,
                             <button
                                 className='underline cursor-pointer hover:text-danger-dark disabled:cursor-not-allowed disabled:text-danger'
                                 type='button'
                                 disabled={loading}
-                                onClick={resendVerificationCode.bind(
-                                    null,
-                                    'email',
-                                )}
+                                onClick={resendVerificationCode}
                             >
-                                email address
-                            </button>{' '}
-                            or{' '}
-                            <button
-                                className='underline cursor-pointer hover:text-danger-dark disabled:cursor-not-allowed disabled:text-danger'
-                                type='button'
-                                disabled={loading}
-                                onClick={resendVerificationCode.bind(
-                                    null,
-                                    'sms',
-                                )}
-                            >
-                                SMS
+                                click here
                             </button>
                             .
                         </p>

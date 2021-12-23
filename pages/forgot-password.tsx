@@ -5,7 +5,6 @@ import { useForm } from 'react-hook-form';
 import { AxiosError, AxiosResponse } from 'axios';
 import clsx from 'clsx';
 import InputField from 'components/utilities/InputField';
-import Radio from 'components/utilities/Radio';
 import { axiosServer } from 'config/axios';
 
 interface AlertNotification {
@@ -15,7 +14,6 @@ interface AlertNotification {
 
 interface FieldValues {
     email: string;
-    method: 'email' | 'sms';
 }
 
 interface Variables {
@@ -27,11 +25,10 @@ export default function ForgotPassword() {
     const [alertNotification, setAlertNotification] =
         useState<AlertNotification | null>(null);
 
-    const { register, watch, getValues, setError, clearErrors, formState } =
+    const { register, getValues, setError, clearErrors, formState } =
         useForm<FieldValues>({
             defaultValues: {
                 email: '',
-                method: 'email',
             },
         });
 
@@ -44,26 +41,22 @@ export default function ForgotPassword() {
             setAlertNotification(data);
         },
         onError({ response }) {
+            const emailError = response?.data.errors.email;
             const message = response?.data.message;
-            const errors = response?.data.errors;
 
             if (response?.status === 422) {
-                const keys: ['email', 'method'] = ['email', 'method'];
-
                 if (alertNotification) {
                     setAlertNotification(null);
                 }
 
-                keys.forEach(key => {
-                    if (errors[key]) {
-                        setError(key, {
-                            type: 'manual',
-                            message: errors[key][0],
-                        });
-                    } else {
-                        clearErrors(key);
-                    }
-                });
+                if (emailError) {
+                    setError('email', {
+                        type: 'manual',
+                        message: emailError[0],
+                    });
+                } else {
+                    clearErrors('email');
+                }
             } else {
                 clearErrors();
                 setAlertNotification({
@@ -73,8 +66,6 @@ export default function ForgotPassword() {
             }
         },
     });
-
-    const method = watch('method');
 
     async function submit(event: FormEvent) {
         event.preventDefault();
@@ -107,45 +98,11 @@ export default function ForgotPassword() {
                     <InputField
                         id='email'
                         type='email'
-                        label='Email address or phone number'
+                        label='Email address'
                         error={formState.errors.email?.message}
                         disabled={isLoading}
                         {...register('email')}
                     />
-
-                    <section className='mt-lg'>
-                        <span className='block text-skin-text text-md font-bold'>
-                            Verification method
-                        </span>
-
-                        <div className='flex items-center mt-xs'>
-                            <Radio
-                                containerClassName='flex items-center cursor-pointer'
-                                id='email_verification'
-                                label='Email'
-                                value='email'
-                                checked={method === 'email'}
-                                disabled={isLoading}
-                                {...register('method')}
-                            />
-
-                            <Radio
-                                containerClassName='flex items-center cursor-pointer ml-xl'
-                                id='sms_verification'
-                                label='SMS'
-                                value='sms'
-                                checked={method === 'sms'}
-                                disabled={isLoading}
-                                {...register('method')}
-                            />
-                        </div>
-
-                        {!!formState.errors.method && (
-                            <p className='text-danger text-sm mt-xs mb-0'>
-                                {formState.errors.method.message}
-                            </p>
-                        )}
-                    </section>
 
                     <button
                         type='submit'

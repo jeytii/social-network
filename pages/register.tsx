@@ -12,12 +12,10 @@ interface RequestBody {
     name: string;
     email: string;
     username: string;
-    phone_number: string;
     password: string;
     password_confirmation: string;
     birth_date: string;
     gender: 'Male' | 'Female' | null;
-    method: string | null;
 }
 
 interface Variables {
@@ -29,12 +27,10 @@ const fields = {
     name: '',
     email: '',
     username: '',
-    phone_number: '',
     password: '',
     password_confirmation: '',
     birth_date: '',
     gender: null,
-    method: null,
 };
 
 export default function Register() {
@@ -75,7 +71,7 @@ export default function Register() {
         },
     });
 
-    const [gender, method] = watch(['gender', 'method']);
+    const { gender } = watch();
 
     async function submit(event: FormEvent) {
         event.preventDefault();
@@ -119,16 +115,6 @@ export default function Register() {
                         error={errors.username?.message}
                         disabled={isLoading}
                         {...register('username')}
-                    />
-
-                    <InputField
-                        containerClassName='mt-lg'
-                        type='tel'
-                        label='Phone number'
-                        placeholder='09123456789'
-                        error={errors.phone_number?.message}
-                        disabled={isLoading}
-                        {...register('phone_number')}
                     />
 
                     <InputField
@@ -189,40 +175,6 @@ export default function Register() {
                         {!!errors.gender && (
                             <p className='text-danger text-sm mt-xs mb-0'>
                                 {errors.gender.message}
-                            </p>
-                        )}
-                    </section>
-
-                    <section className='mt-lg'>
-                        <span className='block text-skin-text text-md font-bold'>
-                            Verification method
-                        </span>
-
-                        <div className='flex items-center mt-xs'>
-                            <Radio
-                                containerClassName='flex items-center cursor-pointer'
-                                id='email_verification'
-                                label='Email'
-                                value='email'
-                                checked={method === 'email'}
-                                disabled={isLoading}
-                                {...register('method')}
-                            />
-
-                            <Radio
-                                containerClassName='flex items-center cursor-pointer ml-xl'
-                                id='sms_verification'
-                                label='SMS'
-                                value='sms'
-                                checked={method === 'sms'}
-                                disabled={isLoading}
-                                {...register('method')}
-                            />
-                        </div>
-
-                        {!!errors.method && (
-                            <p className='text-danger text-sm mt-xs mb-0'>
-                                {errors.method.message}
                             </p>
                         )}
                     </section>
