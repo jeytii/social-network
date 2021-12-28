@@ -49,13 +49,20 @@ export default function Searchbar() {
     useDebounceChange(query, refetch, truncateResults);
 
     return (
-        <section className='relative w-[300px] ml-lg sm:max-w-none sm:w-full sm:ml-auto'>
+        <section
+            className={clsx(
+                'relative w-[300px] bg-skin-white border border-primary-light ml-lg sm:max-w-none sm:w-full sm:ml-auto',
+                isSuccess && !!data?.length && showResults
+                    ? 'rounded-t'
+                    : 'rounded-full',
+            )}
+        >
             <form
                 className={clsx(
-                    'bg-skin-bg-contrast flex shadow-inner',
+                    'bg-primary-transparent flex',
                     isSuccess && !!data?.length && showResults
-                        ? 'rounded-t-xl'
-                        : 'rounded-2xl',
+                        ? 'rounded-t'
+                        : 'rounded-full',
                 )}
                 method='get'
                 action='/search'
@@ -63,10 +70,10 @@ export default function Searchbar() {
                 <input
                     ref={inputRef}
                     className={clsx(
-                        'flex-1 w-full bg-skin-bg-contrast-light text-skin-text text-sm border-none p-sm',
+                        'transparent flex-1 w-full text-skin-primary text-sm border-none p-sm',
                         isSuccess && !!data?.length && showResults
-                            ? 'rounded-tl-2xl'
-                            : 'rounded-l-2xl',
+                            ? 'rounded-tl'
+                            : 'rounded-l-full',
                     )}
                     type='text'
                     name='query'
@@ -79,24 +86,24 @@ export default function Searchbar() {
                 {isFetching ? (
                     <Spinner
                         className={clsx(
-                            'bg-skin-bg-contrast-light flex items-center justify-center px-sm',
+                            'flex items-center justify-center px-sm',
                             isSuccess && !!data?.length && showResults
-                                ? 'rounded-tr-2xl'
-                                : 'rounded-r-2xl',
+                                ? 'rounded-tr'
+                                : 'rounded-r-full',
                         )}
                         size={20}
                     />
                 ) : (
                     <div
                         className={clsx(
-                            'bg-skin-bg-contrast-light flex items-center justify-center px-sm',
+                            'flex items-center justify-center px-sm',
                             isSuccess && !!data?.length && showResults
-                                ? 'rounded-tr-2xl'
-                                : 'rounded-r-2xl',
+                                ? 'rounded-tr'
+                                : 'rounded-r-full',
                         )}
                     >
                         <MdSearch
-                            className='text-md text-skin-text-light'
+                            className='text-md text-skin-secondary'
                             viewBox='2 2 20 20'
                         />
                     </div>

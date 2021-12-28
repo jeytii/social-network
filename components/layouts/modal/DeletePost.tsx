@@ -71,36 +71,36 @@ export default function DeletePostModal({ isOpen }: { isOpen: boolean }) {
 
     return (
         <Modal isOpen={isOpen} closeEvent={closeModal}>
-            <header className='p-md'>
+            <header className='border-b border-primary-transparent p-md'>
                 <Dialog.Title
                     as='h3'
-                    className='text-md font-bold leading-6 text-skin-text'
+                    className='text-md font-bold text-skin-secondary'
                 >
-                    Confirmation to delete post
+                    Confirmation
                 </Dialog.Title>
             </header>
 
-            <p className='paragraph-md text-skin-text p-md bg-skin-bg-contrast'>
-                Delete the selected post?
+            <p className='paragraph-md text-skin-primary p-md'>
+                Are you sure you want to delete the selected post?
             </p>
 
-            <div className='p-md'>
+            <div className='text-right border-t border-primary-transparent p-md'>
                 <button
                     type='button'
-                    className='button button-danger px-sm'
-                    disabled={isLoading}
-                    onClick={deleteItem}
-                >
-                    Delete
-                </button>
-
-                <button
-                    type='button'
-                    className='button button-default px-sm ml-md'
+                    className='button button-default px-sm'
                     disabled={isLoading}
                     onClick={closeModal}
                 >
                     Cancel
+                </button>
+
+                <button
+                    type='button'
+                    className='button button-danger px-sm ml-md'
+                    disabled={isLoading}
+                    onClick={deleteItem}
+                >
+                    Delete
                 </button>
             </div>
         </Modal>

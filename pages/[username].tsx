@@ -43,8 +43,8 @@ const Users = dynamic(() => import('components/layouts/Users'), {
 
 const isActive = (condition: boolean) =>
     condition
-        ? 'relative text-primary after:absolute after:w-full after:h-[3px] after:bg-primary after:left-[0px] after:bottom-[0px]'
-        : 'text-skin-text-light';
+        ? 'bg-skin-main rounded-full text-primary-dark'
+        : 'text-skin-secondary hover:text-primary-dark';
 
 export default function Profile({ invalid, user }: Props) {
     const userData = useMemo(() => user, [user]);
@@ -55,7 +55,7 @@ export default function Profile({ invalid, user }: Props) {
     if (invalid || !userData) {
         return (
             <section className='p-lg text-center sm:px-md'>
-                <h1 className='text-skin-text-light opacity-80'>
+                <h1 className='text-skin-secondary opacity-80'>
                     Oops! It looks like you&#39;re trying to redirect to an
                     unknown page.
                 </h1>
@@ -64,58 +64,45 @@ export default function Profile({ invalid, user }: Props) {
     }
 
     return (
-        <div>
+        <div className='p-lg sm:px-md'>
             <ProfileHeadline {...userData} />
 
-            <nav className='flex border-b border-skin-bg-contrast'>
+            <nav className='flex rounded mt-lg'>
                 <Link href={`/${username}`} shallow>
                     <span
                         className={clsx(
-                            'flex-1 text-md text-center py-sm cursor-pointer hover:bg-skin-bg-contrast md:text-sm sm:text-xs',
+                            'flex-1 text-md text-center py-xs cursor-pointer md:text-sm sm:text-xs',
                             isActive(!section),
                         )}
                     >
-                        <span className='block font-bold'>
-                            {userData.posts_count}
-                        </span>
-                        <span>
-                            {userData.posts_count > 1 ? 'Posts' : 'Post'}
-                        </span>
+                        <span className='font-bold'>Posts</span>
+                        <span className='block'>{userData.posts_count}</span>
                     </span>
                 </Link>
 
                 <Link href={`/${username}?s=comments`} shallow>
                     <span
                         className={clsx(
-                            'flex-1 text-md text-center py-sm cursor-pointer hover:bg-skin-bg-contrast md:text-sm sm:text-xs',
+                            'flex-1 text-md text-center py-xs cursor-pointer md:text-sm sm:text-xs',
                             isActive(section === 'comments'),
                         )}
                     >
-                        <span className='block font-bold'>
-                            {userData.comments_count}
-                        </span>
-                        <span>
-                            {userData.comments_count > 1
-                                ? 'Comments'
-                                : 'Comment'}
-                        </span>
+                        <span className='font-bold'>Comments</span>
+                        <span className='block'>{userData.comments_count}</span>
                     </span>
                 </Link>
 
                 <Link href={`/${username}?s=followers`} shallow>
                     <div
                         className={clsx(
-                            'flex-1 text-md text-center py-sm cursor-pointer hover:bg-skin-bg-contrast md:text-sm sm:text-xs',
+                            'flex-1 text-md text-center py-xs cursor-pointer md:text-sm sm:text-xs',
                             isActive(section === 'followers'),
                         )}
                     >
-                        <span className='block font-bold'>
+                        <span className='font-bold'>Followers</span>
+
+                        <span className='block'>
                             {userData.followers_count}
-                        </span>
-                        <span>
-                            {userData.followers_count > 1
-                                ? 'Followers'
-                                : 'Follower'}
                         </span>
                     </div>
                 </Link>
@@ -123,21 +110,22 @@ export default function Profile({ invalid, user }: Props) {
                 <Link href={`/${username}?s=following`} shallow>
                     <div
                         className={clsx(
-                            'flex-1 text-md text-center py-sm cursor-pointer hover:bg-skin-bg-contrast md:text-sm sm:text-xs',
+                            'flex-1 text-md text-center py-xs cursor-pointer md:text-sm sm:text-xs',
                             isActive(section === 'following'),
                         )}
                     >
-                        <span className='block font-bold'>
+                        <span className='font-bold'>Following</span>
+
+                        <span className='block'>
                             {userData.following_count}
                         </span>
-                        <span>Following</span>
                     </div>
                 </Link>
             </nav>
 
             {!section && (
                 <Posts
-                    className='p-lg sm:px-md'
+                    className='mt-lg'
                     queryKey={['profile.posts', userData.slug]}
                     url={`/api/profile/${userData.username}/posts`}
                     cacheTime={1000 * 60 * 2}

@@ -20,12 +20,12 @@ export default function BottomNav() {
         'relative text-primary after:absolute after:w-full after:h-[5px] after:bg-primary after:left-[0px] after:bottom-[0px]';
 
     return (
-        <nav className='sticky bottom-[0px] left-[0px] bg-skin-bg shadow-inner'>
-            <div className='flex bg-skin-bg-contrast'>
+        <nav className='sticky bottom-[0px] left-[0px] bg-skin-main shadow-inner'>
+            <div className='flex bg-skin-main'>
                 <Link href='/home'>
                     <span
                         className={clsx(
-                            'flex-1 py-md text-skin-text-light cursor-pointer',
+                            'flex-1 py-md text-skin-secondary cursor-pointer',
                             route === '/home' && activeClass,
                         )}
                     >
@@ -36,7 +36,7 @@ export default function BottomNav() {
                 <Link href={`/${user?.username}`}>
                     <span
                         className={clsx(
-                            'flex-1 py-md text-skin-text-light cursor-pointer',
+                            'flex-1 py-md text-skin-secondary cursor-pointer',
                             route === '/' && activeClass,
                         )}
                     >
@@ -55,7 +55,7 @@ export default function BottomNav() {
                 <Link href='/notifications'>
                     <span
                         className={clsx(
-                            'flex-1 py-md text-skin-text-light cursor-pointer',
+                            'flex-1 py-md text-skin-secondary cursor-pointer',
                             route === '/notifications' && activeClass,
                         )}
                     >
@@ -66,7 +66,7 @@ export default function BottomNav() {
                 <Link href='/search'>
                     <span
                         className={clsx(
-                            'flex-1 py-md text-skin-text-light cursor-pointer',
+                            'flex-1 py-md text-skin-secondary cursor-pointer',
                             route === '/search' && activeClass,
                         )}
                     >
@@ -77,7 +77,7 @@ export default function BottomNav() {
                 <Link href='/settings'>
                     <span
                         className={clsx(
-                            'flex-1 py-md text-skin-text-light cursor-pointer',
+                            'flex-1 py-md text-skin-secondary cursor-pointer',
                             route === '/settings' && activeClass,
                         )}
                     >

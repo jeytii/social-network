@@ -28,13 +28,13 @@ export default function SearchSuggestions({ data, target, hideEvent }: Props) {
     }, []);
 
     return (
-        <div className='absolute top-[100%] left-[0px] w-full bg-skin-bg shadow-md rounded-b-2xl z-20'>
+        <div className='absolute top-[100%] left-[0px] w-full bg-skin-white rounded-b z-20 border border-primary-light'>
             {data.map(({ slug, ...user }, index) => (
                 <Link key={slug} href={`/${user.username}`} passHref>
                     <BasicInfo
                         className={clsx(
-                            'bg-skin-bg-contrast-light p-sm cursor-pointer hover:bg-skin-bg-contrast',
-                            index === data.length - 1 && 'rounded-b-2xl',
+                            'p-sm cursor-pointer bg-primary-transparent hover:bg-skin-main',
+                            index === data.length - 1 && 'rounded-b',
                         )}
                         imageSize={40}
                         {...user}

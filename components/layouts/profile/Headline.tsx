@@ -4,6 +4,7 @@ import {
     MdAccountCircle,
     MdOutlineCake,
     MdCalendarToday,
+    MdBikeScooter,
 } from 'react-icons/md';
 import FollowButton from 'components/utilities/FollowButton';
 
@@ -31,7 +32,7 @@ export default function ProfileHeadline({
     is_followed,
 }: ProfileInfo) {
     return (
-        <div className='p-lg sm:px-md'>
+        <div className='bg-skin-main rounded p-lg'>
             <section className='flex items-center sm:block sm:text-center'>
                 <figure className='flex items-center sm:block'>
                     {image_url ? (
@@ -43,17 +44,17 @@ export default function ProfileHeadline({
                         />
                     ) : (
                         <MdAccountCircle
-                            className='text-skin-text-light m-auto'
+                            className='text-skin-secondary m-auto'
                             size={80}
                             viewBox='2 2 20 20'
                         />
                     )}
 
                     <figcaption className='ml-sm sm:mt-sm sm:mx-[0]'>
-                        <span className='block text-skin-text font-bold text-md'>
+                        <span className='block text-skin-primary font-bold text-md'>
                             {name}
                         </span>
-                        <span className='block text-skin-text-light text-md'>
+                        <span className='block text-skin-secondary text-md'>
                             {username}
                         </span>
                     </figcaption>
@@ -63,7 +64,7 @@ export default function ProfileHeadline({
                     <div className='ml-auto sm:mt-sm'>
                         <Link href='/edit-profile'>
                             <span className='button button-primary-outlined text-sm rounded-full'>
-                                Edit profile
+                                Edit
                             </span>
                         </Link>
                     </div>
@@ -74,27 +75,27 @@ export default function ProfileHeadline({
 
             <div className='flex items-center mt-sm sm:justify-center'>
                 <MdOutlineCake
-                    className='text-md text-skin-text-light'
+                    className='text-md text-skin-secondary'
                     viewBox='2 2 20 20'
                 />
-                <span className='text-md text-skin-text-light ml-sm'>
+                <span className='text-md text-skin-secondary ml-sm'>
                     {birth_date}
                 </span>
             </div>
 
             <div className='flex items-center mt-sm sm:justify-center xs:ml-auto'>
                 <MdCalendarToday
-                    className='text-md text-skin-text-light'
+                    className='text-md text-skin-secondary'
                     viewBox='2 2 20 20'
                 />
-                <span className='text-md text-skin-text-light ml-sm'>
+                <span className='text-md text-skin-secondary ml-sm'>
                     Joined on {created_at}
                 </span>
             </div>
 
             {!!bio && (
-                <p className='paragraph-md text-skin-text-light mt-sm sm:text-center'>
-                    {bio}
+                <p className='paragraph-md italic text-skin-secondary mt-sm sm:text-center'>
+                    {MdBikeScooter}
                 </p>
             )}
         </div>

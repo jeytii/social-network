@@ -24,18 +24,20 @@ export default forwardRef(
         >
             {props.checked ? (
                 <MdOutlineRadioButtonChecked
-                    className='text-skin-text text-md'
+                    className='text-primary-dark'
+                    size={15}
                     viewBox='2 2 20 20'
                 />
             ) : (
                 <MdOutlineRadioButtonUnchecked
-                    className='text-skin-text text-md'
+                    className='text-skin-primary'
+                    size={15}
                     viewBox='2 2 20 20'
                 />
             )}
 
             <input ref={ref} className='hidden' type='radio' {...props} />
-            <span className='text-skin-text text-md ml-xs'>{label}</span>
+            <span className='text-skin-primary text-md ml-xs'>{label}</span>
         </label>
     ),
 );

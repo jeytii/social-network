@@ -70,17 +70,17 @@ export default function LikeButton({
             className={clsx(
                 className,
                 liked
-                    ? 'text-primary'
-                    : 'text-skin-text-light hover:text-primary',
+                    ? 'text-primary-dark'
+                    : 'text-skin-secondary hover:text-primary-dark',
             )}
             type='button'
             onClick={toggleLike}
             {...props}
         >
             {liked ? (
-                <MdThumbUp className='text-lg sm:text-md' />
+                <MdThumbUp width={15} height={13} />
             ) : (
-                <MdOutlineThumbUp className='text-lg sm:text-md' />
+                <MdOutlineThumbUp width={15} height={13} />
             )}
 
             <span className='text-sm ml-sm'>{likesCount}</span>

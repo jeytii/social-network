@@ -64,7 +64,7 @@ const User = forwardRef(
                 <div
                     ref={ref}
                     className={clsx(
-                        'flex items-center rounded-md cursor-pointer',
+                        'flex items-center rounded cursor-pointer',
                         className,
                     )}
                     {...props}
@@ -82,8 +82,8 @@ const User = forwardRef(
                             className={clsx(
                                 'rounded-full p-sm ml-auto',
                                 followed
-                                    ? 'hover:bg-danger-lighter'
-                                    : 'hover:bg-primary-lighter',
+                                    ? 'hover:bg-danger-transparent'
+                                    : 'hover:bg-primary-transparent',
                             )}
                             type='button'
                             onClick={toggleFollow}

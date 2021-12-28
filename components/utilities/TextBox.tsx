@@ -1,7 +1,6 @@
 import { useMutation } from 'react-query';
 import useTextBody from 'hooks/useTextBody';
 import { Post } from 'types/post';
-import clsx from 'clsx';
 
 interface Variables {
     url: string;
@@ -62,14 +61,9 @@ export default function TextBox({
     }
 
     return (
-        <form
-            className={clsx(
-                'rounded-md bg-skin-bg-contrast-light border',
-                isError ? 'border-danger' : 'border-skin-bg-contrast',
-            )}
-        >
+        <form className='rounded bg-skin-main'>
             <textarea
-                className='block text-md text-skin-text w-full transparent resize-none rounded-t-md p-md disabled:opacity-50 disabled:cursor-not-allowed'
+                className='block text-md text-skin-primary w-full transparent resize-none rounded-t-md p-md disabled:opacity-50 disabled:cursor-not-allowed'
                 rows={3}
                 placeholder={placeholder}
                 disabled={isLoading}
@@ -77,15 +71,16 @@ export default function TextBox({
                 {...hook.register}
             />
 
-            <div className='flex items-center bg-skin-bg-contrast-light rounded-b-md'>
+            <div className='flex items-center border-t border-primary-transparent rounded-b py-sm px-md'>
                 <span
-                    className='text-sm text-primary ml-md'
+                    className='text-sm text-primary-dark'
                     aria-label='Characters left'
                 >
                     {charactersLeft}
                 </span>
+
                 <button
-                    className='button text-primary text-sm ml-auto py-sm px-lg hover:text-primary-dark'
+                    className='button button-primary text-sm rounded-full ml-auto py-xs px-lg'
                     type='button'
                     disabled={
                         isLoading ||

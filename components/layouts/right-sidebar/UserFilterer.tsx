@@ -58,11 +58,11 @@ export default function UserFilterer() {
     }
 
     return (
-        <aside className='w-[280px] sticky full-height left-[0px] bg-skin-bg-contrast-light p-lg'>
+        <>
             <header className='flex items-center'>
-                <h1 className='text-md text-skin-text font-bold'>Filter</h1>
+                <h1 className='text-md text-skin-primary font-bold'>Filter</h1>
                 <button
-                    className='bg-none text-sm text-skin-text-light cursor-pointer ml-auto hover:text-skin-text'
+                    className='bg-none text-sm text-skin-secondary cursor-pointer ml-auto hover:text-skin-primary'
                     type='button'
                     onClick={resetValues}
                 >
@@ -73,13 +73,13 @@ export default function UserFilterer() {
             <form className='mt-lg'>
                 <div className='flex gap-sm'>
                     <Select
-                        className='flex-1 bg-skin-bg-contrast rounded-md text-sm text-skin-text cursor-pointer p-xs'
+                        className='flex-1 bg-skin-main rounded text-sm text-skin-primary cursor-pointer p-xs'
                         items={months}
                         {...register('month')}
                     />
 
                     <input
-                        className='bg-skin-bg-contrast text-sm text-skin-text rounded-md p-xs'
+                        className='bg-skin-main text-sm text-skin-primary rounded p-xs'
                         type='number'
                         placeholder='Year'
                         min={maxYear - 100}
@@ -109,7 +109,7 @@ export default function UserFilterer() {
                 </div>
 
                 <button
-                    className='button button-primary w-full text-sm mt-lg'
+                    className='button button-primary w-full rounded-full text-sm mt-lg'
                     type='button'
                     disabled={allBlank}
                     onClick={filter}
@@ -117,6 +117,6 @@ export default function UserFilterer() {
                     Filter results
                 </button>
             </form>
-        </aside>
+        </>
     );
 }

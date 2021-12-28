@@ -50,16 +50,16 @@ export default function BookmarkButton({ route, condition, onSuccess }: Props) {
     return (
         <button
             className={clsx(
-                'flex-1 flex items-center justify-center text-skin-text-light text-center py-sm',
-                !bookmarked && 'hover:text-skin-text',
+                'flex-1 flex items-center justify-center text-skin-secondary text-center py-sm',
+                !bookmarked && 'hover:text-skin-primary',
             )}
             type='button'
             onClick={toggleBookmark}
         >
             {bookmarked ? (
-                <MdBookmark className='text-lg sm:text-md' />
+                <MdBookmark width={11} height={15} />
             ) : (
-                <MdBookmarkBorder className='text-lg sm:text-md' />
+                <MdBookmarkBorder width={11} height={15} />
             )}
         </button>
     );

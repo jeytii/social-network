@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 import { AxiosError, AxiosResponse } from 'axios';
 import InputField from 'components/utilities/InputField';
 import Radio from 'components/utilities/Radio';
+import Logo from 'components/Logo';
 import { axiosServer } from 'config/axios';
 
 interface RequestBody {
@@ -83,110 +84,118 @@ export default function Register() {
     }
 
     return (
-        <div className='py-md'>
-            <main className='max-w-[420px] m-auto rounded-md bg-skin-bg-contrast p-lg'>
-                <h1 className='text-lg text-skin-text-light text-center'>
-                    Create an account
-                </h1>
+        <div className='py-lg'>
+            <main className='max-w-[360px] m-auto rounded bg-primary-light'>
+                <div className='bg-skin-main p-lg'>
+                    <div className='flex items-center justify-center'>
+                        <a href='/' className='no-underline'>
+                            <Logo />
+                        </a>
+                    </div>
 
-                <form className='mt-sm' onSubmit={submit}>
-                    <InputField
-                        type='text'
-                        label='Name'
-                        error={errors.name?.message}
-                        disabled={isLoading}
-                        {...register('name')}
-                    />
+                    <h1 className='text-md text-skin-secondary font-bold text-center mt-xs'>
+                        Register an account
+                    </h1>
 
-                    <InputField
-                        containerClassName='mt-lg'
-                        type='email'
-                        label='Email address'
-                        placeholder='sample@domain.com'
-                        error={errors.email?.message}
-                        disabled={isLoading}
-                        {...register('email')}
-                    />
+                    <form className='mt-sm' onSubmit={submit}>
+                        <InputField
+                            type='text'
+                            label='Name'
+                            error={errors.name?.message}
+                            disabled={isLoading}
+                            {...register('name')}
+                        />
 
-                    <InputField
-                        containerClassName='mt-lg'
-                        type='text'
-                        label='Username'
-                        error={errors.username?.message}
-                        disabled={isLoading}
-                        {...register('username')}
-                    />
+                        <InputField
+                            containerClassName='mt-lg'
+                            type='email'
+                            label='Email address'
+                            placeholder='sample@domain.com'
+                            error={errors.email?.message}
+                            disabled={isLoading}
+                            {...register('email')}
+                        />
 
-                    <InputField
-                        containerClassName='mt-lg'
-                        type='password'
-                        label='Password'
-                        error={errors.password?.message}
-                        disabled={isLoading}
-                        {...register('password')}
-                    />
+                        <InputField
+                            containerClassName='mt-lg'
+                            type='text'
+                            label='Username'
+                            error={errors.username?.message}
+                            disabled={isLoading}
+                            {...register('username')}
+                        />
 
-                    <InputField
-                        containerClassName='mt-lg'
-                        type='password'
-                        label='Confirm password'
-                        error={errors.password_confirmation?.message}
-                        disabled={isLoading}
-                        {...register('password_confirmation')}
-                    />
+                        <InputField
+                            containerClassName='mt-lg'
+                            type='password'
+                            label='Password'
+                            error={errors.password?.message}
+                            disabled={isLoading}
+                            {...register('password')}
+                        />
 
-                    <InputField
-                        containerClassName='mt-lg'
-                        className='cursor-pointer'
-                        type='date'
-                        label='Birth date'
-                        error={errors.birth_date?.message}
-                        disabled={isLoading}
-                        {...register('birth_date')}
-                    />
+                        <InputField
+                            containerClassName='mt-lg'
+                            type='password'
+                            label='Confirm password'
+                            error={errors.password_confirmation?.message}
+                            disabled={isLoading}
+                            {...register('password_confirmation')}
+                        />
 
-                    <section className='mt-lg'>
-                        <span className='block text-skin-text text-md font-bold'>
-                            Gender
-                        </span>
+                        <InputField
+                            containerClassName='mt-lg'
+                            className='cursor-pointer'
+                            type='date'
+                            label='Birth date'
+                            error={errors.birth_date?.message}
+                            disabled={isLoading}
+                            {...register('birth_date')}
+                        />
 
-                        <div className='flex items-center mt-xs'>
-                            <Radio
-                                containerClassName='flex items-center cursor-pointer'
-                                id='male'
-                                label='Male'
-                                value='Male'
-                                checked={gender === 'Male'}
-                                disabled={isLoading}
-                                {...register('gender')}
-                            />
+                        <section className='mt-lg'>
+                            <span className='block text-skin-primary text-md font-bold'>
+                                Gender
+                            </span>
 
-                            <Radio
-                                containerClassName='flex items-center cursor-pointer ml-xl'
-                                id='female'
-                                label='Female'
-                                value='Female'
-                                checked={gender === 'Female'}
-                                disabled={isLoading}
-                                {...register('gender')}
-                            />
-                        </div>
+                            <div className='flex items-center mt-xs'>
+                                <Radio
+                                    containerClassName='flex items-center cursor-pointer'
+                                    id='male'
+                                    label='Male'
+                                    value='Male'
+                                    checked={gender === 'Male'}
+                                    disabled={isLoading}
+                                    {...register('gender')}
+                                />
 
-                        {!!errors.gender && (
-                            <p className='text-danger text-sm mt-xs mb-0'>
-                                {errors.gender.message}
-                            </p>
-                        )}
-                    </section>
+                                <Radio
+                                    containerClassName='flex items-center cursor-pointer ml-xl'
+                                    id='female'
+                                    label='Female'
+                                    value='Female'
+                                    checked={gender === 'Female'}
+                                    disabled={isLoading}
+                                    {...register('gender')}
+                                />
+                            </div>
 
-                    <button
-                        type='submit'
-                        className='button button-primary w-full py-sm mt-lg'
-                        disabled={isLoading}
-                    >
-                        Sign up
-                    </button>
-                </form>
+                            {!!errors.gender && (
+                                <p className='text-danger text-sm mt-xs mb-0'>
+                                    {errors.gender.message}
+                                </p>
+                            )}
+                        </section>
+
+                        <button
+                            type='submit'
+                            className='button button-primary w-full rounded-full py-sm mt-lg'
+                            disabled={isLoading}
+                        >
+                            Create account
+                        </button>
+                    </form>
+                </div>
             </main>
         </div>
     );

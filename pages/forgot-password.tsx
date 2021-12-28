@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { AxiosError, AxiosResponse } from 'axios';
 import clsx from 'clsx';
 import InputField from 'components/utilities/InputField';
+import Logo from 'components/Logo';
 import { axiosServer } from 'config/axios';
 
 interface AlertNotification {
@@ -77,15 +78,25 @@ export default function ForgotPassword() {
     }
 
     return (
-        <div className='py-md'>
-            <main className='max-w-[420px] m-auto rounded-md bg-skin-bg-contrast p-lg'>
+        <main className='max-w-[360px] bg-primary-light rounded mx-auto mt-[40px]'>
+            <div className='bg-skin-main p-lg'>
+                <div className='flex items-center justify-center'>
+                    <a href='/' className='no-underline'>
+                        <Logo />
+                    </a>
+                </div>
+
+                <h1 className='text-md text-skin-secondary font-bold text-center mt-xs'>
+                    Forgot password
+                </h1>
+
                 {alertNotification && (
                     <div
                         className={clsx(
-                            'border rounded-md p-sm',
+                            'border rounded p-sm mt-sm',
                             alertNotification.status === 200
-                                ? 'bg-primary-lighter text-primary border-primary-lighter'
-                                : 'bg-danger-lighter text-danger border-danger-lighter',
+                                ? 'bg-success-transparent text-success border-success-transparent'
+                                : 'bg-danger-transparent text-danger border-danger-transparent',
                         )}
                     >
                         <p className='text-md m-0'>
@@ -94,7 +105,7 @@ export default function ForgotPassword() {
                     </div>
                 )}
 
-                <form onSubmit={submit}>
+                <form className='mt-sm' onSubmit={submit}>
                     <InputField
                         id='email'
                         type='email'
@@ -106,14 +117,14 @@ export default function ForgotPassword() {
 
                     <button
                         type='submit'
-                        className='button button-primary w-full py-sm mt-lg'
+                        className='button button-primary w-full rounded-full py-sm mt-lg'
                         disabled={isLoading}
                     >
                         Send password reset request
                     </button>
                 </form>
-            </main>
-        </div>
+            </div>
+        </main>
     );
 }
 

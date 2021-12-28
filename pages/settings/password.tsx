@@ -84,7 +84,7 @@ export default function ChangePassword() {
     return (
         <section className='p-lg'>
             {errorAlert && errorAlert.length && (
-                <p className='bg-danger-light text-md text-danger rounded-md p-sm mb-lg'>
+                <p className='bg-danger-light text-md text-danger rounded p-sm mb-lg'>
                     {errorAlert}
                 </p>
             )}
@@ -124,7 +124,7 @@ export default function ChangePassword() {
                 />
 
                 <button
-                    className='button button-primary w-full py-sm mt-lg'
+                    className='button button-primary w-full rounded-full py-sm mt-lg'
                     type='submit'
                     disabled={isLoading || allBlank}
                 >

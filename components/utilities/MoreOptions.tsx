@@ -26,9 +26,9 @@ export default function MoreOptions({ editEvent, deleteEvent, close }: Props) {
     }, []);
 
     return (
-        <div className='absolute right-[0px] bg-skin-bg rounded-md shadow-md'>
+        <div className='absolute right-[0px] bg-skin-white rounded shadow-md'>
             <button
-                className='block w-full text-sm text-skin-text rounded-t-md py-sm px-lg hover:bg-skin-bg-contrast-light hover:text-skin-text-dark'
+                className='block w-full text-sm text-skin-secondary rounded-t py-sm px-lg hover:text-skin-primary'
                 type='button'
                 onClick={editEvent}
             >
@@ -36,7 +36,7 @@ export default function MoreOptions({ editEvent, deleteEvent, close }: Props) {
             </button>
 
             <button
-                className='block w-full text-sm text-skin-text rounded-b-md py-sm px-lg hover:bg-skin-bg-contrast-light hover:text-skin-text-dark'
+                className='block w-full text-sm text-skin-secondary rounded-b py-sm px-lg hover:text-skin-primary'
                 type='button'
                 onClick={deleteEvent}
             >

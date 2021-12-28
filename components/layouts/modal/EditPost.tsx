@@ -56,18 +56,18 @@ export default function EditPostModal({ isOpen }: { isOpen: boolean }) {
 
     return (
         <Modal isOpen={isOpen} closeEvent={closeModal}>
-            <header className='flex items-center py-sm px-md'>
-                <h1 className='text-md text-skin-text-light font-bold'>
+            <header className='flex items-center border-b border-primary-transparent py-sm px-md'>
+                <h1 className='text-md text-skin-secondary font-bold'>
                     Edit post
                 </h1>
 
                 <button
                     type='button'
-                    className='block rounded-full p-xs ml-auto hover:bg-skin-bg-contrast'
+                    className='block rounded-full p-xs ml-auto'
                     onClick={closeModal}
                 >
                     <MdClose
-                        className='text-skin-text'
+                        className='text-skin-primary'
                         size={20}
                         viewBox='2 2 20 20'
                     />

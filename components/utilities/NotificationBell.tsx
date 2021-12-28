@@ -63,13 +63,13 @@ export default function NotificationBell({
         <Link href='/notifications'>
             <div className='relative cursor-pointer ml-auto'>
                 {!!count && (
-                    <span className='absolute top-[-11px] right-[-9px] w-[20px] h-[20px] flex items-center justify-center bg-danger text-xs text-white rounded-full p-xs'>
+                    <span className='absolute top-[-11px] right-[-9px] w-[20px] h-[20px] flex items-center justify-center bg-primary-dark text-xs text-skin-white rounded-full p-xs'>
                         {count >= 10 ? '9+' : count}
                     </span>
                 )}
 
                 <MdOutlineNotifications
-                    className='text-skin-text-light text-lg'
+                    className='text-skin-secondary text-lg'
                     viewBox='2 2 20 20'
                 />
             </div>

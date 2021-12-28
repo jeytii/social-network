@@ -3,32 +3,38 @@ import { FormEvent, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Cookies from 'js-cookie';
 import InputField from 'components/utilities/InputField';
+import Logo from 'components/Logo';
 import { axiosClient, axiosServer } from 'config/axios';
+import { useMutation } from 'react-query';
+import { AxiosError, AxiosResponse } from 'axios';
+
+interface Variables {
+    url: string;
+    data: {
+        code: string;
+    };
+}
 
 export default function Verification() {
     const [alertError, setAlertError] = useState<string | null>(null);
-    const [loading, setLoading] = useState<boolean>(false);
     const { register, watch, getValues, setError, formState } = useForm({
         defaultValues: {
             code: '',
         },
     });
 
-    const code = watch('code');
-
-    async function submit(event: FormEvent) {
-        event.preventDefault();
-
-        setLoading(true);
-
-        try {
-            const { data } = await axiosClient().put('/verify', getValues());
-
+    const { mutate, isLoading } = useMutation<
+        AxiosResponse,
+        AxiosError,
+        Variables
+    >('update', {
+        onSuccess({ data }) {
             Cookies.set('token', data.token);
-
             window.location.href = '/home';
-        } catch (error) {
-            const { status, data } = error.response;
+        },
+        onError(error) {
+            const status = error.response?.status;
+            const data = error.response?.data;
 
             if (status === 422) {
                 if (alertError) {
@@ -42,39 +48,56 @@ export default function Verification() {
             } else {
                 setAlertError(data.message);
             }
+        },
+    });
 
-            setLoading(false);
-        }
+    const code = watch('code');
+
+    async function submit(event: FormEvent) {
+        event.preventDefault();
+
+        mutate({
+            url: '/verify',
+            data: getValues(),
+        });
     }
 
     return (
-        <div className='py-md'>
-            <main className='max-w-[480px] m-auto rounded-md bg-skin-bg-contrast p-lg'>
-                <h1 className='text-lg font-bold text-skin-text-light text-center'>
+        <main className='max-w-[360px] rounded bg-primary-light mx-auto mt-[40px]'>
+            <div className='bg-skin-main p-lg'>
+                <div className='flex items-center justify-center'>
+                    <a href='/' className='no-underline'>
+                        <Logo />
+                    </a>
+                </div>
+
+                <h1 className='text-md text-skin-secondary font-bold text-center mt-xs'>
                     Verify your account
                 </h1>
 
-                <form className='mt-lg' onSubmit={submit}>
+                <form className='mt-sm' onSubmit={submit}>
                     <InputField
                         id='code'
                         type='number'
                         label='6-digit verification code'
                         error={formState.errors.code?.message}
-                        disabled={loading}
+                        disabled={isLoading}
                         {...register('code', {
                             valueAsNumber: true,
                         })}
                     />
                     <button
                         type='submit'
-                        className='button button-primary w-full py-sm mt-lg'
-                        disabled={Number.isNaN(code) || code === '' || loading}
+                        className='button button-primary w-full rounded-full py-sm mt-lg'
+                        disabled={
+                            Number.isNaN(code) || code === '' || isLoading
+                        }
                     >
                         Verify my account
                     </button>
                 </form>
-            </main>
-        </div>
+            </div>
+        </main>
     );
 }
 

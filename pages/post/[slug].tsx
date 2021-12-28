@@ -50,7 +50,7 @@ export default function ViewPost({ slug }: { slug: string }) {
     if (isError || !data) {
         return (
             <section className='p-lg'>
-                <h1 className='text-md font-bold text-skin-text-light opacity-50 text-center'>
+                <h1 className='text-md font-bold text-skin-secondary opacity-50 text-center'>
                     {error?.message}
                 </h1>
             </section>

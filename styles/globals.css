@@ -4,27 +4,24 @@
 
 @layer base {
     :root {
-        --skin-text-light: rgba(0, 0, 0, .5);
-        --skin-text-default: rgba(0, 0, 0, .8);
-        --skin-text-dark: rgb(0, 0, 0);
-        --skin-bg-default: rgb(255, 255, 255);
-        --skin-bg-contrast: rgba(0, 0, 0, .1);
-        --skin-bg-contrast-light: rgba(0, 0, 0, .05);
+        --skin-main: rgba(255, 255, 255, 0.5);
+        --skin-primary: #333;
+        --skin-secondary: #898989;
+
+        --primary-default: rgba(56, 147, 193, 0.8);
+        --primary-light: rgba(56, 147, 193, 0.6);
+        --primary-dark: rgb(56, 147, 193);
+        --primary-transparent: rgba(56, 147, 193, 0.2);
     }
 
-    .theme-dark {
-        --skin-text-light: rgba(255, 255, 255, .5);
-        --skin-text-default: rgba(255, 255, 255, .8);
-        --skin-text-dark: rgb(255, 255, 255);
-        --skin-bg-default: rgb(0, 0, 0);
-        --skin-bg-contrast: rgba(255, 255, 255, .1);
-        --skin-bg-contrast-light: rgba(255, 255, 255, .05);
+    * {
+        @apply outline-none;
     }
 }
 
 @layer components {
     .button {
-        @apply inline-block text-md font-bold rounded-md py-xs px-lg cursor-pointer;
+        @apply inline-block text-md font-bold rounded py-xs px-lg cursor-pointer;
     }
 
     .button:disabled {
@@ -32,16 +29,11 @@
     }
 
     .button-default {
-        @apply bg-skin-bg-contrast-light text-skin-text-light;
-    }
-
-    .button-default:not(:disabled):hover {
-        @apply bg-skin-bg-contrast text-skin-text;
+        @apply border border-skin-secondary text-skin-secondary;
     }
 
     .button-primary {
-        @apply bg-primary;
-        color: #fff;
+        @apply bg-primary text-skin-white;
     }
 
     .button-primary:not(:disabled):hover {
@@ -54,13 +46,11 @@
     }
 
     .button-primary-outlined:hover {
-        @apply bg-primary;
-        color: #fff;
+        @apply bg-primary text-skin-white;
     }
 
     .button-success {
-        @apply bg-success;
-        color: #fff;
+        @apply bg-success text-skin-white;
     }
 
     .button-success:not(:disabled):hover {
@@ -73,13 +63,11 @@
     }
 
     .button-success-outlined:hover {
-        @apply bg-success;
-        color: #fff;
+        @apply bg-success text-skin-white;
     }
 
     .button-danger {
-        @apply bg-danger;
-        color: #fff;
+        @apply bg-danger text-skin-white;
     }
 
     .button-danger:not(:disabled):hover {
@@ -92,27 +80,22 @@
     }
 
     .button-danger-outlined:hover {
-        @apply bg-danger;
-        color: #fff;
+        @apply bg-danger text-skin-white;
     }
 }
 
 @layer utilities {
     .full-height {
-        height: calc(100vh - 60px);
-        top: 59.5px;
+        height: calc(100vh - 61px);
+        top: 60.5px;
     }
     
     .transparent {
         background: transparent;
     }
 
-    .text-white {
-        color: #fff;
-    }
-
     .textfield {
-        @apply block w-full bg-skin-bg-contrast text-md text-skin-text border border-skin-bg-contrast p-sm rounded-md;
+        @apply block w-full bg-skin-main text-md text-skin-primary border border-primary-light p-sm rounded;
     }
 
     .modal-wrapper {

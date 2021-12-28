@@ -12,11 +12,13 @@ const Select = forwardRef(
         return (
             <select ref={ref} {...props}>
                 {!!props.placeholder && (
-                    <option className='bg-skin-bg'>{props.placeholder}</option>
+                    <option className='bg-skin-main'>
+                        {props.placeholder}
+                    </option>
                 )}
 
                 {items.map(({ label, value }) => (
-                    <option key={value} className='bg-skin-bg' value={value}>
+                    <option key={value} className='bg-skin-main' value={value}>
                         {label}
                     </option>
                 ))}

@@ -159,28 +159,20 @@ export default function EditProfile({
                     {...register('name')}
                 />
 
-                <label className='block mt-md' htmlFor='birthdate'>
-                    <span className='block text-skin-text text-md font-bold'>
-                        Birthdate
-                    </span>
-
-                    <input
-                        className='w-full bg-skin-bg-contrast text-skin-text text-md rounded-md p-sm border border-skin-bg-contrast cursor-pointer mt-xs appearance-none'
-                        id='birthdate'
-                        type='date'
-                        {...register('birth_date')}
-                    />
-
-                    {!!formState.errors.birth_date && (
-                        <p className='text-danger text-sm mt-xs mb-0'>
-                            {formState.errors.birth_date.message}
-                        </p>
-                    )}
-                </label>
+                <InputField
+                    containerClassName='mt-md'
+                    id='birthdate'
+                    type='date'
+                    label='Birth date'
+                    aria-label='Birth date field'
+                    error={formState.errors.birth_date?.message}
+                    autoFocus
+                    {...register('birth_date')}
+                />
 
                 <label className='block mt-md' htmlFor='bio'>
                     <span className='flex items-center'>
-                        <span className='text-skin-text text-md font-bold'>
+                        <span className='text-skin-primary text-md font-bold'>
                             Bio
                         </span>
                         <span className='text-primary text-md ml-auto'>
@@ -207,7 +199,7 @@ export default function EditProfile({
 
                 <button
                     type='submit'
-                    className='button button-primary w-full mt-lg'
+                    className='button button-primary w-full rounded-full py-sm mt-lg'
                     disabled={submitLoading || isSuccess}
                 >
                     Update my profile

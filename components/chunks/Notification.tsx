@@ -18,12 +18,12 @@ const Notification = forwardRef(
                 <figure
                     ref={ref}
                     className={clsx(
-                        'flex items-center text-skin-text border p-sm rounded-md cursor-pointer',
+                        'flex items-center p-md rounded cursor-pointer',
                         {
-                            'bg-skin-bg-contrast-light': props.is_read,
-                            'border-skin-bg-contrast': props.is_read,
-                            'bg-primary-lighter': !props.is_read,
-                            'border-primary': !props.is_read,
+                            'bg-primary-transparent': props.is_read,
+                            'text-skin-secondary': props.is_read,
+                            'bg-skin-main': !props.is_read,
+                            'text-skin-primary': !props.is_read,
                         },
                         className,
                     )}
@@ -37,7 +37,7 @@ const Notification = forwardRef(
                         />
                     ) : (
                         <MdAccountCircle
-                            className='block text-skin-text-light'
+                            className='block text-skin-secondary'
                             size={50}
                             viewBox='2 2 20 20'
                         />

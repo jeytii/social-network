@@ -30,26 +30,28 @@ export default function LeftSidebar() {
         asPath === `/${user?.username}` || route === '/edit-profile';
 
     return (
-        <aside className='w-[200px] sticky full-height left-[0px] bg-skin-bg-contrast-light md:w-auto'>
+        <aside className='w-[200px] sticky full-height left-[0px] bg-skin-main border-r border-primary-transparent md:w-auto'>
             <nav>
                 <Link href='/home'>
                     <span
                         className={clsx(
-                            'flex items-center no-underline text-md p-lg cursor-pointer hover:bg-skin-bg-contrast-light',
-                            route === '/home'
+                            'flex items-center no-underline text-md p-lg cursor-pointer',
+                            route === '/home' || route === '/post/[slug]'
                                 ? [activeClass, 'text-primary']
-                                : 'text-skin-text-light',
+                                : 'text-skin-secondary',
                         )}
                         aria-label='Home link'
                     >
-                        {route === '/home' ? (
+                        {route === '/home' || route === '/post/[slug]' ? (
                             <MdHome className='text-xl' />
                         ) : (
                             <MdOutlineHome className='text-xl' />
                         )}
 
                         {isPortrait && (
-                            <span className='ml-md font-bold'>Home</span>
+                            <span className='ml-md text-md font-bold'>
+                                Home
+                            </span>
                         )}
                     </span>
                 </Link>
@@ -57,7 +59,7 @@ export default function LeftSidebar() {
                 <Link href={`/${user?.username}`}>
                     <span
                         className={clsx(
-                            'flex items-center no-underline text-md text-skin-text-light p-lg cursor-pointer hover:bg-skin-bg-contrast-light',
+                            'flex items-center no-underline text-md text-skin-secondary p-lg cursor-pointer',
                             profileIsActive && activeClass,
                         )}
                         aria-label='Profile link'
@@ -75,10 +77,10 @@ export default function LeftSidebar() {
                         {isPortrait && (
                             <span
                                 className={clsx(
-                                    'ml-md font-bold',
+                                    'ml-md text-md font-bold',
                                     profileIsActive
                                         ? 'text-primary'
-                                        : 'text-skin-text-light',
+                                        : 'text-skin-secondary',
                                 )}
                             >
                                 Profile
@@ -90,10 +92,10 @@ export default function LeftSidebar() {
                 <Link href='/likes?s=posts'>
                     <span
                         className={clsx(
-                            'flex items-center no-underline text-md p-lg cursor-pointer hover:bg-skin-bg-contrast-light',
+                            'flex items-center no-underline text-md p-lg cursor-pointer',
                             route === '/likes'
                                 ? [activeClass, 'text-primary']
-                                : 'text-skin-text-light',
+                                : 'text-skin-secondary',
                         )}
                         aria-label='Likes link'
                     >
@@ -104,7 +106,9 @@ export default function LeftSidebar() {
                         )}
 
                         {isPortrait && (
-                            <span className='ml-md font-bold'>Likes</span>
+                            <span className='ml-md text-md font-bold'>
+                                Likes
+                            </span>
                         )}
                     </span>
                 </Link>
@@ -112,10 +116,10 @@ export default function LeftSidebar() {
                 <Link href='/bookmarks'>
                     <span
                         className={clsx(
-                            'flex items-center no-underline text-md p-lg cursor-pointer hover:bg-skin-bg-contrast-light',
+                            'flex items-center no-underline text-md p-lg cursor-pointer',
                             route === '/bookmarks'
                                 ? [activeClass, 'text-primary']
-                                : 'text-skin-text-light',
+                                : 'text-skin-secondary',
                         )}
                         aria-label='Bookmarks link'
                     >
@@ -126,7 +130,9 @@ export default function LeftSidebar() {
                         )}
 
                         {isPortrait && (
-                            <span className='ml-md font-bold'>Bookmarks</span>
+                            <span className='ml-md text-md font-bold'>
+                                Bookmarks
+                            </span>
                         )}
                     </span>
                 </Link>
@@ -134,10 +140,10 @@ export default function LeftSidebar() {
                 <Link href='/settings'>
                     <span
                         className={clsx(
-                            'flex items-center no-underline text-md p-lg cursor-pointer hover:bg-skin-bg-contrast-light',
+                            'flex items-center no-underline text-md p-lg cursor-pointer',
                             route === '/settings'
                                 ? [activeClass, 'text-primary']
-                                : 'text-skin-text-light',
+                                : 'text-skin-secondary',
                         )}
                         aria-label='Settings link'
                     >
@@ -148,7 +154,9 @@ export default function LeftSidebar() {
                         )}
 
                         {isPortrait && (
-                            <span className='ml-md font-bold'>Settings</span>
+                            <span className='ml-md text-md font-bold'>
+                                Settings
+                            </span>
                         )}
                     </span>
                 </Link>

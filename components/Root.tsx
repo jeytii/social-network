@@ -37,7 +37,7 @@ export default function Root({ isPrivate, children, ...props }: Props) {
         <>
             <div
                 ref={bar}
-                className='fixed top-[0px] left-[0px] w-[0px] h-[3px] bg-primary z-50'
+                className='fixed top-[0px] left-[0px] w-[0px] h-[4px] bg-primary z-50'
             />
 
             {isPrivate ? (

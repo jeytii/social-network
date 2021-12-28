@@ -14,7 +14,7 @@ const InputField = forwardRef(
     ) => (
         <section className={containerClassName}>
             <label
-                className='text-skin-text text-md font-bold'
+                className='text-skin-primary text-md font-bold'
                 htmlFor={props.id}
             >
                 {label}
@@ -23,9 +23,9 @@ const InputField = forwardRef(
             <input
                 ref={ref}
                 className={clsx(
-                    'w-full bg-skin-bg-contrast text-md text-skin-text border p-sm rounded-md mt-xs disabled:opacity-50 disabled:cursor-not-allowed',
+                    'w-full bg-skin-main text-md text-skin-primary border p-sm rounded mt-xs disabled:opacity-50 disabled:cursor-not-allowed',
                     className,
-                    error ? 'border-danger' : 'border-skin-bg-contrast',
+                    error ? 'border-danger-light' : 'border-primary-light',
                 )}
                 {...props}
             />

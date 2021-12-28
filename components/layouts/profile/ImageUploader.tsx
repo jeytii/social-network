@@ -24,7 +24,7 @@ export default function ImageUploader({
     return (
         <section>
             {loading ? (
-                <Spinner className='flex items-center justify-center w-[100px] h-[100px] rounded-full bg-skin-bg-contrast m-auto' />
+                <Spinner className='flex items-center justify-center w-[100px] h-[100px] rounded-full m-auto' />
             ) : (
                 <div className='block w-[100px] rounded-full m-auto'>
                     {src ? (
@@ -37,7 +37,7 @@ export default function ImageUploader({
                         />
                     ) : (
                         <MdAccountCircle
-                            className='text-skin-text-light block w-full h-full'
+                            className='text-skin-secondary block w-full h-full'
                             viewBox='2 2 20 20'
                         />
                     )}
@@ -73,7 +73,7 @@ export default function ImageUploader({
             <p
                 className={clsx(
                     'text-sm text-center mt-sm',
-                    hasError ? 'text-danger' : 'text-skin-text-light',
+                    hasError ? 'text-danger' : 'text-skin-secondary',
                 )}
             >
                 Must be between <b>200x200</b> and <b>800x800</b>.

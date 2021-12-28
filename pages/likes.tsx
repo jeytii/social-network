@@ -16,8 +16,8 @@ const Comments = dynamic(() => import('components/layouts/Comments'), {
 
 const isActive = (condition: boolean) =>
     condition
-        ? 'relative text-primary after:absolute after:w-full after:h-[3px] after:bg-primary after:left-[0px] after:bottom-[0px]'
-        : 'text-skin-text-light';
+        ? 'bg-skin-main text-primary-dark font-bold rounded-full'
+        : 'text-skin-secondary hover:text-primary-dark';
 
 export default function Likes({ invalid }: { invalid: boolean | undefined }) {
     const { query } = useRouter();
@@ -25,7 +25,7 @@ export default function Likes({ invalid }: { invalid: boolean | undefined }) {
     if (invalid) {
         return (
             <section className='p-lg text-center sm:px-md'>
-                <h1 className='text-skin-text-light opacity-80'>
+                <h1 className='text-skin-secondary opacity-80'>
                     Oops! It looks like you&#39;re trying to redirect to an
                     unknown page.
                 </h1>
@@ -35,11 +35,11 @@ export default function Likes({ invalid }: { invalid: boolean | undefined }) {
 
     return (
         <section>
-            <nav className='flex'>
+            <nav className='flex border-b border-primary-transparent p-sm'>
                 <Link href='?s=posts' shallow>
                     <span
                         className={clsx(
-                            'flex-1 text-md text-center py-sm cursor-pointer hover:bg-skin-bg-contrast',
+                            'flex-1 text-md text-center py-sm cursor-pointer',
                             isActive(query.s === 'posts'),
                         )}
                     >
@@ -50,7 +50,7 @@ export default function Likes({ invalid }: { invalid: boolean | undefined }) {
                 <Link href='?s=comments' shallow>
                     <span
                         className={clsx(
-                            'flex-1 text-md text-center py-sm cursor-pointer hover:bg-skin-bg-contrast',
+                            'flex-1 text-md text-center py-sm cursor-pointer',
                             isActive(query.s === 'comments'),
                         )}
                     >

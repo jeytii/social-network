@@ -67,7 +67,7 @@ function Comment(
     return (
         <article
             ref={ref}
-            className={clsx('bg-skin-bg-contrast rounded-md p-md', className)}
+            className={clsx('bg-skin-main rounded p-md', className)}
             {...props}
         >
             <div className={is_own_comment ? 'flex items-center' : 'block'}>
@@ -83,9 +83,9 @@ function Comment(
                 )}
             </div>
 
-            <p className='paragraph-md clamp text-skin-text my-sm'>{body}</p>
+            <p className='paragraph-md clamp text-skin-primary my-sm'>{body}</p>
 
-            <span className='text-skin-text-light text-sm'>
+            <span className='text-skin-secondary text-sm'>
                 {timestamp} {is_edited && '(edited)'}
             </span>
 

@@ -38,17 +38,17 @@ const BasicInfo = forwardRef(
                     />
                 ) : (
                     <MdAccountCircle
-                        className='text-skin-text-light'
+                        className='text-skin-secondary'
                         size={imageSize}
                         viewBox='2 2 20 20'
                     />
                 )}
 
                 <figcaption className='flex-1 grid px-sm'>
-                    <span className='block text-skin-text font-bold text-sm truncate xs:text-xs'>
+                    <span className='block text-skin-primary font-bold text-sm truncate xs:text-xs'>
                         {name}
                     </span>
-                    <span className='block text-skin-text-light text-sm truncate xs:text-xs'>
+                    <span className='block text-skin-secondary text-sm truncate xs:text-xs'>
                         @{username}
                     </span>
                 </figcaption>

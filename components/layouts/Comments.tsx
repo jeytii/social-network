@@ -41,7 +41,7 @@ export default function Comments({
     if (isSuccess && !data.pages.length) {
         return (
             <section className='p-lg'>
-                <h1 className='text-md font-bold text-skin-text-light opacity-50 text-center'>
+                <h1 className='text-md font-bold text-skin-secondary opacity-50 text-center'>
                     No comment to show.
                 </h1>
             </section>
@@ -67,7 +67,7 @@ export default function Comments({
                         <Comment
                             key={comment.slug}
                             ref={i === data.pages.length - 1 ? ref : null}
-                            className={i ? 'mt-lg' : ''}
+                            className={clsx(!!i && 'mt-lg')}
                             {...comment}
                         />
                     ),

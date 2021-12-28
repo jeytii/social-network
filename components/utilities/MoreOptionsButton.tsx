@@ -39,15 +39,10 @@ export default function MoreOptionsButton(props: ModifyItem) {
         <div className='relative ml-auto'>
             <button
                 type='button'
-                className={clsx(
-                    'block rounded-full p-xs',
-                    showOptions
-                        ? 'bg-skin-bg-contrast-light'
-                        : 'hover:bg-skin-bg-contrast-light',
-                )}
+                className={clsx('block rounded-full p-xs')}
                 onClick={toggleOptions}
             >
-                <MdMoreHoriz className='text-skin-text-light text-lg' />
+                <MdMoreHoriz className='text-skin-secondary text-lg' />
             </button>
 
             {showOptions && (

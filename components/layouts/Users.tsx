@@ -50,7 +50,7 @@ export default function Users({ className, url, enabled, ...props }: Props) {
     if (isSuccess && !data?.pages.length) {
         return (
             <section className='p-lg'>
-                <h1 className='text-md font-bold text-skin-text-light opacity-50 text-center'>
+                <h1 className='text-md font-bold text-skin-secondary opacity-50 text-center'>
                     No person to show.
                 </h1>
             </section>
@@ -65,7 +65,7 @@ export default function Users({ className, url, enabled, ...props }: Props) {
                         key={user.slug}
                         ref={i === data.pages.length - 1 ? ref : null}
                         className={clsx(
-                            'bg-skin-bg-contrast-light border border-skin-bg-contrast p-sm hover:bg-skin-bg-contrast',
+                            'bg-skin-main border border-primary-light p-sm',
                             i ? 'mt-lg' : 'mt-auto',
                         )}
                         imageSize={50}

@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { AxiosError, AxiosResponse } from 'axios';
 import Cookies from 'js-cookie';
 import InputField from 'components/utilities/InputField';
+import Logo from 'components/Logo';
 import { axiosClient, axiosServer } from 'config/axios';
 
 interface RequestBody {
@@ -65,13 +66,19 @@ export default function ResetPassword({ token }: { token: string }) {
     }
 
     return (
-        <div className='py-md'>
-            <main className='max-w-[480px] m-auto rounded-md bg-skin-bg-contrast p-lg'>
-                <h1 className='text-lg text-skin-text-light text-center'>
-                    Reset your password
+        <main className='max-w-[360px] bg-primary-light rounded mx-auto mt-[40px]'>
+            <div className='bg-skin-main p-lg'>
+                <div className='flex items-center justify-center'>
+                    <a href='/' className='no-underline'>
+                        <Logo />
+                    </a>
+                </div>
+
+                <h1 className='text-md text-skin-secondary font-bold text-center mt-xs'>
+                    Reset password
                 </h1>
 
-                <form className='mt-sm' onSubmit={submit}>
+                <form className='mt-lg' onSubmit={submit}>
                     <InputField
                         id='email'
                         type='email'
@@ -101,14 +108,14 @@ export default function ResetPassword({ token }: { token: string }) {
 
                     <button
                         type='submit'
-                        className='button button-primary w-full py-sm mt-lg'
+                        className='button button-primary w-full rounded-full py-sm mt-lg'
                         disabled={isLoading}
                     >
-                        Reset my password
+                        Change my password
                     </button>
                 </form>
-            </main>
-        </div>
+            </div>
+        </main>
     );
 }
 

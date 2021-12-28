@@ -112,7 +112,7 @@ export default function CommentBox({ slug }: { slug: string }) {
         <section className='flex gap-sm items-start mt-lg'>
             <form className='flex-1'>
                 <textarea
-                    className='block bg-skin-bg-contrast text-skin-text text-md w-full py-sm px-md border border-skin-bg-contrast rounded-3xl resize-none overflow-hidden disabled:opacity-7 disabled:text-skin-text-light disabled:cursor-not-allowed'
+                    className='block bg-skin-main text-skin-primary text-md w-full py-sm px-md border border-primary-light rounded-full resize-none overflow-hidden disabled:opacity-7 disabled:text-skin-secondary disabled:cursor-not-allowed'
                     placeholder='Write a comment'
                     rows={1}
                     aria-label='Comment box'
@@ -124,7 +124,7 @@ export default function CommentBox({ slug }: { slug: string }) {
                 <input className='hidden' type='submit' />
             </form>
 
-            <span className='w-[44px] h-[44px] flex items-center justify-center bg-skin-bg-contrast text-primary text-sm px-sm rounded-full'>
+            <span className='w-[41px] h-[41px] flex items-center justify-center bg-skin-main text-primary-dark text-sm rounded-full'>
                 {charactersLeft}
             </span>
         </section>

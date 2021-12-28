@@ -1,73 +1,56 @@
-import { useEffect } from 'react';
+import Link from 'next/link';
 import { useQuery } from 'react-query';
 import User from 'components/chunks/User';
 import Spinner from 'components/vectors/Spinner';
 import type { User as UserType } from 'types/user';
 
 export default function RandomSuggestions() {
-    const { data, refetch, isLoading, isRefetching, isSuccess } = useQuery<
+    const { data, isLoading, isSuccess } = useQuery<
         unknown,
         unknown,
         UserType[]
     >('suggestions', {
-        enabled: false,
         meta: {
             url: '/api/users/random',
             returnKey: 'data',
         },
     });
 
-    function refresh() {
-        refetch();
-    }
-
-    useEffect(() => {
-        refetch();
-    }, []);
-
-    if (isLoading || isRefetching) {
-        return (
-            <aside className='w-[280px] sticky full-height left-[0px] bg-skin-bg-contrast-light p-lg'>
-                <Spinner />
-            </aside>
-        );
+    if (isLoading) {
+        return <Spinner />;
     }
 
     if (isSuccess && !data?.length) {
         return (
-            <aside className='w-[280px] sticky full-height left-[0px] bg-skin-bg-contrast-light p-lg'>
-                <p className='text-sm text-skin-text-light text-center'>
-                    No suggestions left
-                </p>
-            </aside>
+            <p className='text-sm text-skin-secondary text-center'>
+                No suggestions to show.
+            </p>
         );
     }
 
     return (
-        <aside className='w-[280px] sticky full-height left-[0px] bg-skin-bg-contrast-light p-lg'>
+        <>
             <header className='flex items-center'>
-                <h3 className='text-skin-text-light text-md font-bold'>
+                <h3 className='text-skin-secondary text-md font-bold'>
                     Search people
                 </h3>
 
-                <button
-                    className='text-primary text-sm cursor-pointer ml-auto'
-                    type='button'
-                    onClick={refresh}
-                >
-                    Refresh
-                </button>
+                <Link href='/search'>
+                    <span className='text-primary text-sm cursor-pointer ml-auto'>
+                        Explore
+                    </span>
+                </Link>
             </header>
 
             <section>
                 {data?.map(user => (
                     <User
                         key={user.slug}
-                        className='bg-primary-lighter p-sm mt-sm'
+                        className='bg-skin-main border border-primary-transparent p-sm mt-sm'
                         {...user}
                     />
                 ))}
             </section>
-        </aside>
+        </>
     );
 }

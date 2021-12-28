@@ -74,7 +74,7 @@ export default function Notifications() {
     if (isSuccess && !data?.pages.length) {
         return (
             <section className='p-lg'>
-                <h1 className='text-md font-bold text-skin-text-light opacity-50 text-center'>
+                <h1 className='text-md font-bold text-skin-secondary opacity-50 text-center'>
                     No notification to show.
                 </h1>
             </section>
@@ -84,10 +84,10 @@ export default function Notifications() {
     return (
         <section className='px-lg pt-sm pb-lg sm:px-md'>
             <div className='flex items-center'>
-                <h1 className='text-skin-text font-semibold'>Notifications</h1>
+                <h1 className='text-skin-primary font-bold'>Notifications</h1>
 
                 <button
-                    className='p-sm rounded-full ml-auto hover:bg-primary-lighter'
+                    className='p-sm rounded-full ml-auto hover:bg-skin-main'
                     type='button'
                     title='Mark all as read'
                     onClick={readAll}

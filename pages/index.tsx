@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { AxiosError } from 'axios';
 import Cookies from 'js-cookie';
 import InputField from 'components/utilities/InputField';
+import Logo from 'components/Logo';
 import { axiosClient, axiosServer } from 'config/axios';
 import type { User } from 'types/user';
 
@@ -122,31 +123,38 @@ export default function Index() {
     }
 
     return (
-        <div className='py-md'>
-            <main className='max-w-[420px] m-auto rounded-md bg-skin-bg-contrast p-lg'>
-                <h1 className='text-lg text-skin-text-light text-center'>
+        <main className='max-w-[360px] bg-primary-light mx-auto mt-[40px] rounded'>
+            <div className='bg-skin-main p-lg'>
+                <div className='flex items-center justify-center'>
+                    <a href='/' className='no-underline'>
+                        <Logo />
+                    </a>
+                </div>
+
+                <h1 className='text-md text-skin-secondary font-bold text-center mt-xs'>
                     Sign in to your account
                 </h1>
 
                 {!!codeResent && (
-                    <p className='bg-success-lighter text-md text-success p-md border-success rounded-md mt-lg'>
-                        A verification code has successfully sent to you.
+                    <p className='bg-success-transparent paragraph-sm text-success-dark p-sm border border-success rounded mt-lg'>
+                        A verification code has been successfully sent to your
+                        email address.
                     </p>
                 )}
 
                 {!!alertError && (
-                    <p className='bg-danger-lighter text-md text-danger p-md border-danger rounded-md mt-lg'>
+                    <p className='bg-danger-transparent text-danger-dark text-sm p-sm border border-danger rounded mt-lg'>
                         Incorrect username or password.
                     </p>
                 )}
 
                 {!!unauthorizedError && (
-                    <div className='bg-danger-lighter text-danger p-md border-danger rounded-md mt-lg'>
-                        <p className='text-md ml-sm'>
+                    <div className='bg-danger-transparent text-danger-dark p-sm border border-danger rounded mt-lg'>
+                        <p className='paragraph-sm'>
                             Please verify your account first before logging in.
                             If you did not receive a verification code,
                             <button
-                                className='underline cursor-pointer hover:text-danger-dark disabled:cursor-not-allowed disabled:text-danger'
+                                className='underline cursor-pointer  disabled:cursor-not-allowed disabled:text-danger-light'
                                 type='button'
                                 disabled={loading}
                                 onClick={resendVerificationCode}
@@ -158,7 +166,7 @@ export default function Index() {
                     </div>
                 )}
 
-                <form className='py-sm' onSubmit={submit}>
+                <form className='py-lg' onSubmit={submit}>
                     <InputField
                         type='text'
                         label='Username or email address'
@@ -168,7 +176,7 @@ export default function Index() {
                     />
 
                     <InputField
-                        containerClassName='mt-md'
+                        containerClassName='mt-lg'
                         type='password'
                         label='Password'
                         error={errors.password?.message}
@@ -178,7 +186,7 @@ export default function Index() {
 
                     <button
                         type='submit'
-                        className='button button-primary w-full py-sm mt-lg'
+                        className='button button-primary w-full rounded-full py-sm mt-lg'
                         disabled={loading}
                     >
                         Sign in
@@ -187,7 +195,7 @@ export default function Index() {
 
                 <div className='text-center'>
                     <Link href='/register'>
-                        <span className='inline-block text-primary text-md no-underline cursor-pointer'>
+                        <span className='inline-block text-primary-dark text-md no-underline cursor-pointer hover:underline'>
                             Create an account
                         </span>
                     </Link>
@@ -195,13 +203,13 @@ export default function Index() {
 
                 <div className='text-center mt-xs'>
                     <Link href='/forgot-password'>
-                        <span className='inline-block text-skin-text-light text-md no-underline cursor-pointer'>
+                        <span className='inline-block text-skin-secondary text-md no-underline cursor-pointer hover:underline'>
                             Forgot password
                         </span>
                     </Link>
                 </div>
-            </main>
-        </div>
+            </div>
+        </main>
     );
 }
 

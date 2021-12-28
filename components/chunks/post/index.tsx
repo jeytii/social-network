@@ -88,10 +88,7 @@ function Post(
     return (
         <article
             ref={ref}
-            className={clsx(
-                'bg-skin-bg-contrast-light border border-skin-bg-contrast rounded-md hover:bg-skin-bg-contrast',
-                className,
-            )}
+            className={clsx('bg-skin-main rounded', className)}
             {...props}
         >
             <section className='p-md'>
@@ -108,16 +105,16 @@ function Post(
                     )}
                 </div>
 
-                <p className='paragraph-md text-skin-text my-sm clamp'>
+                <p className='paragraph-md text-skin-primary my-sm clamp'>
                     {body}
                 </p>
 
-                <span className='text-skin-text-light text-sm xs:text-xs'>
+                <span className='text-skin-secondary text-sm xs:text-xs'>
                     {timestamp} {is_edited && '(edited)'}
                 </span>
             </section>
 
-            <section className='flex bg-skin-bg-contrast-light border-t border-skin-bg-contrast'>
+            <section className='flex border-t border-primary-transparent rounded-b'>
                 <LikeButton
                     className='flex-1 flex items-center justify-center text-center py-sm'
                     route={`/api/posts/${slug}`}
@@ -127,10 +124,10 @@ function Post(
                 />
 
                 <button
-                    className='flex-1 flex items-center justify-center text-skin-text-light text-center py-sm hover:text-skin-text'
+                    className='flex-1 flex items-center justify-center text-skin-secondary text-center py-sm hover:text-skin-primary'
                     type='button'
                 >
-                    <MdOutlineChatBubbleOutline className='text-lg sm:text-md' />
+                    <MdOutlineChatBubbleOutline size={15} />
                     <span className='text-sm ml-sm'>{comments_count}</span>
                 </button>
 
