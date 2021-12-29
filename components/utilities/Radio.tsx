@@ -10,11 +10,11 @@ interface Props extends InputHTMLAttributes<HTMLInputElement> {
     label: string;
 }
 
-export default forwardRef(
-    (
-        { containerClassName, label, ...props }: Props,
-        ref: ForwardedRef<HTMLInputElement>,
-    ) => (
+function Radio(
+    { containerClassName, label, ...props }: Props,
+    ref: ForwardedRef<HTMLInputElement>,
+) {
+    return (
         <label
             className={clsx(
                 containerClassName,
@@ -39,5 +39,7 @@ export default forwardRef(
             <input ref={ref} className='hidden' type='radio' {...props} />
             <span className='text-skin-primary text-md ml-xs'>{label}</span>
         </label>
-    ),
-);
+    );
+}
+
+export default forwardRef(Radio);
