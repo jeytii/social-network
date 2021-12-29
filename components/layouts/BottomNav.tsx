@@ -4,8 +4,8 @@ import Image from 'next/image';
 import { useQueryClient } from 'react-query';
 import {
     MdOutlineHome,
-    MdOutlineGroups,
-    MdOutlineNotifications,
+    MdOutlineThumbUp,
+    MdOutlineBookmarks,
     MdAccountCircle,
     MdOutlineSettings,
 } from 'react-icons/md';
@@ -52,25 +52,25 @@ export default function BottomNav() {
                     </span>
                 </Link>
 
-                <Link href='/notifications'>
+                <Link href='/likes?s=posts'>
                     <span
                         className={clsx(
                             'flex-1 py-md text-skin-secondary cursor-pointer',
-                            route === '/notifications' && activeClass,
+                            route === '/likes' && activeClass,
                         )}
                     >
-                        <MdOutlineNotifications className='m-auto' size={20} />
+                        <MdOutlineThumbUp className='m-auto' size={20} />
                     </span>
                 </Link>
 
-                <Link href='/search'>
+                <Link href='/bookmarks'>
                     <span
                         className={clsx(
                             'flex-1 py-md text-skin-secondary cursor-pointer',
-                            route === '/search' && activeClass,
+                            route === '/bookmarks' && activeClass,
                         )}
                     >
-                        <MdOutlineGroups className='m-auto' size={20} />
+                        <MdOutlineBookmarks className='m-auto' size={20} />
                     </span>
                 </Link>
 
