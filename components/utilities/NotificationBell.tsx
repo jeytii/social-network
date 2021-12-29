@@ -1,9 +1,10 @@
 import Link from 'next/link';
 import { useEffect } from 'react';
-import { useQueryClient } from 'react-query';
+import { InfiniteData, useQueryClient } from 'react-query';
 import { MdOutlineNotifications } from 'react-icons/md';
 import Echo from 'laravel-echo';
 import { axiosClient } from 'config/axios';
+import type { NotificationPage } from 'types/page';
 import type { User } from 'types/user';
 import type { Notification } from 'types/notification';
 import 'pusher-js';
@@ -31,13 +32,10 @@ const authorizer = channel => ({
     },
 });
 
-export default function NotificationBell({
-    count,
-}: {
-    count: number | undefined;
-}) {
+export default function NotificationBell() {
     const queryClient = useQueryClient();
     const user = queryClient.getQueryData<User>('user');
+    const count = queryClient.getQueryData<number>('notificationsCount');
 
     useEffect(() => {
         const echo = new Echo({
@@ -54,6 +52,16 @@ export default function NotificationBell({
             echo.private(`notify.user.${user.slug}`).notification(
                 (data: NotificationData) => {
                     queryClient.setQueryData('notificationsCount', data.count);
+
+                    if (!queryClient.getQueryData('notifications')) {
+                        queryClient.setQueryData<
+                            InfiniteData<NotificationPage> | undefined
+                        >('notifications', current => {
+                            current?.pages[0].items.unshift(data.data);
+
+                            return current;
+                        });
+                    }
                 },
             );
         }

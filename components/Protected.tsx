@@ -33,29 +33,28 @@ export default function Protected({
     const rendered = useRendered();
     const queryClient = useQueryClient();
 
-    const [{ data: editItem }, { data: deleteItem }, { data: notifsCount }] =
-        useQueries([
-            {
-                queryKey: 'edit',
-                queryFn: () => queryClient.getQueryData<ModifyItem>('edit'),
-            },
-            {
-                queryKey: 'delete',
-                queryFn: () => queryClient.getQueryData<ModifyItem>('delete'),
-            },
-            {
-                queryKey: 'notificationsCount',
-                initialData: notificationsCount,
-            },
-            {
-                queryKey: 'user',
-                queryFn: async () => {
-                    const { data } = await axiosClient().get('/api/users/auth');
+    const [{ data: editItem }, { data: deleteItem }] = useQueries([
+        {
+            queryKey: 'edit',
+            queryFn: () => queryClient.getQueryData<ModifyItem>('edit'),
+        },
+        {
+            queryKey: 'delete',
+            queryFn: () => queryClient.getQueryData<ModifyItem>('delete'),
+        },
+        {
+            queryKey: 'notificationsCount',
+            initialData: notificationsCount,
+        },
+        {
+            queryKey: 'user',
+            queryFn: async () => {
+                const { data } = await axiosClient().get('/api/users/auth');
 
-                    return data.data;
-                },
+                return data.data;
             },
-        ]);
+        },
+    ]);
 
     return (
         <main className='bg-primary-dark h-screen overflow-auto'>
@@ -77,7 +76,7 @@ export default function Protected({
 
                         <Searchbar />
 
-                        <NotificationBell count={notifsCount as number} />
+                        <NotificationBell />
                     </div>
                 </header>
 
