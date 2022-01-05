@@ -9,7 +9,7 @@ import type { PostPage } from 'types/page';
 import type { Post as PostType } from 'types/post';
 
 interface Props extends UseInfiniteQueryOptions<PostPage, unknown, PostType> {
-    className: string;
+    className?: string;
     queryKey: QueryKey;
     url: string;
 }
@@ -58,3 +58,7 @@ export default function Posts({ className, url, ...props }: Props) {
         </section>
     );
 }
+
+Posts.defaultProps = {
+    className: undefined,
+};

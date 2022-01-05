@@ -52,7 +52,7 @@ export default function ColorSelect() {
 
             <Listbox value={color} onChange={setColor}>
                 <div className='relative ml-auto'>
-                    <Listbox.Button className='relative py-xs px-md w-[140px] text-left bg-primary-transparent border border-primary-transparent rounded-full cursor-pointer'>
+                    <Listbox.Button className='relative py-xs px-md w-[120px] text-left bg-primary-transparent border border-primary-transparent rounded-full cursor-pointer'>
                         <span className='text-md text-skin-primary'>
                             {color.name}
                         </span>
@@ -65,7 +65,7 @@ export default function ColorSelect() {
                         </span>
                     </Listbox.Button>
 
-                    <Listbox.Options className='absolute right-[0px] top-[100%]  w-full mt-xs overflow-auto bg-skin-white rounded ring-1 ring-black ring-opacity-5 z-10 sm:text-sm'>
+                    <Listbox.Options className='absolute right-[0px] top-[100%]  w-full mt-xs overflow-auto bg-skin rounded ring-1 ring-black ring-opacity-5 z-10 sm:text-sm'>
                         {colors.map(c => (
                             <Listbox.Option key={c.key} value={c}>
                                 {({ selected }) => (

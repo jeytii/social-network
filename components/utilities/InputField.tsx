@@ -25,7 +25,7 @@ const InputField = forwardRef(
                 className={clsx(
                     'w-full bg-skin-main text-md text-skin-primary border p-sm rounded mt-xs disabled:opacity-50 disabled:cursor-not-allowed',
                     className,
-                    error ? 'border-danger-light' : 'border-primary-light',
+                    error ? 'border-danger' : 'border-skin-main',
                 )}
                 {...props}
             />

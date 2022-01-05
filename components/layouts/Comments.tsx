@@ -9,7 +9,7 @@ import type { Comment as CommentType } from 'types/comment';
 
 interface Props
     extends UseInfiniteQueryOptions<CommentPage, unknown, CommentType> {
-    className: string;
+    className?: string;
     queryKey: QueryKey;
     url: string;
     slug?: string;
@@ -80,6 +80,7 @@ export default function Comments({
 }
 
 Comments.defaultProps = {
+    className: undefined,
     slug: undefined,
     hasLink: false,
 };

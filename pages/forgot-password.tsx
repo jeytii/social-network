@@ -78,52 +78,48 @@ export default function ForgotPassword() {
     }
 
     return (
-        <main className='max-w-[360px] bg-primary-light rounded mx-auto mt-[40px]'>
-            <div className='bg-skin-main p-lg'>
-                <div className='flex items-center justify-center'>
-                    <a href='/' className='no-underline'>
-                        <Logo />
-                    </a>
-                </div>
-
-                <h1 className='text-md text-skin-secondary font-bold text-center mt-xs'>
-                    Forgot password
-                </h1>
-
-                {alertNotification && (
-                    <div
-                        className={clsx(
-                            'border rounded p-sm mt-sm',
-                            alertNotification.status === 200
-                                ? 'bg-success-transparent text-success border-success-transparent'
-                                : 'bg-danger-transparent text-danger border-danger-transparent',
-                        )}
-                    >
-                        <p className='text-md m-0'>
-                            {alertNotification.message}
-                        </p>
-                    </div>
-                )}
-
-                <form className='mt-sm' onSubmit={submit}>
-                    <InputField
-                        id='email'
-                        type='email'
-                        label='Email address'
-                        error={formState.errors.email?.message}
-                        disabled={isLoading}
-                        {...register('email')}
-                    />
-
-                    <button
-                        type='submit'
-                        className='button button-primary w-full rounded-full py-sm mt-lg'
-                        disabled={isLoading}
-                    >
-                        Send password reset request
-                    </button>
-                </form>
+        <main className='max-w-[360px] bg-skin-main border border-skin-main rounded p-lg mx-auto mt-[40px]'>
+            <div className='flex items-center justify-center'>
+                <a href='/' className='no-underline'>
+                    <Logo />
+                </a>
             </div>
+
+            <h1 className='text-md text-skin-secondary font-bold text-center mt-xs'>
+                Forgot password
+            </h1>
+
+            {alertNotification && (
+                <div
+                    className={clsx(
+                        'border rounded p-sm mt-sm',
+                        alertNotification.status === 200
+                            ? 'bg-success-transparent text-success border-success-transparent'
+                            : 'bg-danger-transparent text-danger border-danger-transparent',
+                    )}
+                >
+                    <p className='text-md m-0'>{alertNotification.message}</p>
+                </div>
+            )}
+
+            <form className='mt-sm' onSubmit={submit}>
+                <InputField
+                    id='email'
+                    type='email'
+                    label='Email address'
+                    error={formState.errors.email?.message}
+                    disabled={isLoading}
+                    {...register('email')}
+                />
+
+                <button
+                    type='submit'
+                    className='button button-primary w-full rounded-full py-sm mt-lg'
+                    disabled={isLoading}
+                >
+                    Send password reset request
+                </button>
+            </form>
         </main>
     );
 }

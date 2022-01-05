@@ -57,14 +57,14 @@ export default function Protected({
     ]);
 
     return (
-        <main className='bg-primary-dark h-screen overflow-auto'>
+        <main className='h-screen overflow-auto'>
             <Head>
                 <title>{title}</title>
             </Head>
 
-            <div className='bg-skin-main h-full overflow-auto'>
+            <div className='h-full overflow-auto sm:flex sm:flex-col'>
                 {/* HEADER */}
-                <header className='sticky top-[0px] bg-skin-main border-b border-primary-transparent z-10'>
+                <header className='sticky top-[0px] bg-skin border-b border-skin-main z-10 drop-shadow'>
                     <div className='max-w-[1366px] flex items-center py-sm px-lg mx-auto sm:px-md sm:gap-md'>
                         <a
                             className='no-underline'
@@ -81,7 +81,7 @@ export default function Protected({
                 </header>
 
                 {/* MAIN */}
-                <section className='max-w-[1366px] flex items-start mx-auto'>
+                <section className='max-w-[1366px] flex items-start mx-auto sm:flex-1 sm:mx-[0px]'>
                     {!isMobile && <LeftSidebar />}
 
                     <section className='flex-1'>

@@ -63,40 +63,36 @@ export default function Verification() {
     }
 
     return (
-        <main className='max-w-[360px] rounded bg-primary-light mx-auto mt-[40px]'>
-            <div className='bg-skin-main p-lg'>
-                <div className='flex items-center justify-center'>
-                    <a href='/' className='no-underline'>
-                        <Logo />
-                    </a>
-                </div>
-
-                <h1 className='text-md text-skin-secondary font-bold text-center mt-xs'>
-                    Verify your account
-                </h1>
-
-                <form className='mt-sm' onSubmit={submit}>
-                    <InputField
-                        id='code'
-                        type='number'
-                        label='6-digit verification code'
-                        error={formState.errors.code?.message}
-                        disabled={isLoading}
-                        {...register('code', {
-                            valueAsNumber: true,
-                        })}
-                    />
-                    <button
-                        type='submit'
-                        className='button button-primary w-full rounded-full py-sm mt-lg'
-                        disabled={
-                            Number.isNaN(code) || code === '' || isLoading
-                        }
-                    >
-                        Verify my account
-                    </button>
-                </form>
+        <main className='max-w-[360px] bg-skin-main border border-skin-main rounded p-lg mx-auto mt-[40px]'>
+            <div className='flex items-center justify-center'>
+                <a href='/' className='no-underline'>
+                    <Logo />
+                </a>
             </div>
+
+            <h1 className='text-md text-skin-secondary font-bold text-center mt-xs'>
+                Verify your account
+            </h1>
+
+            <form className='mt-sm' onSubmit={submit}>
+                <InputField
+                    id='code'
+                    type='number'
+                    label='6-digit verification code'
+                    error={formState.errors.code?.message}
+                    disabled={isLoading}
+                    {...register('code', {
+                        valueAsNumber: true,
+                    })}
+                />
+                <button
+                    type='submit'
+                    className='button button-primary w-full rounded-full py-sm mt-lg'
+                    disabled={Number.isNaN(code) || code === '' || isLoading}
+                >
+                    Verify my account
+                </button>
+            </form>
         </main>
     );
 }

@@ -24,7 +24,7 @@ export default function Modal({ isOpen, closeEvent, children }: Props) {
                     &#8203;
                 </span>
 
-                <div className='inline-block w-full overflow-hidden text-left align-middle transition-all transform bg-skin-white shadow-xl rounded border border-primary-transparent'>
+                <div className='inline-block w-full overflow-hidden text-left align-middle transition-all transform bg-skin shadow-xl rounded border border-primary-transparent'>
                     {children}
                 </div>
             </div>

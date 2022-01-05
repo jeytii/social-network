@@ -67,7 +67,7 @@ export default function Profile({ invalid, user }: Props) {
         <div className='p-lg sm:px-md'>
             <ProfileHeadline {...userData} />
 
-            <nav className='flex rounded mt-lg'>
+            <nav className='flex rounded py-lg'>
                 <Link href={`/${username}`} shallow>
                     <span
                         className={clsx(
@@ -125,7 +125,6 @@ export default function Profile({ invalid, user }: Props) {
 
             {!section && (
                 <Posts
-                    className='mt-lg'
                     queryKey={['profile.posts', userData.slug]}
                     url={`/api/profile/${userData.username}/posts`}
                     cacheTime={1000 * 60 * 2}
@@ -136,7 +135,6 @@ export default function Profile({ invalid, user }: Props) {
 
             {section === 'comments' && (
                 <Comments
-                    className='p-lg sm:px-md'
                     queryKey={['profile.comments', userData.slug]}
                     url={`/api/profile/${userData.username}/comments`}
                     cacheTime={1000 * 60 * 2}
@@ -148,7 +146,6 @@ export default function Profile({ invalid, user }: Props) {
 
             {section === 'followers' && (
                 <Users
-                    className='p-lg sm:px-md'
                     queryKey={['profile.followers', userData.slug]}
                     url={`/api/profile/${userData.username}/followers`}
                     cacheTime={1000 * 60 * 2}
@@ -159,7 +156,6 @@ export default function Profile({ invalid, user }: Props) {
 
             {section === 'following' && (
                 <Users
-                    className='p-lg sm:px-md'
                     queryKey={['profile.following', userData.slug]}
                     url={`/api/profile/${userData.username}/following`}
                     cacheTime={1000 * 60 * 2}

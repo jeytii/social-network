@@ -39,7 +39,7 @@ export default function TextBox({
     const [hook, checkTextBodyLength, charactersLeft] = useTextBody(
         value || '',
     );
-    const { mutate, isLoading, isError } = useMutation<
+    const { mutate, isLoading } = useMutation<
         ResponseData | never,
         unknown,
         Variables
@@ -61,7 +61,7 @@ export default function TextBox({
     }
 
     return (
-        <form className='rounded bg-skin-main'>
+        <form className='rounded bg-skin-main border border-skin-main'>
             <textarea
                 className='block text-md text-skin-primary w-full transparent resize-none rounded-t-md p-md disabled:opacity-50 disabled:cursor-not-allowed'
                 rows={3}
@@ -71,7 +71,7 @@ export default function TextBox({
                 {...hook.register}
             />
 
-            <div className='flex items-center border-t border-primary-transparent rounded-b py-sm px-md'>
+            <div className='flex items-center border-t border-skin-main rounded-b py-sm px-md'>
                 <span
                     className='text-sm text-primary-dark'
                     aria-label='Characters left'

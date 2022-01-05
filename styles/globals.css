@@ -4,7 +4,8 @@
 
 @layer base {
     :root {
-        --skin-main: rgba(255, 255, 255, 0.5);
+        --skin-default: #fff;
+        --skin-main: rgba(0, 0, 0, 0.1);
         --skin-primary: #333;
         --skin-secondary: #898989;
 
@@ -86,8 +87,8 @@
 
 @layer utilities {
     .full-height {
-        height: calc(100vh - 61px);
-        top: 60.5px;
+        height: calc(100vh - 59px);
+        top: 58.5px;
     }
     
     .transparent {
@@ -95,7 +96,7 @@
     }
 
     .textfield {
-        @apply block w-full bg-skin-main text-md text-skin-primary border border-primary-light p-sm rounded;
+        @apply block w-full bg-skin-main text-md text-skin-primary border border-skin-main p-sm rounded;
     }
 
     .modal-wrapper {

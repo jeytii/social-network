@@ -13,7 +13,7 @@ export default function RightSidebar() {
     const { route } = useRouter();
 
     return (
-        <aside className='w-[280px] sticky full-height left-[0px] bg-skin-main border-l border-primary-transparent p-lg'>
+        <aside className='w-[280px] sticky full-height left-[0px] border-l border-skin-main p-lg'>
             {route === '/search' ? <UserFilterer /> : <RandomSuggestions />}
         </aside>
     );

@@ -9,7 +9,7 @@ import { UserPage } from 'types/page';
 import { User as UserType } from 'types/user';
 
 interface Props extends UseInfiniteQueryOptions<UserPage, unknown, UserType> {
-    className: string;
+    className?: string;
     queryKey: QueryKey;
     url: string;
 }
@@ -65,7 +65,7 @@ export default function Users({ className, url, enabled, ...props }: Props) {
                         key={user.slug}
                         ref={i === data.pages.length - 1 ? ref : null}
                         className={clsx(
-                            'bg-skin-main border border-primary-light p-sm',
+                            'bg-skin-main p-md',
                             i ? 'mt-lg' : 'mt-auto',
                         )}
                         imageSize={50}
@@ -78,3 +78,7 @@ export default function Users({ className, url, enabled, ...props }: Props) {
         </section>
     );
 }
+
+Users.defaultProps = {
+    className: undefined,
+};

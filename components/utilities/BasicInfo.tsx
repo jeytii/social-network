@@ -45,7 +45,7 @@ const BasicInfo = forwardRef(
                 )}
 
                 <figcaption className='flex-1 grid px-sm'>
-                    <span className='block text-skin-primary font-bold text-sm truncate xs:text-xs'>
+                    <span className='block text-skin-primary font-bold text-sm truncate xs:text-sm'>
                         {name}
                     </span>
                     <span className='block text-skin-secondary text-sm truncate xs:text-xs'>

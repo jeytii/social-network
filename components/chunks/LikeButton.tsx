@@ -77,13 +77,9 @@ export default function LikeButton({
             onClick={toggleLike}
             {...props}
         >
-            {liked ? (
-                <MdThumbUp width={15} height={13} />
-            ) : (
-                <MdOutlineThumbUp width={15} height={13} />
-            )}
+            {liked ? <MdThumbUp /> : <MdOutlineThumbUp />}
 
-            <span className='text-sm ml-sm'>{likesCount}</span>
+            <span className='text-sm ml-xs'>{likesCount}</span>
         </button>
     );
 }

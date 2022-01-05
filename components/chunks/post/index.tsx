@@ -88,35 +88,34 @@ function Post(
     return (
         <article
             ref={ref}
-            className={clsx('bg-skin-main rounded', className)}
+            className={clsx(
+                'bg-skin-main border border-skin-main rounded p-md hover:border-primary-light',
+                className,
+            )}
             {...props}
         >
-            <section className='p-md'>
-                <div className={is_own_post ? 'flex items-center' : 'block'}>
-                    <BasicInfo {...userProps} />
+            <div className={is_own_post ? 'flex items-center' : 'block'}>
+                <BasicInfo {...userProps} />
 
-                    {(is_own_post || is_self) && (
-                        <MoreOptionsButton
-                            type='post'
-                            parentSlug={user.slug}
-                            slug={slug}
-                            value={body}
-                        />
-                    )}
-                </div>
+                {(is_own_post || is_self) && (
+                    <MoreOptionsButton
+                        type='post'
+                        parentSlug={user.slug}
+                        slug={slug}
+                        value={body}
+                    />
+                )}
+            </div>
 
-                <p className='paragraph-md text-skin-primary my-sm clamp'>
-                    {body}
-                </p>
+            <p className='paragraph-md text-skin-primary my-sm clamp'>{body}</p>
 
-                <span className='text-skin-secondary text-sm xs:text-xs'>
-                    {timestamp} {is_edited && '(edited)'}
-                </span>
-            </section>
+            <span className='text-skin-secondary text-sm xs:text-xs'>
+                {timestamp} {is_edited && '(edited)'}
+            </span>
 
-            <section className='flex border-t border-primary-transparent rounded-b'>
+            <section className='flex gap-xxl rounded-b mt-md'>
                 <LikeButton
-                    className='flex-1 flex items-center justify-center text-center py-sm'
+                    className='flex items-center justify-center text-center'
                     route={`/api/posts/${slug}`}
                     condition={is_liked}
                     count={likes_count}
@@ -124,11 +123,11 @@ function Post(
                 />
 
                 <button
-                    className='flex-1 flex items-center justify-center text-skin-secondary text-center py-sm hover:text-skin-primary'
+                    className='flex items-center justify-center text-skin-secondary text-center hover:text-success'
                     type='button'
                 >
-                    <MdOutlineChatBubbleOutline size={15} />
-                    <span className='text-sm ml-sm'>{comments_count}</span>
+                    <MdOutlineChatBubbleOutline />
+                    <span className='text-sm ml-xs'>{comments_count}</span>
                 </button>
 
                 <BookmarkButton

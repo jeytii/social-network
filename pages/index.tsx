@@ -123,91 +123,89 @@ export default function Index() {
     }
 
     return (
-        <main className='max-w-[360px] bg-primary-light mx-auto mt-[40px] rounded'>
-            <div className='bg-skin-main p-lg'>
-                <div className='flex items-center justify-center'>
-                    <a href='/' className='no-underline'>
-                        <Logo />
-                    </a>
-                </div>
+        <main className='max-w-[360px] bg-skin-main border border-skin-main rounded p-lg mx-auto mt-[40px]'>
+            <div className='flex items-center justify-center'>
+                <a href='/' className='no-underline'>
+                    <Logo />
+                </a>
+            </div>
 
-                <h1 className='text-md text-skin-secondary font-bold text-center mt-xs'>
-                    Sign in to your account
-                </h1>
+            <h1 className='text-md text-skin-secondary font-bold text-center mt-xs'>
+                Sign in to your account
+            </h1>
 
-                {!!codeResent && (
-                    <p className='bg-success-transparent paragraph-sm text-success-dark p-sm border border-success rounded mt-lg'>
-                        A verification code has been successfully sent to your
-                        email address.
+            {!!codeResent && (
+                <p className='bg-success-transparent paragraph-sm text-success-dark p-sm border border-success rounded mt-lg'>
+                    A verification code has been successfully sent to your email
+                    address.
+                </p>
+            )}
+
+            {!!alertError && (
+                <p className='bg-danger-transparent text-danger-dark text-sm p-sm border border-danger rounded mt-lg'>
+                    Incorrect username or password.
+                </p>
+            )}
+
+            {!!unauthorizedError && (
+                <div className='bg-danger-transparent text-danger-dark p-sm border border-danger rounded mt-lg'>
+                    <p className='paragraph-sm'>
+                        Please verify your account first before logging in. If
+                        you did not receive a verification code,
+                        <button
+                            className='underline cursor-pointer  disabled:cursor-not-allowed disabled:text-danger-light'
+                            type='button'
+                            disabled={loading}
+                            onClick={resendVerificationCode}
+                        >
+                            click here
+                        </button>
+                        .
                     </p>
-                )}
-
-                {!!alertError && (
-                    <p className='bg-danger-transparent text-danger-dark text-sm p-sm border border-danger rounded mt-lg'>
-                        Incorrect username or password.
-                    </p>
-                )}
-
-                {!!unauthorizedError && (
-                    <div className='bg-danger-transparent text-danger-dark p-sm border border-danger rounded mt-lg'>
-                        <p className='paragraph-sm'>
-                            Please verify your account first before logging in.
-                            If you did not receive a verification code,
-                            <button
-                                className='underline cursor-pointer  disabled:cursor-not-allowed disabled:text-danger-light'
-                                type='button'
-                                disabled={loading}
-                                onClick={resendVerificationCode}
-                            >
-                                click here
-                            </button>
-                            .
-                        </p>
-                    </div>
-                )}
-
-                <form className='py-lg' onSubmit={submit}>
-                    <InputField
-                        type='text'
-                        label='Username or email address'
-                        error={errors.username?.message}
-                        disabled={loading}
-                        {...register('username')}
-                    />
-
-                    <InputField
-                        containerClassName='mt-lg'
-                        type='password'
-                        label='Password'
-                        error={errors.password?.message}
-                        disabled={loading}
-                        {...register('password')}
-                    />
-
-                    <button
-                        type='submit'
-                        className='button button-primary w-full rounded-full py-sm mt-lg'
-                        disabled={loading}
-                    >
-                        Sign in
-                    </button>
-                </form>
-
-                <div className='text-center'>
-                    <Link href='/register'>
-                        <span className='inline-block text-primary-dark text-md no-underline cursor-pointer hover:underline'>
-                            Create an account
-                        </span>
-                    </Link>
                 </div>
+            )}
 
-                <div className='text-center mt-xs'>
-                    <Link href='/forgot-password'>
-                        <span className='inline-block text-skin-secondary text-md no-underline cursor-pointer hover:underline'>
-                            Forgot password
-                        </span>
-                    </Link>
-                </div>
+            <form className='py-lg' onSubmit={submit}>
+                <InputField
+                    type='text'
+                    label='Username or email address'
+                    error={errors.username?.message}
+                    disabled={loading}
+                    {...register('username')}
+                />
+
+                <InputField
+                    containerClassName='mt-lg'
+                    type='password'
+                    label='Password'
+                    error={errors.password?.message}
+                    disabled={loading}
+                    {...register('password')}
+                />
+
+                <button
+                    type='submit'
+                    className='button button-primary w-full rounded-full py-sm mt-lg'
+                    disabled={loading}
+                >
+                    Sign in
+                </button>
+            </form>
+
+            <div className='text-center'>
+                <Link href='/register'>
+                    <span className='inline-block text-primary-dark text-md no-underline cursor-pointer hover:underline'>
+                        Create an account
+                    </span>
+                </Link>
+            </div>
+
+            <div className='text-center mt-xs'>
+                <Link href='/forgot-password'>
+                    <span className='inline-block text-skin-secondary text-md no-underline cursor-pointer hover:underline'>
+                        Forgot password
+                    </span>
+                </Link>
             </div>
         </main>
     );

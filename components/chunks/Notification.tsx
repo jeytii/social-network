@@ -48,8 +48,10 @@ function Notification(
             <figure
                 ref={ref}
                 className={clsx(
-                    'flex items-center text-skin-primary p-md border border-primary-transparent rounded cursor-pointer',
-                    is_read ? 'bg-primary-transparent' : 'bg-skin-main',
+                    'flex items-center text-skin-primary p-md border rounded cursor-pointer',
+                    is_read
+                        ? 'border-skin-main'
+                        : ['border-primary', 'bg-skin-main'],
                     className,
                 )}
                 onClick={markAsRead}

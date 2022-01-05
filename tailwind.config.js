@@ -45,6 +45,7 @@ module.exports = {
                 dark: 'rgb(182, 17, 17)',
             },
             skin: {
+                DEFAULT: 'var(--skin-default)',
                 main: 'var(--skin-main)',
                 primary: 'var(--skin-primary)',
                 secondary: 'var(--skin-secondary)',

@@ -30,12 +30,12 @@ export default function LeftSidebar() {
         asPath === `/${user?.username}` || route === '/edit-profile';
 
     return (
-        <aside className='w-[200px] sticky full-height left-[0px] bg-skin-main border-r border-primary-transparent md:w-auto'>
+        <aside className='w-[180px] sticky full-height left-[0px] border-r border-skin-main md:w-auto'>
             <nav>
                 <Link href='/home'>
                     <span
                         className={clsx(
-                            'flex items-center no-underline text-md p-lg cursor-pointer',
+                            'flex items-center no-underline text-md p-lg cursor-pointer hover:bg-skin-main',
                             route === '/home' || route === '/post/[slug]'
                                 ? [activeClass, 'text-primary']
                                 : 'text-skin-secondary',
@@ -59,7 +59,7 @@ export default function LeftSidebar() {
                 <Link href={`/${user?.username}`}>
                     <span
                         className={clsx(
-                            'flex items-center no-underline text-md text-skin-secondary p-lg cursor-pointer',
+                            'flex items-center no-underline text-md text-skin-secondary p-lg cursor-pointer hover:bg-skin-main',
                             profileIsActive && activeClass,
                         )}
                         aria-label='Profile link'
@@ -92,7 +92,7 @@ export default function LeftSidebar() {
                 <Link href='/likes?s=posts'>
                     <span
                         className={clsx(
-                            'flex items-center no-underline text-md p-lg cursor-pointer',
+                            'flex items-center no-underline text-md p-lg cursor-pointer hover:bg-skin-main',
                             route === '/likes'
                                 ? [activeClass, 'text-primary']
                                 : 'text-skin-secondary',
@@ -116,7 +116,7 @@ export default function LeftSidebar() {
                 <Link href='/bookmarks'>
                     <span
                         className={clsx(
-                            'flex items-center no-underline text-md p-lg cursor-pointer',
+                            'flex items-center no-underline text-md p-lg cursor-pointer hover:bg-skin-main',
                             route === '/bookmarks'
                                 ? [activeClass, 'text-primary']
                                 : 'text-skin-secondary',
@@ -140,7 +140,7 @@ export default function LeftSidebar() {
                 <Link href='/settings'>
                     <span
                         className={clsx(
-                            'flex items-center no-underline text-md p-lg cursor-pointer',
+                            'flex items-center no-underline text-md p-lg cursor-pointer hover:bg-skin-main',
                             route === '/settings'
                                 ? [activeClass, 'text-primary']
                                 : 'text-skin-secondary',

@@ -51,7 +51,7 @@ export default function Searchbar() {
     return (
         <section
             className={clsx(
-                'relative w-[300px] bg-skin-white border border-primary-light ml-lg sm:max-w-none sm:w-full sm:ml-auto',
+                'relative w-[300px] bg-skin ml-lg sm:max-w-none sm:w-full sm:ml-auto',
                 isSuccess && !!data?.length && showResults
                     ? 'rounded-t'
                     : 'rounded-full',
@@ -59,7 +59,7 @@ export default function Searchbar() {
         >
             <form
                 className={clsx(
-                    'bg-primary-transparent flex',
+                    'bg-skin-main flex',
                     isSuccess && !!data?.length && showResults
                         ? 'rounded-t'
                         : 'rounded-full',

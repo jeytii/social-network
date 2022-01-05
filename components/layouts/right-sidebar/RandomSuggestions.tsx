@@ -36,7 +36,7 @@ export default function RandomSuggestions() {
                 </h3>
 
                 <Link href='/search'>
-                    <span className='text-primary text-sm cursor-pointer ml-auto'>
+                    <span className='text-primary-dark text-sm cursor-pointer ml-auto'>
                         Explore
                     </span>
                 </Link>
@@ -46,7 +46,7 @@ export default function RandomSuggestions() {
                 {data?.map(user => (
                     <User
                         key={user.slug}
-                        className='bg-skin-main border border-primary-transparent p-sm mt-sm'
+                        className='bg-primary-transparent p-sm mt-sm hover:bg-skin-main'
                         {...user}
                     />
                 ))}

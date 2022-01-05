@@ -35,7 +35,7 @@ export default function Likes({ invalid }: { invalid: boolean | undefined }) {
 
     return (
         <section>
-            <nav className='flex border-b border-primary-transparent p-sm'>
+            <nav className='flex border-b border-primary-transparent p-md'>
                 <Link href='?s=posts' shallow>
                     <span
                         className={clsx(

@@ -26,7 +26,7 @@ export default function MoreOptions({ editEvent, deleteEvent, close }: Props) {
     }, []);
 
     return (
-        <div className='absolute right-[0px] bg-skin-white rounded shadow-md'>
+        <div className='absolute right-[0px] bg-skin rounded shadow-md'>
             <button
                 className='block w-full text-sm text-skin-secondary rounded-t py-sm px-lg hover:text-skin-primary'
                 type='button'
