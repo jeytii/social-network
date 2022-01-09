@@ -1,7 +1,7 @@
 import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import Cookies from 'js-cookie';
-import ColorSelect from 'components/utilities/ColorSelect';
+import DarkModeToggler from 'components/utilities/DarkModeToggler';
 import { axiosClient, axiosServer } from 'config/axios';
 
 interface User {
@@ -23,11 +23,15 @@ async function logout() {
 export default function Settings({ user }: { user: User }) {
     return (
         <div className='p-lg'>
-            <h1 className='text-md text-skin-secondary font-bold'>Settings</h1>
+            <section className='flex items-center bg-skin-main border border-skin-main rounded p-md'>
+                <h3 className='block text-md text-skin-secondary font-bold'>
+                    Dark Mode
+                </h3>
 
-            <ColorSelect />
+                <DarkModeToggler className='ml-auto' />
+            </section>
 
-            <section className='flex items-center bg-skin-main rounded p-md mt-lg'>
+            <section className='flex items-center bg-skin-main border border-skin-main rounded p-md mt-lg'>
                 <div>
                     <span className='block text-md text-skin-secondary font-bold'>
                         Username
@@ -38,13 +42,13 @@ export default function Settings({ user }: { user: User }) {
                 </div>
 
                 <Link href='/settings/username'>
-                    <span className='text-sm text-primary cursor-pointer ml-auto hover:text-primary-dark'>
+                    <span className='text-sm text-primary font-bold cursor-pointer ml-auto hover:text-primary-dark'>
                         Change
                     </span>
                 </Link>
             </section>
 
-            <section className='flex items-center bg-skin-main rounded p-md mt-lg'>
+            <section className='flex items-center bg-skin-main border border-skin-main rounded p-md mt-lg'>
                 <div>
                     <span className='block text-md text-skin-secondary font-bold'>
                         Email address
@@ -55,19 +59,19 @@ export default function Settings({ user }: { user: User }) {
                 </div>
 
                 <Link href='/settings/email-address'>
-                    <span className='text-sm text-primary cursor-pointer ml-auto hover:text-primary-dark'>
+                    <span className='text-sm text-primary font-bold cursor-pointer ml-auto hover:text-primary-dark'>
                         Change
                     </span>
                 </Link>
             </section>
 
-            <section className='flex items-center bg-skin-main rounded p-md mt-lg'>
+            <section className='flex items-center bg-skin-main border border-skin-main rounded p-md mt-lg'>
                 <h3 className='block text-md text-skin-secondary font-bold'>
                     Password
                 </h3>
 
                 <Link href='/settings/password'>
-                    <span className='text-sm text-primary cursor-pointer ml-auto hover:text-primary-dark'>
+                    <span className='text-sm text-primary font-bold cursor-pointer ml-auto hover:text-primary-dark'>
                         Change
                     </span>
                 </Link>

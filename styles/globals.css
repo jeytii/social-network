@@ -15,6 +15,13 @@
         --primary-transparent: rgba(56, 147, 193, 0.2);
     }
 
+    .dark {
+        --skin-default: #000;
+        --skin-main: rgba(255, 255, 255, 0.1);
+        --skin-primary: #fff;
+        --skin-secondary: #9f9f9f;
+    }
+
     * {
         @apply outline-none;
     }
@@ -87,8 +94,8 @@
 
 @layer utilities {
     .full-height {
-        height: calc(100vh - 59px);
-        top: 58.5px;
+        height: calc(100vh - 61px);
+        top: 60.5px;
     }
     
     .transparent {
