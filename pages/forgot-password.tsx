@@ -13,25 +13,22 @@ interface AlertNotification {
     message: string;
 }
 
-interface FieldValues {
-    email: string;
-}
-
 interface Variables {
     url: string;
-    data: FieldValues;
+    data: {
+        email: string;
+    };
 }
 
 export default function ForgotPassword() {
     const [alertNotification, setAlertNotification] =
         useState<AlertNotification | null>(null);
 
-    const { register, getValues, setError, clearErrors, formState } =
-        useForm<FieldValues>({
-            defaultValues: {
-                email: '',
-            },
-        });
+    const { register, getValues, setError, clearErrors, formState } = useForm({
+        defaultValues: {
+            email: '',
+        },
+    });
 
     const { mutate, isLoading } = useMutation<
         AxiosResponse,

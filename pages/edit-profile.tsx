@@ -166,7 +166,6 @@ export default function EditProfile({
                     label='Birth date'
                     aria-label='Birth date field'
                     error={formState.errors.birth_date?.message}
-                    autoFocus
                     {...register('birth_date')}
                 />
 
