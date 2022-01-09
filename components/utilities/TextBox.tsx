@@ -1,6 +1,7 @@
 import { useMutation } from 'react-query';
 import useTextBody from 'hooks/useTextBody';
 import { Post } from 'types/post';
+import clsx from 'clsx';
 
 interface Variables {
     url: string;
@@ -17,6 +18,7 @@ interface ResponseData {
 }
 
 interface Props {
+    className?: string;
     buttonLabel: string;
     value: string;
     placeholder?: string;
@@ -29,6 +31,7 @@ interface Props {
 }
 
 export default function TextBox({
+    className,
     buttonLabel,
     value,
     placeholder,
@@ -61,7 +64,12 @@ export default function TextBox({
     }
 
     return (
-        <form className='rounded bg-skin-main border border-skin-main'>
+        <form
+            className={clsx(
+                'rounded bg-skin-main border border-skin-main',
+                className,
+            )}
+        >
             <textarea
                 className='block text-md text-skin-primary w-full transparent resize-none rounded-t-md p-md disabled:opacity-50 disabled:cursor-not-allowed'
                 rows={3}
@@ -97,5 +105,6 @@ export default function TextBox({
 }
 
 TextBox.defaultProps = {
+    className: undefined,
     placeholder: "What's on your mind?",
 };
