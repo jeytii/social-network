@@ -1,5 +1,4 @@
 import { GetServerSideProps } from 'next';
-import { useRouter } from 'next/router';
 import { FormEvent } from 'react';
 import { useMutation } from 'react-query';
 import { useForm } from 'react-hook-form';
@@ -35,7 +34,6 @@ const fields = {
 };
 
 export default function Register() {
-    const { push } = useRouter();
     const {
         register,
         watch,
@@ -43,7 +41,7 @@ export default function Register() {
         setError,
         clearErrors,
         formState: { errors },
-    } = useForm<RequestBody>({
+    } = useForm({
         defaultValues: fields,
     });
 
@@ -53,7 +51,7 @@ export default function Register() {
         Variables
     >('create', {
         onSuccess({ data }) {
-            push(data.url);
+            window.location.href = data.url;
         },
         onError(error) {
             const e = error.response?.data.errors;
