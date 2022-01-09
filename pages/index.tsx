@@ -1,125 +1,142 @@
 import { GetServerSideProps } from 'next';
-import Link from 'next/link';
 import { FormEvent, useState } from 'react';
+import { useMutation } from 'react-query';
 import { useForm } from 'react-hook-form';
-import { AxiosError } from 'axios';
+import { AxiosError, AxiosResponse } from 'axios';
 import Cookies from 'js-cookie';
 import InputField from 'components/utilities/InputField';
 import Logo from 'components/Logo';
-import { axiosClient, axiosServer } from 'config/axios';
-import type { User } from 'types/user';
+import { axiosServer } from 'config/axios';
+
+interface LoginVariables {
+    url: string;
+    data: {
+        username: string;
+        password: string;
+    };
+}
+
+interface ResendVariables {
+    url: string;
+    data: {
+        username: string;
+    };
+}
 
 interface FormDataError {
     username: string[];
     password: string[];
 }
 
-interface OkResponse {
-    status: number;
-    message: string;
-    token: string;
-    user: User;
-}
-
-const fields = {
-    username: '',
-    password: '',
-};
+type UnauthorizedError = { username: string } | null;
 
 export default function Index() {
     const [alertError, setAlertError] = useState<string | null>(null);
     const [codeResent, setCodeResent] = useState<boolean>(false);
-    const [unauthorizedError, setUnauthorizedError] = useState<{
-        username: string;
-    } | null>(null);
-    const [loading, setLoading] = useState<boolean>(false);
-    const {
-        register,
-        getValues,
-        setError,
-        clearErrors,
-        formState: { errors },
-    } = useForm({
-        defaultValues: fields,
+    const [unauthorizedError, setUnauthorizedError] =
+        useState<UnauthorizedError>(null);
+
+    const { register, getValues, setError, clearErrors, formState } = useForm({
+        defaultValues: {
+            username: '',
+            password: '',
+        },
     });
 
-    function processFormErrors(error: AxiosError) {
-        const formErrors = error.response?.data.errors;
-        const keys = Object.keys(fields);
-
-        if (alertError) {
-            setAlertError(null);
-        }
-
-        keys.forEach(key => {
-            if (formErrors[key]) {
-                setError(key as keyof FormDataError, {
-                    type: 'manual',
-                    message: formErrors[key][0],
-                });
-            } else {
-                clearErrors(key as keyof FormDataError);
-            }
-        });
-    }
-
-    async function submit(event: FormEvent) {
-        event.preventDefault();
-
-        setLoading(true);
-
-        try {
-            const { data } = await axiosClient().post<OkResponse>(
-                '/login',
-                getValues(),
-            );
-
+    const { mutate: login, isLoading: loadingLogin } = useMutation<
+        AxiosResponse,
+        AxiosError,
+        LoginVariables
+    >('create', {
+        onSuccess({ data }) {
             clearErrors();
             setAlertError(null);
 
             Cookies.set('token', data.token);
 
             window.location.href = '/home';
-        } catch (error) {
-            const { status, data } = error.response;
-            setLoading(false);
-
-            if (status === 422) {
-                processFormErrors(error);
-            } else if (status === 401) {
-                clearErrors();
-
-                if (codeResent) {
-                    setCodeResent(false);
-                }
-
-                if (alertError) {
-                    setAlertError(null);
-                }
-
-                setUnauthorizedError(data.data);
+        },
+        onError({ response }) {
+            if (response?.status === 422) {
+                set422Errors(response.data.errors);
+            } else if (response?.status === 401) {
+                set401Error(response.data.data);
             } else {
-                clearErrors();
-
-                if (unauthorizedError) {
-                    setUnauthorizedError(null);
-                }
-
-                setAlertError(data.message);
+                set404Error(response?.data.message);
             }
+        },
+    });
+
+    const { mutate: resend, isLoading: loadingResend } = useMutation<
+        AxiosResponse,
+        AxiosError,
+        ResendVariables
+    >('create', {
+        onSuccess() {
+            setUnauthorizedError(null);
+            setCodeResent(true);
+        },
+    });
+
+    function set404Error(error: string | null) {
+        clearErrors();
+
+        if (unauthorizedError) {
+            setUnauthorizedError(null);
         }
+
+        setAlertError(error);
+    }
+
+    function set401Error(error: UnauthorizedError) {
+        clearErrors();
+
+        if (codeResent) {
+            setCodeResent(false);
+        }
+
+        if (alertError) {
+            setAlertError(null);
+        }
+
+        setUnauthorizedError(error);
+    }
+
+    function set422Errors(errors: FormDataError) {
+        const keys: Array<keyof FormDataError> = ['username', 'password'];
+
+        if (alertError) {
+            setAlertError(null);
+        }
+
+        keys.forEach(key => {
+            if (errors[key]) {
+                setError(key, {
+                    type: 'manual',
+                    message: errors[key][0],
+                });
+            } else {
+                clearErrors(key);
+            }
+        });
+    }
+
+    function submit(event: FormEvent) {
+        event.preventDefault();
+
+        login({
+            url: '/login',
+            data: getValues(),
+        });
     }
 
     async function resendVerificationCode() {
-        setLoading(true);
-
-        await axiosClient().post('/verify/resend', {
-            username: unauthorizedError?.username,
+        resend({
+            url: '/verify/resend',
+            data: {
+                username: unauthorizedError?.username as string,
+            },
         });
-
-        setLoading(false);
-        setUnauthorizedError(null);
-        setCodeResent(true);
     }
 
     return (
@@ -143,7 +160,7 @@ export default function Index() {
 
             {!!alertError && (
                 <p className='bg-danger-transparent text-danger-dark text-sm p-sm border border-danger rounded mt-lg'>
-                    Incorrect username or password.
+                    {alertError}
                 </p>
             )}
 
@@ -155,7 +172,7 @@ export default function Index() {
                         <button
                             className='underline cursor-pointer  disabled:cursor-not-allowed disabled:text-danger-light'
                             type='button'
-                            disabled={loading}
+                            disabled={loadingResend}
                             onClick={resendVerificationCode}
                         >
                             click here
@@ -169,8 +186,8 @@ export default function Index() {
                 <InputField
                     type='text'
                     label='Username or email address'
-                    error={errors.username?.message}
-                    disabled={loading}
+                    error={formState.errors.username?.message}
+                    disabled={loadingLogin}
                     {...register('username')}
                 />
 
@@ -178,34 +195,36 @@ export default function Index() {
                     containerClassName='mt-lg'
                     type='password'
                     label='Password'
-                    error={errors.password?.message}
-                    disabled={loading}
+                    error={formState.errors.password?.message}
+                    disabled={loadingLogin}
                     {...register('password')}
                 />
 
                 <button
                     type='submit'
                     className='button button-primary w-full rounded-full py-sm mt-lg'
-                    disabled={loading}
+                    disabled={loadingLogin}
                 >
                     Sign in
                 </button>
             </form>
 
             <div className='text-center'>
-                <Link href='/register'>
-                    <span className='inline-block text-primary-dark text-md no-underline cursor-pointer hover:underline'>
-                        Create an account
-                    </span>
-                </Link>
+                <a
+                    className='inline-block text-primary-dark text-md no-underline cursor-pointer hover:underline'
+                    href='/register'
+                >
+                    Create an account
+                </a>
             </div>
 
             <div className='text-center mt-xs'>
-                <Link href='/forgot-password'>
-                    <span className='inline-block text-skin-secondary text-md no-underline cursor-pointer hover:underline'>
-                        Forgot password
-                    </span>
-                </Link>
+                <a
+                    className='inline-block text-skin-secondary text-md no-underline cursor-pointer hover:underline'
+                    href='/forgot-password'
+                >
+                    Forgot password
+                </a>
             </div>
         </main>
     );
