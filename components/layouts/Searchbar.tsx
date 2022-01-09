@@ -51,7 +51,7 @@ export default function Searchbar() {
     return (
         <section
             className={clsx(
-                'relative w-[300px] bg-skin ml-lg sm:max-w-none sm:w-full sm:ml-auto',
+                'relative w-[300px] ml-lg sm:max-w-none sm:w-full sm:ml-auto',
                 isSuccess && !!data?.length && showResults
                     ? 'rounded-t'
                     : 'rounded-full',
@@ -59,7 +59,7 @@ export default function Searchbar() {
         >
             <form
                 className={clsx(
-                    'bg-skin-main flex',
+                    'bg-skin-main border border-skin-main flex',
                     isSuccess && !!data?.length && showResults
                         ? 'rounded-t'
                         : 'rounded-full',
@@ -78,7 +78,7 @@ export default function Searchbar() {
                     type='text'
                     name='query'
                     value={query}
-                    placeholder='Search people'
+                    placeholder='Search'
                     onChange={handleQuery}
                     onFocus={focus}
                 />

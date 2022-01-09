@@ -102,7 +102,7 @@ export default function DeleteCommentModal({ isOpen }: { isOpen: boolean }) {
 
     return (
         <Modal isOpen={isOpen} closeEvent={closeModal}>
-            <header className='border-b border-primary-transparent p-md'>
+            <header className='bg-skin-main border-b border-skin-main p-md'>
                 <Dialog.Title
                     as='h3'
                     className='text-md font-bold leading-6 text-skin-primary'
@@ -115,23 +115,23 @@ export default function DeleteCommentModal({ isOpen }: { isOpen: boolean }) {
                 Delete the selected comment?
             </p>
 
-            <div className='border-t border-primary-transparent p-md'>
+            <div className='bg-skin-main text-right border-t border-skin-main p-md'>
                 <button
                     type='button'
-                    className='button button-danger px-sm'
-                    disabled={isLoading}
-                    onClick={deleteItem}
-                >
-                    Delete
-                </button>
-
-                <button
-                    type='button'
-                    className='button button-default px-sm ml-md'
+                    className='button button-default px-sm'
                     disabled={isLoading}
                     onClick={closeModal}
                 >
                     Cancel
+                </button>
+
+                <button
+                    type='button'
+                    className='button button-danger px-sm ml-md'
+                    disabled={isLoading}
+                    onClick={deleteItem}
+                >
+                    Delete
                 </button>
             </div>
         </Modal>

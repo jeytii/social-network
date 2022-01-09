@@ -65,7 +65,7 @@ export default function Users({ className, url, enabled, ...props }: Props) {
                         key={user.slug}
                         ref={i === data.pages.length - 1 ? ref : null}
                         className={clsx(
-                            'bg-skin-main p-md',
+                            'bg-skin-main border border-skin-main p-md hover:border-primary-light',
                             i ? 'mt-lg' : 'mt-auto',
                         )}
                         imageSize={50}

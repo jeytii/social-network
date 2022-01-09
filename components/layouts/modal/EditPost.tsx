@@ -56,7 +56,7 @@ export default function EditPostModal({ isOpen }: { isOpen: boolean }) {
 
     return (
         <Modal isOpen={isOpen} closeEvent={closeModal}>
-            <header className='flex items-center border-b border-primary-transparent py-sm px-md'>
+            <header className='flex items-center bg-skin-main border-b border-skin-main py-sm px-md'>
                 <h1 className='text-md text-skin-secondary font-bold'>
                     Edit post
                 </h1>
@@ -75,7 +75,8 @@ export default function EditPostModal({ isOpen }: { isOpen: boolean }) {
             </header>
 
             <TextBox
-                buttonLabel='Edit post'
+                className='border-none rounded-[0px]'
+                buttonLabel='Edit'
                 value={item.value}
                 apiUrl={`/api/posts/${item.slug}`}
                 apiMethod='put'

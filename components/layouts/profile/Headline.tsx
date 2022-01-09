@@ -32,7 +32,7 @@ export default function ProfileHeadline({
     is_followed,
 }: ProfileInfo) {
     return (
-        <div className='bg-skin-main rounded p-lg'>
+        <div className='bg-skin-main border border-skin-main rounded p-lg'>
             <section className='flex items-center sm:block sm:text-center'>
                 <figure className='flex items-center sm:block'>
                     {image_url ? (

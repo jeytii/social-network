@@ -71,7 +71,7 @@ export default function DeletePostModal({ isOpen }: { isOpen: boolean }) {
 
     return (
         <Modal isOpen={isOpen} closeEvent={closeModal}>
-            <header className='border-b border-primary-transparent p-md'>
+            <header className='bg-skin-main border-b border-skin-main p-md'>
                 <Dialog.Title
                     as='h3'
                     className='text-md font-bold text-skin-secondary'
@@ -84,7 +84,7 @@ export default function DeletePostModal({ isOpen }: { isOpen: boolean }) {
                 Are you sure you want to delete the selected post?
             </p>
 
-            <div className='text-right border-t border-primary-transparent p-md'>
+            <div className='bg-skin-main text-right border-t border-skin-main p-md'>
                 <button
                     type='button'
                     className='button button-default px-sm'

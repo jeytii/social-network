@@ -16,17 +16,19 @@ export default function BottomNav() {
     const { route } = useRouter();
     const queryClient = useQueryClient();
     const user = queryClient.getQueryData<User>('user');
+    const isHome = route === '/home' || route === '/post/[slug]';
+    const isProfile = route === '/[username]' || route === '/edit-profile';
     const activeClass =
         'relative text-primary after:absolute after:w-full after:h-[5px] after:bg-primary after:left-[0px] after:bottom-[0px]';
 
     return (
-        <nav className='sticky bottom-[0px] left-[0px] bg-skin-main shadow-inner'>
-            <div className='flex bg-skin-main'>
+        <nav className='sticky bottom-[0px] left-[0px] bg-skin border-t border-skin-main'>
+            <div className='flex bg-skin-main border-t border-skin-main'>
                 <Link href='/home'>
                     <span
                         className={clsx(
                             'flex-1 py-md text-skin-secondary cursor-pointer',
-                            route === '/home' && activeClass,
+                            isHome && activeClass,
                         )}
                     >
                         <MdOutlineHome className='m-auto' size={20} />
@@ -37,7 +39,7 @@ export default function BottomNav() {
                     <span
                         className={clsx(
                             'flex-1 py-md text-skin-secondary cursor-pointer',
-                            route === '/' && activeClass,
+                            isProfile && activeClass,
                         )}
                     >
                         {user?.image_url ? (

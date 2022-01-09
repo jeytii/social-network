@@ -107,7 +107,9 @@ function Post(
                 )}
             </div>
 
-            <p className='paragraph-md text-skin-primary my-sm clamp'>{body}</p>
+            <p className='paragraph-md text-skin-primary mt-md mb-sm clamp'>
+                {body}
+            </p>
 
             <span className='text-skin-secondary text-sm xs:text-xs'>
                 {timestamp} {is_edited && '(edited)'}

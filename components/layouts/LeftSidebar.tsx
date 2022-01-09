@@ -19,18 +19,15 @@ import { User } from 'types/user';
 
 export default function LeftSidebar() {
     const isPortrait = useMediaQuery({ minWidth: 721 });
-    const { route, asPath } = useRouter();
+    const { route } = useRouter();
     const queryClient = useQueryClient();
     const user = queryClient.getQueryData<User>('user');
-
+    const isProfile = route === '/[username]' || route === '/edit-profile';
     const activeClass =
         'relative after:absolute after:w-[5px] after:h-full after:bg-primary after:left-[0px] after:top-[0px]';
 
-    const profileIsActive =
-        asPath === `/${user?.username}` || route === '/edit-profile';
-
     return (
-        <aside className='w-[180px] sticky full-height left-[0px] border-r border-skin-main md:w-auto'>
+        <aside className='w-[180px] sticky full-height left-[0px] bg-skin-main border-r border-skin-main md:w-auto'>
             <nav>
                 <Link href='/home'>
                     <span
@@ -60,7 +57,7 @@ export default function LeftSidebar() {
                     <span
                         className={clsx(
                             'flex items-center no-underline text-md text-skin-secondary p-lg cursor-pointer hover:bg-skin-main',
-                            profileIsActive && activeClass,
+                            isProfile && activeClass,
                         )}
                         aria-label='Profile link'
                     >
@@ -78,7 +75,7 @@ export default function LeftSidebar() {
                             <span
                                 className={clsx(
                                     'ml-md text-md font-bold',
-                                    profileIsActive
+                                    isProfile
                                         ? 'text-primary'
                                         : 'text-skin-secondary',
                                 )}

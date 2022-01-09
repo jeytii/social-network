@@ -28,7 +28,7 @@ export default function SearchSuggestions({ data, target, hideEvent }: Props) {
     }, []);
 
     return (
-        <div className='absolute top-[100%] left-[0px] w-full bg-skin rounded-b z-20 shadow-md'>
+        <div className='absolute top-[100%] left-[0px] w-full bg-skin border-l border-r border-b border-skin-main rounded-b z-20 shadow-md'>
             {data.map(({ slug, ...user }, index) => (
                 <Link key={slug} href={`/${user.username}`} passHref>
                     <BasicInfo
