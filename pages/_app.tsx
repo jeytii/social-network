@@ -6,7 +6,8 @@ import {
     QueryMeta,
 } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
-import Root from 'components/Root';
+import Public from 'components/Public';
+import Protected from 'components/Protected';
 import { axiosClient } from 'config/axios';
 import '../styles/globals.css';
 
@@ -33,6 +34,8 @@ const queryClient = new QueryClient({
 });
 
 function MyApp({ Component, pageProps }: AppProps) {
+    const { isPrivate, ...props } = pageProps;
+
     queryClient.setMutationDefaults('create', {
         mutationFn: ({ url, data }) => axiosClient().post(url, data),
     });
@@ -47,10 +50,17 @@ function MyApp({ Component, pageProps }: AppProps) {
 
     return (
         <QueryClientProvider client={queryClient}>
-            <ReactQueryDevtools />
-            <Root {...pageProps}>
-                <Component {...pageProps} />
-            </Root>
+            {process.env.NODE_ENV === 'development' && <ReactQueryDevtools />}
+
+            {isPrivate ? (
+                <Protected {...props}>
+                    <Component {...props} />
+                </Protected>
+            ) : (
+                <Public {...props}>
+                    <Component {...props} />
+                </Public>
+            )}
         </QueryClientProvider>
     );
 }
