@@ -1,12 +1,12 @@
 import { GetServerSideProps } from 'next';
 import { FormEvent, useState } from 'react';
+import { useMutation } from 'react-query';
 import { useForm } from 'react-hook-form';
+import { AxiosError, AxiosResponse } from 'axios';
 import Cookies from 'js-cookie';
 import InputField from 'components/utilities/InputField';
 import Logo from 'components/Logo';
 import { axiosClient, axiosServer } from 'config/axios';
-import { useMutation } from 'react-query';
-import { AxiosError, AxiosResponse } from 'axios';
 
 interface Variables {
     url: string;
@@ -17,7 +17,7 @@ interface Variables {
 
 export default function Verification() {
     const [alertError, setAlertError] = useState<string | null>(null);
-    const { register, watch, getValues, setError, formState } = useForm({
+    const { register, getValues, setError, formState } = useForm({
         defaultValues: {
             code: '',
         },
@@ -50,8 +50,6 @@ export default function Verification() {
             }
         },
     });
-
-    const code = watch('code');
 
     async function submit(event: FormEvent) {
         event.preventDefault();
@@ -88,7 +86,7 @@ export default function Verification() {
                 <button
                     type='submit'
                     className='button button-primary w-full rounded-full py-sm mt-lg'
-                    disabled={Number.isNaN(code) || code === '' || isLoading}
+                    disabled={isLoading}
                 >
                     Verify my account
                 </button>
