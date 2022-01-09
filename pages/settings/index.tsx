@@ -10,6 +10,7 @@ interface User {
     username: string;
     gender: string;
     image_url: string | null;
+    dark_mode: boolean;
 }
 
 async function logout() {
@@ -28,7 +29,7 @@ export default function Settings({ user }: { user: User }) {
                     Dark Mode
                 </h3>
 
-                <DarkModeToggler className='ml-auto' />
+                <DarkModeToggler className='ml-auto' checked={user.dark_mode} />
             </section>
 
             <section className='flex items-center bg-skin-main border border-skin-main rounded p-md mt-lg'>

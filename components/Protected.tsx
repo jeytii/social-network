@@ -43,9 +43,10 @@ export default function Protected({
     const queryClient = useQueryClient();
     const { events } = useRouter();
 
-    const { data: authUser } = useQuery<unknown, unknown, UserType>('user', {
-        initialData: user,
-    });
+    const { data: authUser } = useQuery<unknown, unknown, UserType>(
+        'user',
+        () => user,
+    );
 
     const { data: editItem } = useQuery<unknown, unknown, ModifyItem>(
         'edit',

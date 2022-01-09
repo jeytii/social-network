@@ -1,38 +1,60 @@
 import { Switch } from '@headlessui/react';
 import { useState } from 'react';
-import { useQueryClient } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import clsx from 'clsx';
 import type { User } from 'types/user';
+
+interface Variables {
+    url: string;
+    data: {
+        dark_mode: boolean;
+    };
+}
+
+interface Props {
+    className?: string;
+    checked: boolean;
+}
 
 type UserType = User & {
     dark_mode: boolean;
 };
 
-export default function DarkModeToggler({ className }: { className?: string }) {
+export default function DarkModeToggler({ className, checked }: Props) {
     const queryClient = useQueryClient();
-    const user = queryClient.getQueryData<UserType>('user');
-    const [checked, setChecked] = useState<boolean>(user?.dark_mode as boolean);
+    const [darkMode, setDarkMode] = useState<boolean>(checked);
+
+    const { mutate } = useMutation<unknown, unknown, Variables>('update', {
+        onSuccess() {
+            setDarkMode(current => !current);
+
+            queryClient.setQueryData<UserType | undefined>('user', current => {
+                if (current) {
+                    return { ...current, dark_mode: !current?.dark_mode };
+                }
+
+                return current;
+            });
+        },
+    });
 
     function toggleDarkMode() {
-        setChecked(current => !current);
-
-        queryClient.setQueryData<UserType | undefined>('user', current => {
-            if (current) {
-                return { ...current, dark_mode: !current?.dark_mode };
-            }
-
-            return current;
+        mutate({
+            url: '/api/settings/dark-mode',
+            data: {
+                dark_mode: !darkMode,
+            },
         });
     }
 
     return (
         <div className={className}>
             <Switch
-                checked={checked}
+                checked={darkMode as boolean}
                 onChange={toggleDarkMode}
                 className={clsx(
                     'relative flex flex-shrink-0 h-[25px] w-[45px] rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus-visible:ring-2  focus-visible:ring-white focus-visible:ring-opacity-75',
-                    checked ? 'bg-primary-light' : 'bg-skin-secondary',
+                    darkMode ? 'bg-primary-light' : 'bg-skin-secondary',
                 )}
             >
                 <span className='sr-only'>Toggle Dark Mode</span>
@@ -40,10 +62,10 @@ export default function DarkModeToggler({ className }: { className?: string }) {
                     aria-hidden='true'
                     className={clsx(
                         'pointer-events-none inline-block h-[25px] w-[25px] rounded-full bg-skin-white border shadow-lg transform ring-0 transition ease-in-out duration-200',
-                        checked
+                        darkMode
                             ? 'border-primary-light'
                             : 'border-skin-secondary',
-                        checked ? 'translate-x-[20px]' : 'translate-x-[0px]',
+                        darkMode ? 'translate-x-[20px]' : 'translate-x-[0px]',
                     )}
                 />
             </Switch>
