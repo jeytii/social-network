@@ -26,7 +26,7 @@ interface ProfileInfo {
 
 interface Props {
     invalid: boolean | undefined;
-    user: ProfileInfo | undefined;
+    currentUser: ProfileInfo | undefined;
 }
 
 const Posts = dynamic(() => import('components/layouts/Posts'), {
@@ -46,8 +46,8 @@ const isActive = (condition: boolean) =>
         ? 'bg-skin-main rounded-full text-primary-dark'
         : 'text-skin-secondary hover:text-primary-dark';
 
-export default function Profile({ invalid, user }: Props) {
-    const userData = useMemo(() => user, [user]);
+export default function Profile({ invalid, currentUser }: Props) {
+    const userData = useMemo(() => currentUser, [currentUser]);
     const {
         query: { s: section, username },
     } = useRouter();
@@ -193,6 +193,7 @@ export const getServerSideProps: GetServerSideProps = async ({
             title: 'Not found',
             isPrivate: true,
             invalid: true,
+            user: responses[0].data.data,
             notificationsCount: responses[1].data.data,
         };
 
@@ -211,7 +212,7 @@ export const getServerSideProps: GetServerSideProps = async ({
                 props: {
                     ...errorProps,
                     title: data.data.name,
-                    user: data.data,
+                    currentUser: data.data,
                     invalid: false,
                 },
             };

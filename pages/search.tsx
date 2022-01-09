@@ -35,6 +35,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
             props: {
                 title: 'Search people',
                 isPrivate: true,
+                user: responses[0].data.data,
                 notificationsCount: responses[1].data.data,
             },
         };

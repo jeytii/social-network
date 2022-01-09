@@ -37,6 +37,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
             props: {
                 title: 'Bookmarks',
                 isPrivate: true,
+                user: responses[0].data.data,
                 notificationsCount: responses[1].data.data,
             },
         };

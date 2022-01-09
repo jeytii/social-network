@@ -35,7 +35,7 @@ export default function Likes({ invalid }: { invalid: boolean | undefined }) {
 
     return (
         <section>
-            <nav className='flex border-b border-primary-transparent p-md'>
+            <nav className='flex border-b border-skin-main p-md'>
                 <Link href='?s=posts' shallow>
                     <span
                         className={clsx(
@@ -110,6 +110,7 @@ export const getServerSideProps: GetServerSideProps = async ({
         const props = {
             title: 'Likes',
             isPrivate: true,
+            user: responses[0].data.data,
             notificationsCount: responses[1].data.data,
         };
 

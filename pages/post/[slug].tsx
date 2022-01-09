@@ -98,6 +98,7 @@ export const getServerSideProps: GetServerSideProps = async ({
             props: {
                 title: 'Sosyal.me',
                 isPrivate: true,
+                user: responses[0].data.data,
                 notificationsCount: responses[1].data.data,
                 ...params,
             },
