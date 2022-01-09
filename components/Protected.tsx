@@ -1,10 +1,12 @@
 import Head from 'next/head';
-import { ReactNode } from 'react';
-import { useQueries, useQueryClient } from 'react-query';
+import { useRouter } from 'next/router';
+import { useEffect, useRef, ReactNode } from 'react';
+import { useQuery, useQueryClient } from 'react-query';
 import { useMediaQuery } from 'react-responsive';
 import useRendered from 'hooks/useRendered';
-import { axiosClient } from 'config/axios';
+import clsx from 'clsx';
 import type { ModifyItem } from 'types/item';
+import type { User } from 'types/user';
 import DeletePostModal from './layouts/modal/DeletePost';
 import DeleteCommentModal from './layouts/modal/DeleteComment';
 import EditPostModal from './layouts/modal/EditPost';
@@ -17,55 +19,87 @@ import NotificationBell from './utilities/NotificationBell';
 import Spinner from './vectors/Spinner';
 import Logo from './Logo';
 
+type UserType = User & {
+    dark_mode: boolean;
+};
+
 interface Props {
+    user: UserType;
     title: string;
     notificationsCount: number;
     children: ReactNode;
 }
 
 export default function Protected({
+    user,
     title,
     notificationsCount,
     children,
 }: Props) {
+    const bar = useRef<HTMLDivElement | null>(null);
     const isDesktop = useMediaQuery({ minWidth: 1024 });
     const isMobile = useMediaQuery({ maxWidth: 480 });
     const rendered = useRendered();
     const queryClient = useQueryClient();
+    const { events } = useRouter();
 
-    const [{ data: editItem }, { data: deleteItem }] = useQueries([
-        {
-            queryKey: 'edit',
-            queryFn: () => queryClient.getQueryData<ModifyItem>('edit'),
-        },
-        {
-            queryKey: 'delete',
-            queryFn: () => queryClient.getQueryData<ModifyItem>('delete'),
-        },
-        {
-            queryKey: 'notificationsCount',
-            initialData: notificationsCount,
-        },
-        {
-            queryKey: 'user',
-            queryFn: async () => {
-                const { data } = await axiosClient().get('/api/users/auth');
+    const { data: authUser } = useQuery<unknown, unknown, UserType>('user', {
+        initialData: user,
+    });
 
-                return data.data;
-            },
-        },
-    ]);
+    const { data: editItem } = useQuery<unknown, unknown, ModifyItem>(
+        'edit',
+        () => queryClient.getQueryData('edit'),
+    );
+
+    const { data: deleteItem } = useQuery<unknown, unknown, ModifyItem>(
+        'delete',
+        () => queryClient.getQueryData('delete'),
+    );
+
+    useQuery('notificationsCount', {
+        initialData: notificationsCount,
+    });
+
+    useEffect(() => {
+        events.on('routeChangeStart', () => {
+            bar.current?.classList.add('transition-[width]', 'duration-500');
+            bar.current?.classList.replace('w-[0px]', 'w-[30%]');
+        });
+
+        events.on('routeChangeComplete', () => {
+            bar.current?.classList.replace('w-[30%]', 'w-full');
+
+            setTimeout(() => {
+                bar.current?.classList.remove(
+                    'transition-[width]',
+                    'duration-500',
+                );
+                bar.current?.classList.replace('w-full', 'w-[0px]');
+            }, 500);
+        });
+    }, []);
 
     return (
-        <main className='h-screen overflow-auto'>
+        <main
+            className={clsx(
+                'h-screen overflow-auto bg-skin',
+                authUser?.dark_mode && 'dark',
+            )}
+        >
             <Head>
                 <title>{title}</title>
             </Head>
 
+            <div
+                ref={bar}
+                className='fixed top-[0px] left-[0px] w-[0px] h-[4px] bg-primary z-50'
+            />
+
             <div className='h-full overflow-auto sm:flex sm:flex-col'>
                 {/* HEADER */}
-                <header className='sticky top-[0px] bg-skin border-b border-skin-main z-10 drop-shadow'>
-                    <div className='max-w-[1366px] flex items-center py-sm px-lg mx-auto sm:px-md sm:gap-md'>
+                <header className='sticky top-[0px] bg-skin z-10'>
+                    <div className='max-w-[1366px] flex items-center bg-skin-main border-b border-skin-main py-sm px-lg mx-auto sm:px-md sm:gap-md'>
                         <a
                             className='no-underline'
                             href='/home'
