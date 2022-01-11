@@ -72,7 +72,7 @@ export default function ChangeEmailAddress({ email }: { email: string }) {
     }
 
     return (
-        <section className='p-lg'>
+        <section className='max-w-[480px] p-lg m-auto'>
             {errorAlert && errorAlert.length && (
                 <p className='bg-danger-light text-md text-danger rounded p-sm mb-lg'>
                     {errorAlert}
@@ -141,6 +141,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
             props: {
                 title: 'Change email address',
                 isPrivate: true,
+                user: responses[0].data.data,
                 email: responses[0].data.data.email,
                 notificationsCount: responses[1].data.data,
             },

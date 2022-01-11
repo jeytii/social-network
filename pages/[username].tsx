@@ -43,8 +43,8 @@ const Users = dynamic(() => import('components/layouts/Users'), {
 
 const isActive = (condition: boolean) =>
     condition
-        ? 'bg-skin-main rounded-full text-primary-dark'
-        : 'text-skin-secondary hover:text-primary-dark';
+        ? 'bg-skin-main rounded-full text-primary-dark border-skin-main'
+        : 'text-skin-secondary hover:text-primary-dark border-[transparent]';
 
 export default function Profile({ invalid, currentUser }: Props) {
     const userData = useMemo(() => currentUser, [currentUser]);
@@ -67,11 +67,11 @@ export default function Profile({ invalid, currentUser }: Props) {
         <div className='p-lg sm:px-md'>
             <ProfileHeadline {...userData} />
 
-            <nav className='flex rounded py-lg'>
+            <nav className='flex rounded py-lg sm:gap-xs'>
                 <Link href={`/${username}`} shallow>
                     <span
                         className={clsx(
-                            'flex-1 text-md text-center py-xs cursor-pointer md:text-sm sm:text-xs',
+                            'flex-1 text-md text-center border py-xs cursor-pointer md:text-sm sm:text-xs',
                             isActive(!section),
                         )}
                     >
@@ -83,7 +83,7 @@ export default function Profile({ invalid, currentUser }: Props) {
                 <Link href={`/${username}?s=comments`} shallow>
                     <span
                         className={clsx(
-                            'flex-1 text-md text-center py-xs cursor-pointer md:text-sm sm:text-xs',
+                            'flex-1 text-md text-center border py-xs cursor-pointer md:text-sm sm:text-xs',
                             isActive(section === 'comments'),
                         )}
                     >
@@ -95,7 +95,7 @@ export default function Profile({ invalid, currentUser }: Props) {
                 <Link href={`/${username}?s=followers`} shallow>
                     <div
                         className={clsx(
-                            'flex-1 text-md text-center py-xs cursor-pointer md:text-sm sm:text-xs',
+                            'flex-1 text-md text-center border py-xs cursor-pointer md:text-sm sm:text-xs',
                             isActive(section === 'followers'),
                         )}
                     >
@@ -110,7 +110,7 @@ export default function Profile({ invalid, currentUser }: Props) {
                 <Link href={`/${username}?s=following`} shallow>
                     <div
                         className={clsx(
-                            'flex-1 text-md text-center py-xs cursor-pointer md:text-sm sm:text-xs',
+                            'flex-1 text-md text-center border py-xs cursor-pointer md:text-sm sm:text-xs',
                             isActive(section === 'following'),
                         )}
                     >

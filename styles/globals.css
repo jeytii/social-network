@@ -94,8 +94,8 @@
 
 @layer utilities {
     .full-height {
-        height: calc(100vh - 61px);
-        top: 60.5px;
+        height: calc(100vh - 51px);
+        top: 50.5px;
     }
     
     .transparent {

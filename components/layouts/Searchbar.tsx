@@ -70,7 +70,7 @@ export default function Searchbar() {
                 <input
                     ref={inputRef}
                     className={clsx(
-                        'transparent flex-1 w-full text-skin-primary text-sm border-none p-sm',
+                        'transparent flex-1 w-full text-skin-primary text-sm border-none py-xs px-sm',
                         isSuccess && !!data?.length && showResults
                             ? 'rounded-tl'
                             : 'rounded-l-full',

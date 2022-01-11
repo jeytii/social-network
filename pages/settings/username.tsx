@@ -72,7 +72,7 @@ export default function ChangeUsername({ username }: { username: string }) {
     }
 
     return (
-        <section className='p-lg'>
+        <section className='max-w-[480px] m-auto p-lg'>
             {errorAlert && errorAlert.length && (
                 <p className='bg-danger-light text-md text-danger rounded p-sm mb-lg'>
                     {errorAlert}
@@ -141,6 +141,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
             props: {
                 title: 'Change username',
                 isPrivate: true,
+                user: responses[0].data.data,
                 username: responses[0].data.data.username,
                 notificationsCount: responses[1].data.data,
             },

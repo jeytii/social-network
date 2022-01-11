@@ -82,7 +82,7 @@ export default function ChangePassword() {
     }
 
     return (
-        <section className='p-lg'>
+        <section className='max-w-[480px] p-lg m-auto'>
             {errorAlert && errorAlert.length && (
                 <p className='bg-danger-light text-md text-danger rounded p-sm mb-lg'>
                     {errorAlert}
@@ -157,6 +157,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
             props: {
                 title: 'Change password',
                 isPrivate: true,
+                user: responses[0].data.data,
                 notificationsCount: responses[1].data.data,
             },
         };
