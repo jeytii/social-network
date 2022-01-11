@@ -1,10 +1,16 @@
 import { useRouter } from 'next/router';
-import { useForm } from 'react-hook-form';
-import Select from 'components/utilities/Select';
+import { ChangeEvent, useState } from 'react';
+import { MdKeyboardArrowDown } from 'react-icons/md';
+import { Listbox } from '@headlessui/react';
 import Radio from 'components/utilities/Radio';
 
+interface Month {
+    value: string;
+    label: string;
+}
+
 const months = [
-    { value: '', label: 'Month' },
+    // { value: '', label: 'Month' },
     { value: '1', label: 'January' },
     { value: '2', label: 'February' },
     { value: '3', label: 'March' },
@@ -21,38 +27,46 @@ const months = [
 
 const maxYear = new Date().getFullYear();
 
-const values = {
-    month: '',
-    year: '',
-    gender: null,
-};
-
 export default function UserFilterer() {
     const { query, push } = useRouter();
-    const { register, watch, getValues, reset } = useForm({
-        defaultValues: values,
-    });
+    const [month, setMonth] = useState<Month | null>(null);
+    const [year, setYear] = useState<string>('');
+    const [gender, setGender] = useState<'Male' | 'Female' | null>(null);
 
-    const body = watch();
-    const allBlank = Object.values(body).every(value => !value);
+    function handleYearValue(event: ChangeEvent<HTMLInputElement>) {
+        setYear(event.target.value);
+    }
+
+    function handleGenderValue(value: 'Male' | 'Female') {
+        return () => {
+            setGender(value);
+        };
+    }
 
     function resetValues() {
-        reset();
+        setMonth(null);
+        setYear('');
+        setGender(null);
     }
 
     function filter() {
-        const request = Object.entries(getValues());
         const queries = new URLSearchParams();
 
         if (query.query && typeof query.query === 'string') {
             queries.append('query', query.query);
         }
 
-        request.forEach(item => {
-            if (!!item[1] || item[1]?.length) {
-                queries.append(item[0], item[1]);
-            }
-        });
+        if (month) {
+            queries.append('month', month.value);
+        }
+
+        if (year) {
+            queries.append('year', year);
+        }
+
+        if (gender) {
+            queries.append('gender', gender);
+        }
 
         push(`/search?${queries}`);
     }
@@ -72,19 +86,52 @@ export default function UserFilterer() {
 
             <form className='mt-lg'>
                 <div className='flex gap-sm'>
-                    <Select
-                        className='flex-1 bg-skin-main rounded text-sm text-skin-primary cursor-pointer p-xs'
-                        items={months}
-                        {...register('month')}
-                    />
+                    <Listbox value={month} onChange={setMonth}>
+                        <div className='relative'>
+                            <Listbox.Button className='relative w-[120px] bg-skin-main text-left border border-skin-main rounded py-xs px-md cursor-pointer'>
+                                {!month ? (
+                                    <Listbox.Label
+                                        as='span'
+                                        className='text-sm text-skin-secondary'
+                                    >
+                                        Month
+                                    </Listbox.Label>
+                                ) : (
+                                    <span className='text-sm text-skin-primary'>
+                                        {month.label}
+                                    </span>
+                                )}
+
+                                <span className='absolute inset-y-[0px] right-[10px] flex items-center pr-2 pointer-events-none'>
+                                    <MdKeyboardArrowDown
+                                        className='text-lg text-skin-secondary'
+                                        aria-hidden='true'
+                                    />
+                                </span>
+                            </Listbox.Button>
+
+                            <Listbox.Options className='absolute right-[0px] top-[100%] w-full mt-xs overflow-auto bg-skin rounded ring-1 ring-skin-secondary ring-opacity-5 z-10 sm:text-sm'>
+                                {months.map(m => (
+                                    <Listbox.Option key={m.value} value={m}>
+                                        <div className='p-xs cursor-pointer hover:bg-skin-main hover:font-bold'>
+                                            <span className='text-sm text-skin-primary ml-xs'>
+                                                {m.label}
+                                            </span>
+                                        </div>
+                                    </Listbox.Option>
+                                ))}
+                            </Listbox.Options>
+                        </div>
+                    </Listbox>
 
                     <input
-                        className='bg-skin-main text-sm text-skin-primary rounded p-xs'
+                        className='bg-skin-main text-sm text-skin-primary border border-skin-main rounded p-xs'
                         type='number'
                         placeholder='Year'
                         min={maxYear - 100}
                         max={maxYear}
-                        {...register('year')}
+                        value={year}
+                        onChange={handleYearValue}
                     />
                 </div>
 
@@ -94,8 +141,8 @@ export default function UserFilterer() {
                         id='male'
                         label='Male'
                         value='Male'
-                        checked={body.gender === 'Male'}
-                        {...register('gender')}
+                        checked={gender === 'Male'}
+                        onChange={handleGenderValue('Male')}
                     />
 
                     <Radio
@@ -103,15 +150,15 @@ export default function UserFilterer() {
                         id='female'
                         label='Female'
                         value='Female'
-                        checked={body.gender === 'Female'}
-                        {...register('gender')}
+                        checked={gender === 'Female'}
+                        onChange={handleGenderValue('Female')}
                     />
                 </div>
 
                 <button
-                    className='button button-primary w-full rounded-full text-sm mt-lg'
+                    className='button button-primary w-full rounded-full text-sm py-sm mt-lg'
                     type='button'
-                    disabled={allBlank}
+                    disabled={!month && !year.length && !gender}
                     onClick={filter}
                 >
                     Filter results
