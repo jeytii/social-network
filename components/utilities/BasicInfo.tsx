@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { ForwardedRef, forwardRef, HTMLAttributes } from 'react';
+import { memo, forwardRef, ForwardedRef, HTMLAttributes } from 'react';
 import { MdAccountCircle } from 'react-icons/md';
 import clsx from 'clsx';
 
@@ -61,4 +61,4 @@ BasicInfo.defaultProps = {
     imageSize: 40,
 };
 
-export default BasicInfo;
+export default memo(BasicInfo);

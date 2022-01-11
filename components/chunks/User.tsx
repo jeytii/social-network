@@ -1,5 +1,12 @@
 import Link from 'next/link';
-import { useState, forwardRef, HTMLAttributes, Ref } from 'react';
+import {
+    useState,
+    forwardRef,
+    memo,
+    HTMLAttributes,
+    MouseEventHandler,
+    Ref,
+} from 'react';
 import { MdPersonAddAlt, MdOutlinePersonRemove } from 'react-icons/md';
 import clsx from 'clsx';
 import BasicInfo from 'components/utilities/BasicInfo';
@@ -52,12 +59,12 @@ const User = forwardRef(
             }
         }
 
-        function toggleFollow(event: MouseEvent) {
+        const toggleFollow: MouseEventHandler<HTMLButtonElement> = event => {
             event.preventDefault();
 
             setFollowed(current => !current);
             debounce();
-        }
+        };
 
         return (
             <Link href={`/${username}`}>
@@ -105,4 +112,7 @@ User.defaultProps = {
     imageSize: 40,
 };
 
-export default User;
+export default memo(
+    User,
+    (prev, current) => prev.is_followed === current.is_followed,
+);

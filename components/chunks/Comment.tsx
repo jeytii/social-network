@@ -1,4 +1,4 @@
-import { forwardRef, HTMLAttributes, Ref } from 'react';
+import { memo, forwardRef, HTMLAttributes, Ref } from 'react';
 import { InfiniteData, useQueryClient } from 'react-query';
 import clsx from 'clsx';
 import BasicInfo from 'components/utilities/BasicInfo';
@@ -102,4 +102,4 @@ function Comment(
     );
 }
 
-export default forwardRef(Comment);
+export default memo(forwardRef(Comment));

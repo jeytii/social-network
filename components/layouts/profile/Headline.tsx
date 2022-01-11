@@ -1,10 +1,10 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import { memo } from 'react';
 import {
     MdAccountCircle,
     MdOutlineCake,
     MdCalendarToday,
-    MdBikeScooter,
 } from 'react-icons/md';
 import FollowButton from 'components/utilities/FollowButton';
 
@@ -20,7 +20,7 @@ interface ProfileInfo {
     is_followed: boolean;
 }
 
-export default function ProfileHeadline({
+function ProfileHeadline({
     slug,
     name,
     username,
@@ -95,9 +95,11 @@ export default function ProfileHeadline({
 
             {!!bio && (
                 <p className='paragraph-md italic text-skin-secondary mt-sm sm:text-center'>
-                    {MdBikeScooter}
+                    {bio}
                 </p>
             )}
         </div>
     );
 }
+
+export default memo(ProfileHeadline);

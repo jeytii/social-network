@@ -1,4 +1,4 @@
-import { useState, HTMLAttributes, MouseEvent } from 'react';
+import { useState, memo, HTMLAttributes, MouseEvent } from 'react';
 import { MdThumbUp, MdOutlineThumbUp } from 'react-icons/md';
 import clsx from 'clsx';
 import useDebounceClick from 'hooks/useDebounceClick';
@@ -11,7 +11,7 @@ interface Props extends HTMLAttributes<HTMLButtonElement> {
     onSuccess(condition: boolean, count: number): void;
 }
 
-export default function LikeButton({
+function LikeButton({
     className,
     route,
     condition,
@@ -83,3 +83,5 @@ export default function LikeButton({
         </button>
     );
 }
+
+export default memo(LikeButton);

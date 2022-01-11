@@ -1,5 +1,5 @@
 import { Switch } from '@headlessui/react';
-import { useState } from 'react';
+import { memo, useState } from 'react';
 import { useMutation, useQueryClient } from 'react-query';
 import clsx from 'clsx';
 import type { User } from 'types/user';
@@ -20,7 +20,7 @@ type UserType = User & {
     dark_mode: boolean;
 };
 
-export default function DarkModeToggler({ className, checked }: Props) {
+function DarkModeToggler({ className, checked }: Props) {
     const queryClient = useQueryClient();
     const [darkMode, setDarkMode] = useState<boolean>(checked);
 
@@ -76,3 +76,8 @@ export default function DarkModeToggler({ className, checked }: Props) {
 DarkModeToggler.defaultProps = {
     className: undefined,
 };
+
+export default memo(
+    DarkModeToggler,
+    (prev, current) => prev.checked === current.checked,
+);

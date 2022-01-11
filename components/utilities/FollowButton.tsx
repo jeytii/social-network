@@ -1,4 +1,4 @@
-import { useState, MouseEvent, useEffect } from 'react';
+import { useState, MouseEvent, useEffect, memo } from 'react';
 import clsx from 'clsx';
 import useDebounceClick from 'hooks/useDebounceClick';
 import { axiosClient } from 'config/axios';
@@ -8,7 +8,7 @@ interface Props {
     condition: boolean;
 }
 
-export default function FollowButton({ userSlug, condition }: Props) {
+function FollowButton({ userSlug, condition }: Props) {
     const [followed, setFollowed] = useState<boolean>(condition);
     const [debounce, mutatePrevious] = useDebounceClick(
         followed,
@@ -61,3 +61,8 @@ export default function FollowButton({ userSlug, condition }: Props) {
         </button>
     );
 }
+
+export default memo(
+    FollowButton,
+    (prev, current) => prev.condition === current.condition,
+);

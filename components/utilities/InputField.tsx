@@ -1,4 +1,4 @@
-import { ForwardedRef, forwardRef, InputHTMLAttributes } from 'react';
+import { memo, forwardRef, ForwardedRef, InputHTMLAttributes } from 'react';
 import clsx from 'clsx';
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
@@ -42,4 +42,7 @@ InputField.defaultProps = {
     error: undefined,
 };
 
-export default InputField;
+export default memo(
+    InputField,
+    (prev, current) => prev.value === current.value,
+);

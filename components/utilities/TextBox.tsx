@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { useMutation } from 'react-query';
 import useTextBody from 'hooks/useTextBody';
 import { Post } from 'types/post';
@@ -30,7 +31,7 @@ interface Props {
     ): void;
 }
 
-export default function TextBox({
+function TextBox({
     className,
     buttonLabel,
     value,
@@ -108,3 +109,5 @@ TextBox.defaultProps = {
     className: undefined,
     placeholder: "What's on your mind?",
 };
+
+export default memo(TextBox, (prev, current) => prev.value === current.value);
