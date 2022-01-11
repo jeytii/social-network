@@ -94,7 +94,7 @@ export default function EditProfile({
 
     const values = watch();
     const bioLength = values.bio ? values.bio.length : 0;
-    const charactersLeft = 180 - bioLength;
+    const charactersLeft = 120 - bioLength;
 
     function onBioChange(event: ChangeEvent<HTMLTextAreaElement>) {
         const { target } = event;

@@ -3,7 +3,6 @@ import { useEffect } from 'react';
 import { InfiniteData, useQueryClient } from 'react-query';
 import { MdOutlineNotifications } from 'react-icons/md';
 import Echo from 'laravel-echo';
-import { axiosClient } from 'config/axios';
 import type { NotificationPage } from 'types/page';
 import type { User } from 'types/user';
 import type { Notification } from 'types/notification';
