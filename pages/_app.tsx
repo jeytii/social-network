@@ -1,3 +1,4 @@
+import dynamic from 'next/dynamic';
 import { AppProps } from 'next/dist/shared/lib/router/router';
 import {
     QueryClient,
@@ -6,10 +7,15 @@ import {
     QueryMeta,
 } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
-import Public from 'components/Public';
-import Protected from 'components/Protected';
 import { axiosClient } from 'config/axios';
 import '../styles/globals.css';
+
+const Public = dynamic(() => import('components/Public'), {
+    loading: () => null,
+});
+const Protected = dynamic(() => import('components/Protected'), {
+    loading: () => null,
+});
 
 const queryClient = new QueryClient({
     defaultOptions: {
