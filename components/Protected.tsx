@@ -117,13 +117,13 @@ export default function Protected({
 
                 {/* MAIN */}
                 <section className='max-w-[1366px] flex items-start mx-auto sm:flex-1 sm:mx-[0px]'>
-                    {!isMobile && <LeftSidebar />}
+                    {rendered && !isMobile && <LeftSidebar />}
 
                     <section className='flex-1'>
                         {rendered ? children : <Spinner className='p-lg' />}
                     </section>
 
-                    {isDesktop && <RightSidebar />}
+                    {rendered && isDesktop && <RightSidebar />}
                 </section>
 
                 {/* BOTTOM NAV (mobile mode) */}
