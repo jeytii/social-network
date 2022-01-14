@@ -6,7 +6,7 @@ import { AxiosError, AxiosResponse } from 'axios';
 import Cookies from 'js-cookie';
 import InputField from 'components/utilities/InputField';
 import Logo from 'components/Logo';
-import { axiosClient, axiosServer } from 'config/axios';
+import axios from 'lib/axios';
 
 interface Variables {
     url: string;
@@ -15,11 +15,12 @@ interface Variables {
     };
 }
 
-export default function Verification() {
+export default function Verification({ token }: { token: string }) {
     const [alertError, setAlertError] = useState<string | null>(null);
     const { register, getValues, setError, formState } = useForm({
         defaultValues: {
             code: '',
+            token,
         },
     });
 
@@ -79,9 +80,7 @@ export default function Verification() {
                     label='6-digit verification code'
                     error={formState.errors.code?.message}
                     disabled={isLoading}
-                    {...register('code', {
-                        valueAsNumber: true,
-                    })}
+                    {...register('code')}
                 />
                 <button
                     type='submit'
@@ -99,16 +98,17 @@ export const getServerSideProps: GetServerSideProps = async ({
     params,
     req,
 }) => {
+    const props = {
+        title: 'Verify account',
+        isPrivate: false,
+        token: params?.token,
+    };
+
     if (!req.cookies || !req.cookies.token) {
         try {
-            await axiosClient().get(`/verify/${params?.token}`);
+            await axios().get(`/verify/${params?.token}`);
 
-            return {
-                props: {
-                    title: 'Verify account',
-                    isPrivate: false,
-                },
-            };
+            return { props };
         } catch (err) {
             return {
                 notFound: true,
@@ -117,7 +117,7 @@ export const getServerSideProps: GetServerSideProps = async ({
     }
 
     try {
-        await axiosServer(req.cookies.token).get('/private');
+        await axios(req.cookies.token).get('/private');
 
         return {
             redirect: {
@@ -127,14 +127,9 @@ export const getServerSideProps: GetServerSideProps = async ({
         };
     } catch (e) {
         try {
-            await axiosClient().get(`/verify/${params?.token}`);
+            await axios().get(`/verify/${params?.token}`);
 
-            return {
-                props: {
-                    title: 'Verify account',
-                    isPrivate: false,
-                },
-            };
+            return { props };
         } catch (err) {
             return {
                 notFound: true,
