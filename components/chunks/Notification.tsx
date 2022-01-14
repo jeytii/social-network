@@ -4,7 +4,7 @@ import { forwardRef, Ref } from 'react';
 import { InfiniteData, useQueryClient } from 'react-query';
 import { MdAccountCircle } from 'react-icons/md';
 import clsx from 'clsx';
-import { axiosClient } from 'config/axios';
+import axios from 'lib/axios';
 import type { NotificationPage } from 'types/page';
 import type { Notification as NotificationType } from 'types/notification';
 
@@ -23,7 +23,7 @@ function Notification(
             return;
         }
 
-        await axiosClient().put(`/api/notifications/${slug}/read`);
+        await axios().put(`/api/notifications/${slug}/read`);
 
         queryClient.setQueryData<InfiniteData<NotificationPage> | undefined>(
             'notifications',

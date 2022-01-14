@@ -1,6 +1,6 @@
 import { GetServerSideProps } from 'next';
-import { axiosServer } from 'config/axios';
 import Posts from 'components/layouts/Posts';
+import axios from 'lib/axios';
 
 export default function Bookmarks() {
     return (
@@ -29,8 +29,8 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
 
     try {
         const responses = await Promise.all([
-            axiosServer(req.cookies.token).get('/private'),
-            axiosServer(req.cookies.token).get('/api/notifications/count'),
+            axios(req.cookies.token).get('/private'),
+            axios(req.cookies.token).get('/api/notifications/count'),
         ]);
 
         return {

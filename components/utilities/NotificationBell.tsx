@@ -3,6 +3,7 @@ import { useEffect } from 'react';
 import { InfiniteData, useQueryClient } from 'react-query';
 import { MdOutlineNotifications } from 'react-icons/md';
 import Echo from 'laravel-echo';
+import axios from 'lib/axios';
 import type { NotificationPage } from 'types/page';
 import type { User } from 'types/user';
 import type { Notification } from 'types/notification';
@@ -16,13 +17,10 @@ interface NotificationData {
 const authorizer = channel => ({
     async authorize(socketId, callback) {
         try {
-            const { data } = await axiosClient().post(
-                '/api/broadcasting/auth',
-                {
-                    socket_id: socketId,
-                    channel_name: channel.name,
-                },
-            );
+            const { data } = await axios().post('/api/broadcasting/auth', {
+                socket_id: socketId,
+                channel_name: channel.name,
+            });
 
             callback(false, data);
         } catch (error) {

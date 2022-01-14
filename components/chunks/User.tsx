@@ -11,7 +11,7 @@ import { MdPersonAddAlt, MdOutlinePersonRemove } from 'react-icons/md';
 import clsx from 'clsx';
 import BasicInfo from 'components/utilities/BasicInfo';
 import useDebounceClick from 'hooks/useDebounceClick';
-import { axiosClient } from 'config/axios';
+import axios from 'lib/axios';
 import type { User as UserType } from 'types/user';
 
 interface Props extends UserType, HTMLAttributes<HTMLDivElement> {
@@ -43,7 +43,7 @@ const User = forwardRef(
 
         async function follow() {
             try {
-                await axiosClient().post(`/api/users/${slug}/follow`);
+                await axios().post(`/api/users/${slug}/follow`);
                 mutatePreviousState(true);
             } catch (e) {
                 setFollowed(false);
@@ -52,7 +52,7 @@ const User = forwardRef(
 
         async function unfollow() {
             try {
-                await axiosClient().delete(`/api/users/${slug}/unfollow`);
+                await axios().delete(`/api/users/${slug}/unfollow`);
                 mutatePreviousState(false);
             } catch (e) {
                 setFollowed(true);

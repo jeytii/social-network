@@ -7,7 +7,7 @@ import {
     QueryMeta,
 } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
-import { axiosClient } from 'config/axios';
+import axios from 'lib/axios';
 import '../styles/globals.css';
 
 const Public = dynamic(() => import('components/Public'), {
@@ -23,7 +23,7 @@ const queryClient = new QueryClient({
             async queryFn({ pageParam = 0, meta }: QueryFunctionContext) {
                 const { url, returnKey, ...params } = meta as QueryMeta;
 
-                const { data } = await axiosClient().get(url as string, {
+                const { data } = await axios().get(url as string, {
                     params: {
                         page: pageParam,
                         ...params,
@@ -43,15 +43,15 @@ function MyApp({ Component, pageProps }: AppProps) {
     const { isPrivate, ...props } = pageProps;
 
     queryClient.setMutationDefaults('create', {
-        mutationFn: ({ url, data }) => axiosClient().post(url, data),
+        mutationFn: ({ url, data }) => axios().post(url, data),
     });
 
     queryClient.setMutationDefaults('update', {
-        mutationFn: ({ url, data }) => axiosClient().put(url, data),
+        mutationFn: ({ url, data }) => axios().put(url, data),
     });
 
     queryClient.setMutationDefaults('delete', {
-        mutationFn: ({ url }) => axiosClient().delete(url),
+        mutationFn: ({ url }) => axios().delete(url),
     });
 
     return (

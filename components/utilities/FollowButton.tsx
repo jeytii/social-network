@@ -1,7 +1,7 @@
 import { useState, MouseEvent, useEffect, memo } from 'react';
 import clsx from 'clsx';
 import useDebounceClick from 'hooks/useDebounceClick';
-import { axiosClient } from 'config/axios';
+import axios from 'lib/axios';
 
 interface Props {
     userSlug: string;
@@ -22,7 +22,7 @@ function FollowButton({ userSlug, condition }: Props) {
 
     async function follow() {
         try {
-            await axiosClient().post(`/api/users/${userSlug}/follow`);
+            await axios().post(`/api/users/${userSlug}/follow`);
 
             mutatePrevious(true);
         } catch (e) {
@@ -32,7 +32,7 @@ function FollowButton({ userSlug, condition }: Props) {
 
     async function unfollow() {
         try {
-            await axiosClient().delete(`/api/users/${userSlug}/unfollow`);
+            await axios().delete(`/api/users/${userSlug}/unfollow`);
 
             mutatePrevious(false);
         } catch (e) {

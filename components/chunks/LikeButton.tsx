@@ -2,7 +2,7 @@ import { useState, memo, HTMLAttributes, MouseEvent } from 'react';
 import { MdThumbUp, MdOutlineThumbUp } from 'react-icons/md';
 import clsx from 'clsx';
 import useDebounceClick from 'hooks/useDebounceClick';
-import { axiosClient } from 'config/axios';
+import axios from 'lib/axios';
 
 interface Props extends HTMLAttributes<HTMLButtonElement> {
     route: string;
@@ -25,7 +25,7 @@ function LikeButton({
 
     async function like() {
         try {
-            const { data } = await axiosClient().post(`${route}/like`);
+            const { data } = await axios().post(`${route}/like`);
 
             onSuccess(true, data.data);
             setLikesCount(data.data);
@@ -38,7 +38,7 @@ function LikeButton({
 
     async function dislike() {
         try {
-            const { data } = await axiosClient().delete(`${route}/dislike`);
+            const { data } = await axios().delete(`${route}/dislike`);
 
             onSuccess(false, data.data);
             setLikesCount(data.data);

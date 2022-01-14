@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import clsx from 'clsx';
 import Spinner from 'components/vectors/Spinner';
-import { axiosServer } from 'config/axios';
+import axios from 'lib/axios';
 
 const Posts = dynamic(() => import('components/layouts/Posts'), {
     loading: () => <Spinner className='p-lg' />,
@@ -102,8 +102,8 @@ export const getServerSideProps: GetServerSideProps = async ({
 
     try {
         const responses = await Promise.all([
-            axiosServer(req.cookies.token).get('/private'),
-            axiosServer(req.cookies.token).get('/api/notifications/count'),
+            axios(req.cookies.token).get('/private'),
+            axios(req.cookies.token).get('/api/notifications/count'),
         ]);
 
         const sections = ['posts', 'comments'];

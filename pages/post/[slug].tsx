@@ -5,7 +5,7 @@ import { useQuery, useQueryClient, QueryFunctionContext } from 'react-query';
 import Post from 'components/chunks/post';
 import CommentBox from 'components/chunks/CommentBox';
 import Spinner from 'components/vectors/Spinner';
-import { axiosClient, axiosServer } from 'config/axios';
+import axios from 'lib/axios';
 import type { Post as PostType } from 'types/post';
 
 const Comments = dynamic(() => import('components/layouts/Comments'), {
@@ -14,9 +14,7 @@ const Comments = dynamic(() => import('components/layouts/Comments'), {
 
 const getPost = async (ctx: QueryFunctionContext) => {
     try {
-        const { data } = await axiosClient().get(
-            `/api/posts/${ctx.meta?.slug}`,
-        );
+        const { data } = await axios().get(`/api/posts/${ctx.meta?.slug}`);
 
         return data.post;
     } catch (error) {
@@ -90,8 +88,8 @@ export const getServerSideProps: GetServerSideProps = async ({
 
     try {
         const responses = await Promise.all([
-            axiosServer(req.cookies.token).get('/private'),
-            axiosServer(req.cookies.token).get('/api/notifications/count'),
+            axios(req.cookies.token).get('/private'),
+            axios(req.cookies.token).get('/api/notifications/count'),
         ]);
 
         return {

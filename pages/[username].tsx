@@ -6,7 +6,7 @@ import { useMemo } from 'react';
 import clsx from 'clsx';
 import ProfileHeadline from 'components/layouts/profile/Headline';
 import Spinner from 'components/vectors/Spinner';
-import { axiosServer } from 'config/axios';
+import axios from 'lib/axios';
 
 interface ProfileInfo {
     slug: string;
@@ -185,8 +185,8 @@ export const getServerSideProps: GetServerSideProps = async ({
 
     try {
         const responses = await Promise.all([
-            axiosServer(req.cookies.token).get('/private'),
-            axiosServer(req.cookies.token).get('/api/notifications/count'),
+            axios(req.cookies.token).get('/private'),
+            axios(req.cookies.token).get('/api/notifications/count'),
         ]);
 
         const errorProps = {
@@ -198,7 +198,7 @@ export const getServerSideProps: GetServerSideProps = async ({
         };
 
         try {
-            const { data } = await axiosServer(req.cookies.token).get(
+            const { data } = await axios(req.cookies.token).get(
                 `/api/profile/${params?.username}`,
             );
 

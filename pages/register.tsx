@@ -6,7 +6,7 @@ import { AxiosError, AxiosResponse } from 'axios';
 import InputField from 'components/utilities/InputField';
 import Radio from 'components/utilities/Radio';
 import Logo from 'components/Logo';
-import { axiosServer } from 'config/axios';
+import axios from 'lib/axios';
 
 interface RequestBody {
     name: string;
@@ -208,7 +208,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     }
 
     try {
-        await axiosServer(req.cookies.token).get('/private');
+        await axios(req.cookies.token).get('/private');
 
         return {
             redirect: {

@@ -2,7 +2,7 @@ import { useState, MouseEvent } from 'react';
 import { MdBookmark, MdBookmarkBorder } from 'react-icons/md';
 import clsx from 'clsx';
 import useDebounceClick from 'hooks/useDebounceClick';
-import { axiosClient } from 'config/axios';
+import axios from 'lib/axios';
 
 interface Props {
     route: string;
@@ -20,7 +20,7 @@ export default function BookmarkButton({ route, condition, onSuccess }: Props) {
 
     async function bookmark() {
         try {
-            await axiosClient().post(`${route}/bookmark`);
+            await axios().post(`${route}/bookmark`);
 
             onSuccess(true);
             mutatePreviousState(true);
@@ -31,7 +31,7 @@ export default function BookmarkButton({ route, condition, onSuccess }: Props) {
 
     async function unbookmark() {
         try {
-            await axiosClient().delete(`${route}/unbookmark`);
+            await axios().delete(`${route}/unbookmark`);
 
             onSuccess(false);
             mutatePreviousState(false);

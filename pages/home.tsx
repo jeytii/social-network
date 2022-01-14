@@ -3,10 +3,10 @@ import dynamic from 'next/dynamic';
 import { useQueryClient, InfiniteData } from 'react-query';
 import TextBox from 'components/utilities/TextBox';
 import Spinner from 'components/vectors/Spinner';
-import { axiosServer } from 'config/axios';
+import axios from 'lib/axios';
 import type { User } from 'types/user';
 import type { Post } from 'types/post';
-import { PostPage } from 'types/page';
+import type { PostPage } from 'types/page';
 
 interface ResponseData {
     data: {
@@ -76,8 +76,8 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
 
     try {
         const responses = await Promise.all([
-            axiosServer(req.cookies.token).get('/private'),
-            axiosServer(req.cookies.token).get('/api/notifications/count'),
+            axios(req.cookies.token).get('/private'),
+            axios(req.cookies.token).get('/api/notifications/count'),
         ]);
 
         return {

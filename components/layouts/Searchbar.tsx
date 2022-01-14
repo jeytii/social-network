@@ -5,11 +5,11 @@ import clsx from 'clsx';
 import SearchSuggestions from 'components/chunks/SearchSuggestions';
 import Spinner from 'components/vectors/Spinner';
 import useDebounceChange from 'hooks/useDebounceChange';
-import { axiosClient } from 'config/axios';
-import { User } from 'types/user';
+import axios from 'lib/axios';
+import type { User } from 'types/user';
 
 const getResults = async ({ meta }: QueryFunctionContext) => {
-    const { data } = await axiosClient().get('/api/users/search', {
+    const { data } = await axios().get('/api/users/search', {
         params: { query: meta?.query },
     });
 

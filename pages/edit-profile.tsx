@@ -5,8 +5,8 @@ import { useForm } from 'react-hook-form';
 import { AxiosError, AxiosResponse } from 'axios';
 import ImageUploader from 'components/layouts/profile/ImageUploader';
 import InputField from 'components/utilities/InputField';
-import { axiosServer } from 'config/axios';
-import { User } from 'types/user';
+import axios from 'lib/axios';
+import type { User } from 'types/user';
 
 interface ImageVariables {
     url: string;
@@ -222,8 +222,8 @@ export const getServerSideProps: GetServerSideProps = async ({ req }) => {
 
     try {
         const responses = await Promise.all([
-            axiosServer(req.cookies.token).get('/private'),
-            axiosServer(req.cookies.token).get('/api/notifications/count'),
+            axios(req.cookies.token).get('/private'),
+            axios(req.cookies.token).get('/api/notifications/count'),
         ]);
 
         return {
