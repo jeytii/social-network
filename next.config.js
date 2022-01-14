@@ -7,7 +7,7 @@ module.exports = {
             pages: resolve(__dirname, 'pages/'),
             components: resolve(__dirname, 'components/'),
             hooks: resolve(__dirname, 'hooks/'),
-            config: resolve(__dirname, 'config/'),
+            lib: resolve(__dirname, 'lib/'),
             types: resolve(__dirname, 'types/'),
         };
 

@@ -24,7 +24,7 @@
             "pages/*": ["pages/*"],
             "components/*": ["components/*"],
             "hooks/*": ["hooks/*"],
-            "config/*": ["config/*"],
+            "lib/*": ["lib/*"],
             "types/*": ["types/*"]
         }
     },
