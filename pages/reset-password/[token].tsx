@@ -6,10 +6,9 @@ import { AxiosError, AxiosResponse } from 'axios';
 import Cookies from 'js-cookie';
 import InputField from 'components/utilities/InputField';
 import Logo from 'components/Logo';
-import { axiosClient, axiosServer } from 'config/axios';
+import axios from 'lib/axios';
 
 interface RequestBody {
-    email: string;
     password: string;
     password_confirmation: string;
 }
@@ -20,7 +19,6 @@ interface Variables {
 }
 
 const fields = {
-    email: '',
     password: '',
     password_confirmation: '',
 };
@@ -79,14 +77,6 @@ export default function ResetPassword({ token }: { token: string }) {
 
             <form className='mt-lg' onSubmit={submit}>
                 <InputField
-                    id='email'
-                    type='email'
-                    label='Email address'
-                    error={formState.errors.email?.message}
-                    disabled={isLoading}
-                    {...register('email')}
-                />
-                <InputField
                     containerClassName='mt-lg'
                     id='password'
                     type='password'
@@ -129,7 +119,7 @@ export const getServerSideProps: GetServerSideProps = async ({
 
     if (!req.cookies || !req.cookies.token) {
         try {
-            await axiosClient().get(`/reset-password/${params?.token}`);
+            await axios().get(`/reset-password/${params?.token}`);
 
             return { props };
         } catch (err) {
@@ -140,7 +130,7 @@ export const getServerSideProps: GetServerSideProps = async ({
     }
 
     try {
-        await axiosServer(req.cookies.token).get('/private');
+        await axios(req.cookies.token).get('/private');
 
         return {
             redirect: {
@@ -150,7 +140,7 @@ export const getServerSideProps: GetServerSideProps = async ({
         };
     } catch (e) {
         try {
-            await axiosClient().get(`/reset-password/${params?.token}`);
+            await axios().get(`/reset-password/${params?.token}`);
 
             return { props };
         } catch (err) {
