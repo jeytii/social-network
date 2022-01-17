@@ -1,7 +1,6 @@
-import { useRouter } from 'next/router';
 import { useQueryClient, useMutation, InfiniteData } from 'react-query';
 import { Dialog } from '@headlessui/react';
-import type { CommentPage, PostPage } from 'types/page';
+import type { PostPage } from 'types/page';
 import type { ModifyItem } from 'types/item';
 import type { User } from 'types/user';
 import Modal from '.';
@@ -11,7 +10,6 @@ interface Variables {
 }
 
 export default function DeleteCommentModal({ isOpen }: { isOpen: boolean }) {
-    const { route } = useRouter();
     const queryClient = useQueryClient();
     const user = queryClient.getQueryData<User>('user');
     const item = queryClient.getQueryData<ModifyItem>('delete');
@@ -19,12 +17,6 @@ export default function DeleteCommentModal({ isOpen }: { isOpen: boolean }) {
         'delete',
         { onSuccess },
     );
-
-    const queries = [
-        { key: ['comments', item?.parentSlug], path: '/post/[slug]' },
-        { key: ['profile.comments', user?.slug], path: '/[username]' },
-        { key: 'profile.likes.comments', path: '/likes' },
-    ];
 
     const postQueries = [
         'posts',
@@ -34,33 +26,35 @@ export default function DeleteCommentModal({ isOpen }: { isOpen: boolean }) {
     ];
 
     async function onSuccess() {
-        queries.forEach(async query => {
-            if (queryClient.getQueryData(query.key)) {
-                if (route === query.path) {
-                    queryClient.setQueryData<
-                        InfiniteData<CommentPage> | undefined
-                    >(query.key, current => {
-                        current?.pages.forEach(page => {
-                            const index = page.items.findIndex(
-                                comment => comment.slug === item?.slug,
-                            );
+        await Promise.all([
+            queryClient.cancelQueries('profile.likes.comments'),
+            queryClient.cancelQueries(['comments', item?.parentSlug], {
+                exact: true,
+            }),
+            queryClient.cancelQueries(['profile.comments', user?.slug], {
+                exact: true,
+            }),
+        ]);
 
-                            if (index !== -1) {
-                                page.items.splice(index, 1);
-                            }
-                        });
-
-                        return current;
-                    });
-                } else {
-                    await queryClient.invalidateQueries(query.key, {
-                        exact: true,
-                        refetchActive: true,
-                        refetchInactive: true,
-                    });
-                }
-            }
-        });
+        await Promise.all([
+            queryClient.invalidateQueries('profile.likes.comments', {
+                refetchActive: true,
+                refetchInactive: true,
+                refetchPage: () => true,
+            }),
+            queryClient.invalidateQueries(['comments', item?.parentSlug], {
+                exact: true,
+                refetchActive: true,
+                refetchInactive: true,
+                refetchPage: () => true,
+            }),
+            queryClient.invalidateQueries(['profile.comments', user?.slug], {
+                exact: true,
+                refetchActive: true,
+                refetchInactive: true,
+                refetchPage: () => true,
+            }),
+        ]);
 
         postQueries.forEach(query => {
             if (queryClient.getQueryData(query)) {

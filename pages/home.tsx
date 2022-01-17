@@ -1,19 +1,10 @@
 import { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
-import { useQueryClient, InfiniteData } from 'react-query';
+import { useQueryClient } from 'react-query';
 import TextBox from 'components/utilities/TextBox';
 import Spinner from 'components/vectors/Spinner';
 import axios from 'lib/axios';
 import type { User } from 'types/user';
-import type { Post } from 'types/post';
-import type { PostPage } from 'types/page';
-
-interface ResponseData {
-    data: {
-        status: number;
-        data: Post;
-    };
-}
 
 const Posts = dynamic(() => import('components/layouts/Posts'), {
     loading: () => <Spinner className='p-lg' />,
@@ -22,23 +13,26 @@ const Posts = dynamic(() => import('components/layouts/Posts'), {
 export default function Home() {
     const queryClient = useQueryClient();
     const user = queryClient.getQueryData<User>('user');
-    const queryKeys = ['posts', ['profile.posts', user?.slug]];
 
-    async function onSuccess({ data }: ResponseData) {
-        await queryClient.cancelQueries('posts');
+    async function onSuccess() {
+        await Promise.all([
+            queryClient.cancelQueries('posts'),
+            queryClient.cancelQueries(['profile.posts', user?.slug], {
+                exact: true,
+            }),
+        ]);
 
-        queryKeys.forEach(key => {
-            if (queryClient.getQueryData(key)) {
-                queryClient.setQueryData<InfiniteData<PostPage> | undefined>(
-                    key,
-                    current => {
-                        current?.pages[0].items.unshift(data.data);
-
-                        return current;
-                    },
-                );
-            }
-        });
+        await Promise.all([
+            queryClient.invalidateQueries('posts', {
+                refetchActive: true,
+                refetchPage: () => true,
+            }),
+            queryClient.invalidateQueries(['profile.posts', user?.slug], {
+                exact: true,
+                refetchInactive: true,
+                refetchPage: () => true,
+            }),
+        ]);
     }
 
     return (

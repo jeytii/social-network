@@ -1,8 +1,6 @@
-import { useQueryClient, useMutation, InfiniteData } from 'react-query';
+import { useQueryClient, useMutation } from 'react-query';
 import { Dialog } from '@headlessui/react';
 import type { ModifyItem } from 'types/item';
-import { PostPage } from 'types/page';
-import { useRouter } from 'next/router';
 import Modal from '.';
 
 interface Variables {
@@ -10,7 +8,6 @@ interface Variables {
 }
 
 export default function DeletePostModal({ isOpen }: { isOpen: boolean }) {
-    const { route } = useRouter();
     const queryClient = useQueryClient();
     const item = queryClient.getQueryData<ModifyItem>('delete');
     const { mutate, isLoading } = useMutation<unknown, unknown, Variables>(
@@ -18,41 +15,39 @@ export default function DeletePostModal({ isOpen }: { isOpen: boolean }) {
         { onSuccess },
     );
 
-    const queries = [
-        { key: 'posts', path: '/home' },
-        { key: ['profile.posts', item?.parentSlug], path: '/[username]' },
-        { key: 'profile.likes.posts', path: '/likes' },
-        { key: 'profile.bookmarks', path: '/bookmarks' },
-    ];
+    async function onSuccess() {
+        await Promise.all([
+            queryClient.cancelQueries('posts'),
+            queryClient.cancelQueries('profile.likes.posts'),
+            queryClient.cancelQueries('profile.bookmarks'),
+            queryClient.cancelQueries(['profile.posts', item?.parentSlug], {
+                exact: true,
+            }),
+        ]);
 
-    function onSuccess() {
-        queries.forEach(async query => {
-            if (queryClient.getQueryData(query.key)) {
-                if (route === query.path) {
-                    queryClient.setQueryData<
-                        InfiniteData<PostPage> | undefined
-                    >(query.key, current => {
-                        current?.pages.forEach(page => {
-                            const index = page.items.findIndex(
-                                post => post.slug === item?.slug,
-                            );
-
-                            if (index !== -1) {
-                                page.items.splice(index, 1);
-                            }
-                        });
-
-                        return current;
-                    });
-                } else {
-                    await queryClient.invalidateQueries(query.key, {
-                        exact: true,
-                        refetchActive: true,
-                        refetchInactive: true,
-                    });
-                }
-            }
-        });
+        await Promise.all([
+            queryClient.invalidateQueries('posts', {
+                refetchActive: true,
+                refetchInactive: true,
+                refetchPage: () => true,
+            }),
+            queryClient.invalidateQueries('profile.likes.posts', {
+                refetchActive: true,
+                refetchInactive: true,
+                refetchPage: () => true,
+            }),
+            queryClient.invalidateQueries('profile.bookmarks', {
+                refetchActive: true,
+                refetchInactive: true,
+                refetchPage: () => true,
+            }),
+            queryClient.invalidateQueries(['profile.posts', item?.parentSlug], {
+                exact: true,
+                refetchActive: true,
+                refetchInactive: true,
+                refetchPage: () => true,
+            }),
+        ]);
 
         closeModal();
     }

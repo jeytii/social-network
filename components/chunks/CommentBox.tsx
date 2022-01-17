@@ -1,10 +1,9 @@
 import { KeyboardEvent } from 'react';
 import { useMutation, useQueryClient, InfiniteData } from 'react-query';
 import useTextBody from 'hooks/useTextBody';
-import type { CommentPage, PostPage } from 'types/page';
+import type { PostPage } from 'types/page';
 import type { User } from 'types/user';
 import type { Post } from 'types/post';
-import type { Comment } from 'types/comment';
 
 interface Variables {
     url: string;
@@ -14,27 +13,15 @@ interface Variables {
     };
 }
 
-interface ResponseBody {
-    data: {
-        status: number;
-        data: Comment;
-    };
-}
-
 export default function CommentBox({ slug }: { slug: string }) {
     const queryClient = useQueryClient();
     const [hook, checkTextBodyLength, charactersLeft] = useTextBody('');
-    const { mutate, isLoading } = useMutation<ResponseBody, unknown, Variables>(
+    const { mutate, isLoading } = useMutation<unknown, unknown, Variables>(
         'create',
         { onSuccess },
     );
 
     const user = queryClient.getQueryData<User>('user');
-
-    const queries = [
-        ['comments', slug],
-        ['profile.comments', user?.slug],
-    ];
 
     const postQueries = [
         'posts',
@@ -58,21 +45,26 @@ export default function CommentBox({ slug }: { slug: string }) {
         }
     }
 
-    async function onSuccess({ data }: ResponseBody) {
-        await queryClient.cancelQueries(['comments', slug], { exact: true });
+    async function onSuccess() {
+        await Promise.all([
+            queryClient.cancelQueries(['comments', slug], { exact: true }),
+            queryClient.cancelQueries(['profile.comments', user?.slug], {
+                exact: true,
+            }),
+        ]);
 
-        queries.forEach(query => {
-            if (queryClient.getQueryData(query)) {
-                queryClient.setQueryData<InfiniteData<CommentPage> | undefined>(
-                    query,
-                    current => {
-                        current?.pages[0].items.unshift(data.data);
-
-                        return current;
-                    },
-                );
-            }
-        });
+        await Promise.all([
+            queryClient.invalidateQueries(['comments', slug], {
+                exact: true,
+                refetchActive: true,
+                refetchPage: () => true,
+            }),
+            queryClient.invalidateQueries(['profile.comments', user?.slug], {
+                exact: true,
+                refetchInactive: true,
+                refetchPage: () => true,
+            }),
+        ]);
 
         queryClient.setQueryData<Post | undefined>(['post', slug], current => {
             if (!current) {
