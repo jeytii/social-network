@@ -50,7 +50,7 @@ export default function Users({ className, url, enabled, ...props }: Props) {
     if (isSuccess && !data?.pages.length) {
         return (
             <section className='p-lg'>
-                <h1 className='text-md font-bold text-skin-secondary opacity-50 text-center'>
+                <h1 className='text-md font-bold text-skin-primary opacity-50 text-center'>
                     No person to show.
                 </h1>
             </section>

@@ -74,7 +74,7 @@ export default function Notifications() {
     if (isSuccess && !data?.pages.length) {
         return (
             <section className='p-lg'>
-                <h1 className='text-md font-bold text-skin-secondary opacity-50 text-center'>
+                <h1 className='text-md font-bold text-skin-primary opacity-50 text-center'>
                     No notification to show.
                 </h1>
             </section>

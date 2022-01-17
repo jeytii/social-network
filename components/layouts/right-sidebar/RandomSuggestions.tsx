@@ -22,7 +22,7 @@ export default function RandomSuggestions() {
 
     if (isSuccess && !data?.length) {
         return (
-            <p className='text-sm text-skin-secondary text-center'>
+            <p className='text-sm text-skin-primary text-center'>
                 No suggestions to show.
             </p>
         );
