@@ -41,7 +41,7 @@ export default function Comments({
     if (isSuccess && !data.pages.length) {
         return (
             <section className='p-lg'>
-                <h1 className='text-md font-bold text-skin-secondary opacity-50 text-center'>
+                <h1 className='text-md font-bold text-skin-primary opacity-50 text-center'>
                     No comment to show.
                 </h1>
             </section>
@@ -54,7 +54,7 @@ export default function Comments({
                 {data.pages.map((comment, i) =>
                     hasLink ? (
                         <Link
-                            key={comment.slug}
+                            key={comment.unique_key}
                             href={`/post/${comment.post_slug}`}
                         >
                             <Comment
@@ -65,7 +65,7 @@ export default function Comments({
                         </Link>
                     ) : (
                         <Comment
-                            key={comment.slug}
+                            key={comment.unique_key}
                             ref={i === data.pages.length - 1 ? ref : null}
                             className={clsx(!!i && 'mt-lg')}
                             {...comment}

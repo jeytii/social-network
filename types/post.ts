@@ -1,6 +1,7 @@
 import type { User } from './user';
 
 export interface Post {
+    key: string;
     slug: string;
     body: string;
     likes_count: number;

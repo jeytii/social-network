@@ -1,6 +1,7 @@
 import type { User } from './user';
 
 export interface Comment {
+    unique_key: string;
     slug: string;
     post_slug: string;
     body: string;
