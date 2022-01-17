@@ -1,13 +1,13 @@
-import { ForwardedRef, forwardRef, HTMLAttributes } from 'react';
+import { memo, forwardRef, ForwardedRef, HTMLAttributes } from 'react';
 import { InfiniteData, useQueryClient } from 'react-query';
 import { MdOutlineChatBubbleOutline } from 'react-icons/md';
 import clsx from 'clsx';
 import BasicInfo from 'components/utilities/BasicInfo';
 import MoreOptionsButton from 'components/utilities/MoreOptionsButton';
 import LikeButton from 'components/chunks/LikeButton';
-import type { Post as PostType } from 'types/post';
-import { PostPage } from 'types/page';
 import BookmarkButton from './BookmarkButton';
+import type { Post as PostType } from 'types/post';
+import type { PostPage } from 'types/page';
 
 type Props = PostType & HTMLAttributes<HTMLElement>;
 type QueryData = InfiniteData<PostPage> | undefined;
@@ -57,7 +57,7 @@ function Post(
     ref: ForwardedRef<HTMLElement>,
 ) {
     const queryClient = useQueryClient();
-    const { is_self, ...userProps } = user;
+    const { is_self, is_followed, ...userProps } = user;
     const queryKeys = [
         'posts',
         ['profile.posts', user.slug],
@@ -142,4 +142,11 @@ function Post(
     );
 }
 
-export default forwardRef(Post);
+export default memo(
+    forwardRef(Post),
+    (prev, current) =>
+        prev.body === current.body ||
+        prev.is_liked === current.is_liked ||
+        prev.comments_count === current.comments_count ||
+        prev.is_bookmarked === current.is_bookmarked,
+);
