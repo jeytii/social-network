@@ -1,7 +1,8 @@
 import { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
 import { useEffect } from 'react';
-import { useQuery, useQueryClient, QueryFunctionContext } from 'react-query';
+import { useQuery, useQueryClient } from 'react-query';
+import { AxiosError } from 'axios';
 import Post from 'components/chunks/post';
 import CommentBox from 'components/chunks/CommentBox';
 import Spinner from 'components/vectors/Spinner';
@@ -12,27 +13,18 @@ const Comments = dynamic(() => import('components/layouts/Comments'), {
     loading: () => <Spinner className='mt-lg' />,
 });
 
-const getPost = async (ctx: QueryFunctionContext) => {
-    try {
-        const { data } = await axios().get(`/api/posts/${ctx.meta?.slug}`);
-
-        return data.post;
-    } catch (error) {
-        if (error.response.status === 404) {
-            throw new Error('Post does not exist.');
-        }
-
-        throw new Error('Something went wrong.');
-    }
-};
-
 export default function ViewPost({ slug }: { slug: string }) {
     const queryClient = useQueryClient();
-    const { data, isIdle, isError, error, remove } = useQuery<PostType, Error>(
-        ['post', slug],
-        getPost,
-        { meta: { slug } },
-    );
+    const { data, isIdle, isError, error, remove } = useQuery<
+        PostType,
+        AxiosError
+    >(['post', slug], {
+        meta: {
+            url: `/api/posts/${slug}`,
+            returnKey: 'post',
+            errorMessage: 'Post does not exist.',
+        },
+    });
 
     useEffect(() => {
         return () => {
@@ -48,7 +40,7 @@ export default function ViewPost({ slug }: { slug: string }) {
     if (isError || !data) {
         return (
             <section className='p-lg'>
-                <h1 className='text-md font-bold text-skin-secondary opacity-50 text-center'>
+                <h1 className='text-md font-bold text-skin-primary opacity-50 text-center'>
                     {error?.message}
                 </h1>
             </section>
