@@ -21,16 +21,25 @@ const queryClient = new QueryClient({
     defaultOptions: {
         queries: {
             async queryFn({ pageParam = 0, meta }: QueryFunctionContext) {
-                const { url, returnKey, ...params } = meta as QueryMeta;
+                const { url, returnKey, errorMessage, ...params } =
+                    meta as QueryMeta;
 
-                const { data } = await axios().get(url as string, {
-                    params: {
-                        page: pageParam,
-                        ...params,
-                    },
-                });
+                try {
+                    const { data } = await axios().get(url as string, {
+                        params: {
+                            page: pageParam,
+                            ...params,
+                        },
+                    });
 
-                return returnKey ? data[returnKey as string] : data;
+                    return returnKey ? data[returnKey as string] : data;
+                } catch (e) {
+                    if (e.response.status === 404 && errorMessage) {
+                        throw new Error(errorMessage as string);
+                    }
+
+                    throw new Error('Something went wrong.');
+                }
             },
             refetchOnMount: false,
             refetchOnWindowFocus: false,
