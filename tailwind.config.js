@@ -1,6 +1,5 @@
 module.exports = {
-    mode: 'jit',
-    purge: [
+    content: [
         './pages/**/*.{js,ts,jsx,tsx}',
         './components/**/*.{js,ts,jsx,tsx}',
     ],
@@ -15,30 +14,18 @@ module.exports = {
         },
         colors: {
             primary: {
-                // lighter: 'rgba(17, 123, 182, .1)',
-                // light: 'rgba(17, 123, 182, .3)',
-                // DEFAULT: 'rgba(36, 142, 201, .8)',
-                // dark: 'rgb(36, 142, 201)',
-                DEFAULT: 'var(--primary-default)',
-                dark: 'var(--primary-dark)',
-                light: 'var(--primary-light)',
-                transparent: 'var(--primary-transparent)',
+                DEFAULT: 'rgba(56, 147, 193, 0.8)',
+                dark: 'rgb(56, 147, 193)',
+                light: 'rgba(56, 147, 193, 0.6)',
+                transparent: 'rgba(56, 147, 193, 0.2)',
             },
             success: {
-                // lighter: 'rgba(34, 157, 46, .1)',
-                // light: 'rgba(34, 157, 46, .3)',
-                // DEFAULT: 'rgba(51, 171, 62, .8)',
-                // dark: 'rgb(51, 171, 62)',
                 transparent: 'rgba(9, 171, 35, 0.2)',
                 light: 'rgba(9, 171, 35, 0.6)',
                 DEFAULT: 'rgba(9, 171, 35, .8)',
                 dark: 'rgb(9, 171, 35)',
             },
             danger: {
-                // lighter: 'rgba(182, 17, 17, .1)',
-                // light: 'rgba(229, 59, 59, .3)',
-                // DEFAULT: 'rgba(229, 59, 59, .8)',
-                // dark: 'rgb(229, 59, 59)',
                 transparent: 'rgba(182, 17, 17, 0.2)',
                 light: 'rgba(182, 17, 17, 0.6)',
                 DEFAULT: 'rgba(182, 17, 17, 0.8)',
@@ -71,7 +58,7 @@ module.exports = {
             xs: '5px',
         },
         stroke: {
-            current: 'var(--primary-light)',
+            current: 'rgba(56, 147, 193, 0.6)',
         },
         borderRadius: {
             sm: '5px',
