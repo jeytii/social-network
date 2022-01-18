@@ -8,11 +8,6 @@
         --skin-main: rgba(0, 0, 0, 0.1);
         --skin-primary: #333;
         --skin-secondary: #898989;
-
-        --primary-default: rgba(56, 147, 193, 0.8);
-        --primary-light: rgba(56, 147, 193, 0.6);
-        --primary-dark: rgb(56, 147, 193);
-        --primary-transparent: rgba(56, 147, 193, 0.2);
     }
 
     .dark {
