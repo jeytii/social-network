@@ -86,7 +86,7 @@ export const getServerSideProps: GetServerSideProps = async ({
 
         return {
             props: {
-                title: 'Sosyal.me',
+                title: 'View post',
                 isPrivate: true,
                 user: responses[0].data.data,
                 notificationsCount: responses[1].data.data,

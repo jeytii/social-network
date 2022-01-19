@@ -232,7 +232,7 @@ export default function Index() {
 
 export const getServerSideProps: GetServerSideProps = async ({ req }) => {
     const props = {
-        title: 'Welcome to Sosyal.me',
+        title: "JT's Social Network",
         isPrivate: false,
     };
 
