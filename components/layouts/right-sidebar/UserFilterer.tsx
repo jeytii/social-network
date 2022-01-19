@@ -87,17 +87,17 @@ export default function UserFilterer() {
             <form className='mt-lg'>
                 <div className='flex gap-sm'>
                     <Listbox value={month} onChange={setMonth}>
-                        <div className='relative'>
-                            <Listbox.Button className='relative w-[120px] bg-skin-main text-left border border-skin-main rounded py-xs px-md cursor-pointer'>
+                        <div className='flex-1 relative'>
+                            <Listbox.Button className='relative w-full bg-skin-main text-left border border-skin-main rounded py-xs px-md cursor-pointer'>
                                 {!month ? (
                                     <Listbox.Label
                                         as='span'
-                                        className='text-sm text-skin-secondary'
+                                        className='text-md text-skin-secondary'
                                     >
                                         Month
                                     </Listbox.Label>
                                 ) : (
-                                    <span className='text-sm text-skin-primary'>
+                                    <span className='text-md text-skin-primary'>
                                         {month.label}
                                     </span>
                                 )}
@@ -110,11 +110,11 @@ export default function UserFilterer() {
                                 </span>
                             </Listbox.Button>
 
-                            <Listbox.Options className='absolute right-[0px] top-[100%] w-full mt-xs overflow-auto bg-skin rounded ring-1 ring-skin-secondary ring-opacity-5 z-10 sm:text-sm'>
+                            <Listbox.Options className='absolute right-[0px] top-[100%] w-full mt-xs overflow-auto bg-skin rounded ring-1 ring-skin-secondary ring-opacity-5 z-10'>
                                 {months.map(m => (
                                     <Listbox.Option key={m.value} value={m}>
                                         <div className='p-xs cursor-pointer hover:bg-skin-main hover:font-bold'>
-                                            <span className='text-sm text-skin-primary ml-xs'>
+                                            <span className='text-md text-skin-primary ml-xs'>
                                                 {m.label}
                                             </span>
                                         </div>
@@ -125,7 +125,7 @@ export default function UserFilterer() {
                     </Listbox>
 
                     <input
-                        className='bg-skin-main text-sm text-skin-primary border border-skin-main rounded p-xs'
+                        className='bg-skin-main text-md text-skin-primary border border-skin-main rounded p-xs'
                         type='number'
                         placeholder='Year'
                         min={maxYear - 100}
@@ -156,7 +156,7 @@ export default function UserFilterer() {
                 </div>
 
                 <button
-                    className='button button-primary w-full rounded-full text-sm py-sm mt-lg'
+                    className='button button-primary w-full rounded-full text-md py-sm mt-lg'
                     type='button'
                     disabled={!month && !year.length && !gender}
                     onClick={filter}
