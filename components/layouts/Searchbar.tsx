@@ -1,20 +1,11 @@
 import { ChangeEvent, useRef, useState } from 'react';
-import { useQuery, useQueryClient, QueryFunctionContext } from 'react-query';
+import { useQuery, useQueryClient } from 'react-query';
 import { MdSearch } from 'react-icons/md';
 import clsx from 'clsx';
 import SearchSuggestions from 'components/chunks/SearchSuggestions';
 import Spinner from 'components/vectors/Spinner';
 import useDebounceChange from 'hooks/useDebounceChange';
-import axios from 'lib/axios';
 import type { User } from 'types/user';
-
-const getResults = async ({ meta }: QueryFunctionContext) => {
-    const { data } = await axios().get('/api/users/search', {
-        params: { query: meta?.query },
-    });
-
-    return data.data;
-};
 
 export default function Searchbar() {
     const [query, setQuery] = useState<string>('');
@@ -23,10 +14,13 @@ export default function Searchbar() {
     const queryClient = useQueryClient();
     const { data, refetch, isFetching, isSuccess } = useQuery<User[]>(
         'search',
-        getResults,
         {
             enabled: false,
-            meta: { query },
+            meta: {
+                url: '/api/users/search',
+                query,
+                returnKey: 'data',
+            },
         },
     );
 
