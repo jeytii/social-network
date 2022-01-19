@@ -50,7 +50,7 @@ export default function NotificationBell() {
                 (data: NotificationData) => {
                     queryClient.setQueryData('notificationsCount', data.count);
 
-                    if (!queryClient.getQueryData('notifications')) {
+                    if (queryClient.getQueryData('notifications')) {
                         queryClient.setQueryData<
                             InfiniteData<NotificationPage> | undefined
                         >('notifications', current => {
