@@ -1,10 +1,9 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { forwardRef, Ref } from 'react';
-import { InfiniteData, useQueryClient } from 'react-query';
+import { InfiniteData, useMutation, useQueryClient } from 'react-query';
 import { MdAccountCircle } from 'react-icons/md';
 import clsx from 'clsx';
-import axios from 'lib/axios';
 import type { NotificationPage } from 'types/page';
 import type { Notification as NotificationType } from 'types/notification';
 
@@ -17,30 +16,37 @@ function Notification(
     ref: Ref<HTMLElement>,
 ) {
     const queryClient = useQueryClient();
+    const { mutate } = useMutation<unknown, unknown, { url: string }>(
+        'update',
+        {
+            onSuccess() {
+                queryClient.setQueryData<
+                    InfiniteData<NotificationPage> | undefined
+                >('notifications', current => {
+                    const notifications = current?.pages.flatMap(page => [
+                        ...page.items,
+                    ]);
+
+                    notifications?.forEach(n => {
+                        const notification = n;
+
+                        notification.is_read = true;
+                    });
+
+                    return current;
+                });
+            },
+        },
+    );
 
     async function markAsRead() {
         if (is_read) {
             return;
         }
 
-        await axios().put(`/api/notifications/${slug}/read`);
-
-        queryClient.setQueryData<InfiniteData<NotificationPage> | undefined>(
-            'notifications',
-            current => {
-                const notifications = current?.pages.flatMap(page => [
-                    ...page.items,
-                ]);
-
-                notifications?.forEach(n => {
-                    const notification = n;
-
-                    notification.is_read = true;
-                });
-
-                return current;
-            },
-        );
+        mutate({
+            url: `/api/notifications/${slug}/read`,
+        });
     }
 
     return (
