@@ -11,6 +11,7 @@ export default function Public({ title, children }: Props) {
         <section className='px-md'>
             <Head>
                 <title>{title}</title>
+                <link rel='icon' href='/dark.ico' />
             </Head>
 
             {children}
