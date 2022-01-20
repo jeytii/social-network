@@ -6,7 +6,7 @@ import { AxiosError, AxiosResponse } from 'axios';
 import Cookies from 'js-cookie';
 import InputField from 'components/utilities/InputField';
 import Logo from 'components/Logo';
-import axios from 'lib/axios';
+import authenticate from 'lib/auth';
 
 interface LoginVariables {
     url: string;
@@ -230,26 +230,7 @@ export default function Index() {
     );
 }
 
-export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-    const props = {
+export const getServerSideProps: GetServerSideProps = props =>
+    authenticate('guest', props, {
         title: "JT's Social Network",
-        isPrivate: false,
-    };
-
-    if (!req.cookies || !req.cookies.token) {
-        return { props };
-    }
-
-    try {
-        await axios(req.cookies.token).get('/private');
-
-        return {
-            redirect: {
-                destination: '/home',
-                permanent: false,
-            },
-        };
-    } catch (e) {
-        return { props };
-    }
-};
+    });

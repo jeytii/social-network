@@ -6,7 +6,7 @@ import { AxiosError, AxiosResponse } from 'axios';
 import InputField from 'components/utilities/InputField';
 import Radio from 'components/utilities/Radio';
 import Logo from 'components/Logo';
-import axios from 'lib/axios';
+import authenticate from 'lib/auth';
 
 interface RequestBody {
     name: string;
@@ -197,26 +197,7 @@ export default function Register() {
     );
 }
 
-export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-    const props = {
+export const getServerSideProps: GetServerSideProps = props =>
+    authenticate('guest', props, {
         title: 'Create an account',
-        isPrivate: false,
-    };
-
-    if (!req.cookies || !req.cookies.token) {
-        return { props };
-    }
-
-    try {
-        await axios(req.cookies.token).get('/private');
-
-        return {
-            redirect: {
-                destination: '/home',
-                permanent: false,
-            },
-        };
-    } catch (e) {
-        return { props };
-    }
-};
+    });

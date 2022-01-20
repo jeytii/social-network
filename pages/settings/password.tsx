@@ -4,7 +4,7 @@ import { useMutation } from 'react-query';
 import { useForm } from 'react-hook-form';
 import { AxiosError } from 'axios';
 import InputField from 'components/utilities/InputField';
-import axios from 'lib/axios';
+import authenticate from 'lib/auth';
 
 interface RequestBody {
     current_password: string;
@@ -135,33 +135,7 @@ export default function ChangePassword() {
     );
 }
 
-export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-    const defaultReturn = {
-        redirect: {
-            destination: '/',
-            permanent: false,
-        },
-    };
-
-    if (!req.cookies || !req.cookies.token) {
-        return defaultReturn;
-    }
-
-    try {
-        const responses = await Promise.all([
-            axios(req.cookies.token).get('/private'),
-            axios(req.cookies.token).get('/api/notifications/count'),
-        ]);
-
-        return {
-            props: {
-                title: 'Change password',
-                isPrivate: true,
-                user: responses[0].data.data,
-                notificationsCount: responses[1].data.data,
-            },
-        };
-    } catch (e) {
-        return defaultReturn;
-    }
-};
+export const getServerSideProps: GetServerSideProps = props =>
+    authenticate('auth', props, {
+        title: 'Change password',
+    });

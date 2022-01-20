@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Cookies from 'js-cookie';
 import DarkModeToggler from 'components/utilities/DarkModeToggler';
 import axios from 'lib/axios';
+import authenticate from 'lib/auth';
 
 interface User {
     slug: string;
@@ -89,33 +90,7 @@ export default function Settings({ user }: { user: User }) {
     );
 }
 
-export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-    const defaultReturn = {
-        redirect: {
-            destination: '/',
-            permanent: false,
-        },
-    };
-
-    if (!req.cookies || !req.cookies.token) {
-        return defaultReturn;
-    }
-
-    try {
-        const responses = await Promise.all([
-            axios(req.cookies.token).get('/private'),
-            axios(req.cookies.token).get('/api/notifications/count'),
-        ]);
-
-        return {
-            props: {
-                title: 'Settings',
-                isPrivate: true,
-                user: responses[0].data.data,
-                notificationsCount: responses[1].data.data,
-            },
-        };
-    } catch (e) {
-        return defaultReturn;
-    }
-};
+export const getServerSideProps: GetServerSideProps = props =>
+    authenticate('auth', props, {
+        title: 'Settings',
+    });

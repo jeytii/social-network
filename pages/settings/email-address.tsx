@@ -4,7 +4,12 @@ import { useMutation } from 'react-query';
 import { useForm } from 'react-hook-form';
 import { AxiosError } from 'axios';
 import InputField from 'components/utilities/InputField';
-import axios from 'lib/axios';
+import authenticate from 'lib/auth';
+import type { User } from 'types/user';
+
+interface UserType extends User {
+    email: string;
+}
 
 interface Variables {
     url: string;
@@ -14,7 +19,7 @@ interface Variables {
     };
 }
 
-export default function ChangeEmailAddress({ email }: { email: string }) {
+export default function ChangeEmailAddress({ user }: { user: UserType }) {
     const [errorAlert, setErrorAlert] = useState<string | null>(null);
     const { mutate, isLoading } = useMutation<unknown, AxiosError, Variables>(
         'update',
@@ -22,7 +27,7 @@ export default function ChangeEmailAddress({ email }: { email: string }) {
     );
     const { register, getValues, watch, setError, clearErrors, formState } =
         useForm({
-            defaultValues: { email, password: '' },
+            defaultValues: { email: user.email, password: '' },
         });
 
     const [emailAddress, password] = watch(['email', 'password']);
@@ -109,7 +114,7 @@ export default function ChangeEmailAddress({ email }: { email: string }) {
                         isLoading ||
                         !emailAddress.length ||
                         !password.length ||
-                        (!!emailAddress.length && emailAddress === email)
+                        (!!emailAddress.length && emailAddress === user.email)
                     }
                 >
                     Update my email address
@@ -119,34 +124,7 @@ export default function ChangeEmailAddress({ email }: { email: string }) {
     );
 }
 
-export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-    const defaultReturn = {
-        redirect: {
-            destination: '/',
-            permanent: false,
-        },
-    };
-
-    if (!req.cookies || !req.cookies.token) {
-        return defaultReturn;
-    }
-
-    try {
-        const responses = await Promise.all([
-            axios(req.cookies.token).get('/private'),
-            axios(req.cookies.token).get('/api/notifications/count'),
-        ]);
-
-        return {
-            props: {
-                title: 'Change email address',
-                isPrivate: true,
-                user: responses[0].data.data,
-                email: responses[0].data.data.email,
-                notificationsCount: responses[1].data.data,
-            },
-        };
-    } catch (e) {
-        return defaultReturn;
-    }
-};
+export const getServerSideProps: GetServerSideProps = props =>
+    authenticate('auth', props, {
+        title: 'Change email address',
+    });

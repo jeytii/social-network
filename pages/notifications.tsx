@@ -6,7 +6,7 @@ import clsx from 'clsx';
 import Notification from 'components/chunks/Notification';
 import Spinner from 'components/vectors/Spinner';
 import useInfiniteScroll from 'hooks/useInfiniteScroll';
-import axios from 'lib/axios';
+import authenticate from 'lib/auth';
 import type { NotificationPage } from 'types/page';
 import type { Notification as NotificationType } from 'types/notification';
 
@@ -112,33 +112,7 @@ export default function Notifications() {
     );
 }
 
-export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-    const defaultReturn = {
-        redirect: {
-            destination: '/',
-            permanent: false,
-        },
-    };
-
-    if (!req.cookies || !req.cookies.token) {
-        return defaultReturn;
-    }
-
-    try {
-        const responses = await Promise.all([
-            axios(req.cookies.token).get('/private'),
-            axios(req.cookies.token).get('/api/notifications/count'),
-        ]);
-
-        return {
-            props: {
-                title: 'Notifications',
-                isPrivate: true,
-                user: responses[0].data.data,
-                notificationsCount: responses[1].data.data,
-            },
-        };
-    } catch (e) {
-        return defaultReturn;
-    }
-};
+export const getServerSideProps: GetServerSideProps = props =>
+    authenticate('auth', props, {
+        title: 'Notifications',
+    });

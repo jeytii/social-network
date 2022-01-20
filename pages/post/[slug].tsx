@@ -6,7 +6,7 @@ import { AxiosError } from 'axios';
 import Post from 'components/chunks/post';
 import CommentBox from 'components/chunks/CommentBox';
 import Spinner from 'components/vectors/Spinner';
-import axios from 'lib/axios';
+import authenticate from 'lib/auth';
 import type { Post as PostType } from 'types/post';
 
 const Comments = dynamic(() => import('components/layouts/Comments'), {
@@ -63,37 +63,8 @@ export default function ViewPost({ slug }: { slug: string }) {
     );
 }
 
-export const getServerSideProps: GetServerSideProps = async ({
-    params,
-    req,
-}) => {
-    const defaultReturn = {
-        redirect: {
-            destination: '/',
-            permanent: false,
-        },
-    };
-
-    if (!req.cookies || !req.cookies.token) {
-        return defaultReturn;
-    }
-
-    try {
-        const responses = await Promise.all([
-            axios(req.cookies.token).get('/private'),
-            axios(req.cookies.token).get('/api/notifications/count'),
-        ]);
-
-        return {
-            props: {
-                title: 'View post',
-                isPrivate: true,
-                user: responses[0].data.data,
-                notificationsCount: responses[1].data.data,
-                ...params,
-            },
-        };
-    } catch (e) {
-        return defaultReturn;
-    }
-};
+export const getServerSideProps: GetServerSideProps = ({ params, ...props }) =>
+    authenticate('auth', props, {
+        title: 'View post',
+        ...params,
+    });

@@ -4,7 +4,8 @@ import { useMutation } from 'react-query';
 import { useForm } from 'react-hook-form';
 import { AxiosError } from 'axios';
 import InputField from 'components/utilities/InputField';
-import axios from 'lib/axios';
+import authenticate from 'lib/auth';
+import type { User } from 'types/user';
 
 interface Variables {
     url: string;
@@ -14,7 +15,7 @@ interface Variables {
     };
 }
 
-export default function ChangeUsername({ username }: { username: string }) {
+export default function ChangeUsername({ user }: { user: User }) {
     const [errorAlert, setErrorAlert] = useState<string | null>(null);
     const { mutate, isLoading } = useMutation<unknown, AxiosError, Variables>(
         'update',
@@ -22,7 +23,7 @@ export default function ChangeUsername({ username }: { username: string }) {
     );
     const { register, getValues, watch, setError, clearErrors, formState } =
         useForm({
-            defaultValues: { username, password: '' },
+            defaultValues: { username: user.username, password: '' },
         });
 
     const [userName, password] = watch(['username', 'password']);
@@ -109,7 +110,7 @@ export default function ChangeUsername({ username }: { username: string }) {
                         isLoading ||
                         !userName.length ||
                         !password.length ||
-                        (!!userName.length && userName === username)
+                        (!!userName.length && userName === user.username)
                     }
                 >
                     Update my username
@@ -119,34 +120,7 @@ export default function ChangeUsername({ username }: { username: string }) {
     );
 }
 
-export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-    const defaultReturn = {
-        redirect: {
-            destination: '/',
-            permanent: false,
-        },
-    };
-
-    if (!req.cookies || !req.cookies.token) {
-        return defaultReturn;
-    }
-
-    try {
-        const responses = await Promise.all([
-            axios(req.cookies.token).get('/private'),
-            axios(req.cookies.token).get('/api/notifications/count'),
-        ]);
-
-        return {
-            props: {
-                title: 'Change username',
-                isPrivate: true,
-                user: responses[0].data.data,
-                username: responses[0].data.data.username,
-                notificationsCount: responses[1].data.data,
-            },
-        };
-    } catch (e) {
-        return defaultReturn;
-    }
-};
+export const getServerSideProps: GetServerSideProps = props =>
+    authenticate('auth', props, {
+        title: 'Change username',
+    });
