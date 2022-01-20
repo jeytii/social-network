@@ -90,6 +90,12 @@ export default function Protected({
         >
             <Head>
                 <title>{title}</title>
+
+                {authUser?.dark_mode ? (
+                    <link rel='icon' href='/light.ico' />
+                ) : (
+                    <link rel='icon' href='/dark.ico' />
+                )}
             </Head>
 
             <div
