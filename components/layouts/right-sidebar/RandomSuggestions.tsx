@@ -46,7 +46,7 @@ export default function RandomSuggestions() {
                 {data?.map(user => (
                     <User
                         key={user.slug}
-                        className='bg-skin-main border border-primary-transparent p-sm mt-sm hover:border-primary-light'
+                        className='bg-skin-main border border-skin-main p-sm mt-sm hover:border-primary-light'
                         {...user}
                     />
                 ))}
