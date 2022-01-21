@@ -4,6 +4,7 @@ import TextBox from 'components/utilities/TextBox';
 import type { PostPage } from 'types/page';
 import type { ModifyItem } from 'types/item';
 import type { User } from 'types/user';
+import type { Post } from 'types/post';
 import Modal from '.';
 
 type QueryData = InfiniteData<PostPage> | undefined;
@@ -35,13 +36,35 @@ export default function EditPostModal({ isOpen }: { isOpen: boolean }) {
     ];
 
     function onSuccess(_: never, { body }: { body: string }) {
-        queryKeys.forEach(key => {
-            if (queryClient.getQueryData(key)) {
-                queryClient.setQueryData<QueryData>(key, current =>
-                    update(current, item?.slug as string, body),
+        if (item) {
+            queryKeys.forEach(key => {
+                if (queryClient.getQueryData(key)) {
+                    queryClient.setQueryData<QueryData>(key, current =>
+                        update(current, item.slug, body),
+                    );
+                }
+            });
+
+            if (
+                queryClient.getQueryData(item.slug, {
+                    exact: true,
+                })
+            ) {
+                queryClient.setQueryData<Post | undefined>(
+                    item.slug,
+                    current => {
+                        if (current) {
+                            const post = current;
+
+                            post.body = body;
+                            post.is_edited = true;
+                        }
+
+                        return current;
+                    },
                 );
             }
-        });
+        }
 
         closeModal();
     }
