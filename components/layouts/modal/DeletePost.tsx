@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router';
 import { useQueryClient, useMutation } from 'react-query';
 import { Dialog } from '@headlessui/react';
 import type { ModifyItem } from 'types/item';
@@ -9,6 +10,7 @@ interface Variables {
 
 export default function DeletePostModal({ isOpen }: { isOpen: boolean }) {
     const queryClient = useQueryClient();
+    const { route, back } = useRouter();
     const item = queryClient.getQueryData<ModifyItem>('delete');
     const { mutate, isLoading } = useMutation<unknown, unknown, Variables>(
         'delete',
@@ -50,6 +52,10 @@ export default function DeletePostModal({ isOpen }: { isOpen: boolean }) {
         ]);
 
         closeModal();
+
+        if (route === '/post/[slug]') {
+            back();
+        }
     }
 
     function deleteItem() {
