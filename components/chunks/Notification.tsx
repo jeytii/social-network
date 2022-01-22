@@ -23,15 +23,18 @@ function Notification(
                 queryClient.setQueryData<
                     InfiniteData<NotificationPage> | undefined
                 >('notifications', current => {
-                    const notifications = current?.pages.flatMap(page => [
-                        ...page.items,
-                    ]);
+                    if (current) {
+                        const notifications = current.pages.flatMap(page => [
+                            ...page.items,
+                        ]);
 
-                    notifications?.forEach(n => {
-                        const notification = n;
-
-                        notification.is_read = true;
-                    });
+                        notifications.forEach(n => {
+                            if (n.slug === slug) {
+                                const notification = n;
+                                notification.is_read = true;
+                            }
+                        });
+                    }
 
                     return current;
                 });
