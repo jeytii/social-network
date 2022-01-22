@@ -7,6 +7,7 @@ import {
     QueryMeta,
 } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
+import { AxiosError } from 'axios';
 import axios from 'lib/axios';
 import '../styles/globals.css';
 
@@ -34,7 +35,10 @@ const queryClient = new QueryClient({
 
                     return returnKey ? data[returnKey as string] : data;
                 } catch (e) {
-                    if (e.response.status === 404 && errorMessage) {
+                    if (
+                        (e as AxiosError).response?.status === 404 &&
+                        errorMessage
+                    ) {
                         throw new Error(errorMessage as string);
                     }
 
