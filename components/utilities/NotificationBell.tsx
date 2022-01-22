@@ -9,6 +9,7 @@ import type { User } from 'types/user';
 import type { Notification } from 'types/notification';
 import type { Channel, AuthorizerCallback } from 'pusher-js';
 import type Socket from 'pusher-js/types/src/core/socket';
+import type { AuthData } from 'pusher-js/types/src/core/auth/options';
 import 'pusher-js';
 
 interface NotificationData {
@@ -26,7 +27,7 @@ const authorizer = (channel: Channel) => ({
 
             callback(null, data);
         } catch (error) {
-            callback(true, error);
+            callback(error as Error, error as AuthData);
         }
     },
 });
