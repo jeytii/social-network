@@ -7,6 +7,8 @@ import axios from 'lib/axios';
 import type { NotificationPage } from 'types/page';
 import type { User } from 'types/user';
 import type { Notification } from 'types/notification';
+import type { Channel, AuthorizerCallback } from 'pusher-js';
+import type Socket from 'pusher-js/types/src/core/socket';
 import 'pusher-js';
 
 interface NotificationData {
@@ -14,15 +16,15 @@ interface NotificationData {
     data: Notification;
 }
 
-const authorizer = channel => ({
-    async authorize(socketId, callback) {
+const authorizer = (channel: Channel) => ({
+    async authorize(socketId: Socket, callback: AuthorizerCallback) {
         try {
             const { data } = await axios().post('/api/broadcasting/auth', {
                 socket_id: socketId,
                 channel_name: channel.name,
             });
 
-            callback(false, data);
+            callback(null, data);
         } catch (error) {
             callback(true, error);
         }
