@@ -5,9 +5,9 @@ import clsx from 'clsx';
 import BasicInfo from 'components/utilities/BasicInfo';
 import MoreOptionsButton from 'components/utilities/MoreOptionsButton';
 import LikeButton from 'components/chunks/LikeButton';
-import BookmarkButton from './BookmarkButton';
 import type { Post as PostType } from 'types/post';
 import type { PostPage } from 'types/page';
+import BookmarkButton from './BookmarkButton';
 
 type Props = PostType & HTMLAttributes<HTMLElement>;
 type QueryData = InfiniteData<PostPage> | undefined;
