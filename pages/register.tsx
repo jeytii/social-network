@@ -1,5 +1,5 @@
 import { GetServerSideProps } from 'next';
-import { FormEvent } from 'react';
+import { useState, FormEvent } from 'react';
 import { useMutation } from 'react-query';
 import { useForm } from 'react-hook-form';
 import { AxiosError, AxiosResponse } from 'axios';
@@ -34,6 +34,7 @@ const fields = {
 };
 
 export default function Register() {
+    const [isSuccessful, setIsSuccessful] = useState<boolean>(false);
     const {
         register,
         watch,
@@ -50,8 +51,9 @@ export default function Register() {
         AxiosError,
         Variables
     >('create', {
-        onSuccess({ data }) {
-            window.location.href = data.url;
+        onSuccess() {
+            setIsSuccessful(true);
+            window.scrollTo(0, 0);
         },
         onError(error) {
             const e = error.response?.data.errors;
@@ -93,6 +95,13 @@ export default function Register() {
                 <h1 className='text-md text-skin-secondary font-bold text-center mt-xs'>
                     Register an account
                 </h1>
+
+                {isSuccessful && (
+                    <p className='bg-success-transparent paragraph-sm text-success-dark p-sm border border-success rounded mt-lg'>
+                        Registration successful. Please check for the
+                        verification code that was sent to your email address.
+                    </p>
+                )}
 
                 <form className='mt-sm' onSubmit={submit}>
                     <InputField
