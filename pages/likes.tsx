@@ -6,11 +6,11 @@ import clsx from 'clsx';
 import Spinner from 'components/vectors/Spinner';
 import axios from 'lib/axios';
 
-const Posts = dynamic(() => import('components/layouts/Posts'), {
+const Posts = dynamic(() => import('components/macro/Posts'), {
     loading: () => <Spinner className='p-lg' />,
 });
 
-const Comments = dynamic(() => import('components/layouts/Comments'), {
+const Comments = dynamic(() => import('components/macro/Comments'), {
     loading: () => <Spinner className='p-lg' />,
 });
 

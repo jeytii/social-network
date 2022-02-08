@@ -1,5 +1,5 @@
 import { GetServerSideProps } from 'next';
-import Posts from 'components/layouts/Posts';
+import Posts from 'components/macro/Posts';
 import authenticate from 'lib/auth';
 
 export default function Bookmarks() {

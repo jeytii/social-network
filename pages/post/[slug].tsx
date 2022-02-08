@@ -9,7 +9,7 @@ import Spinner from 'components/vectors/Spinner';
 import authenticate from 'lib/auth';
 import type { Post as PostType } from 'types/post';
 
-const Comments = dynamic(() => import('components/layouts/Comments'), {
+const Comments = dynamic(() => import('components/macro/Comments'), {
     loading: () => <Spinner className='mt-lg' />,
 });
 

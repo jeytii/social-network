@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import { useMemo } from 'react';
 import clsx from 'clsx';
-import ProfileHeadline from 'components/layouts/profile/Headline';
+import ProfileHeadline from 'components/macro/profile/Headline';
 import Spinner from 'components/vectors/Spinner';
 import axios from 'lib/axios';
 
@@ -29,15 +29,15 @@ interface Props {
     currentUser: ProfileInfo | undefined;
 }
 
-const Posts = dynamic(() => import('components/layouts/Posts'), {
+const Posts = dynamic(() => import('components/macro/Posts'), {
     loading: () => <Spinner className='p-lg' />,
 });
 
-const Comments = dynamic(() => import('components/layouts/Comments'), {
+const Comments = dynamic(() => import('components/macro/Comments'), {
     loading: () => <Spinner className='p-lg' />,
 });
 
-const Users = dynamic(() => import('components/layouts/Users'), {
+const Users = dynamic(() => import('components/macro/Users'), {
     loading: () => <Spinner className='p-lg' />,
 });
 

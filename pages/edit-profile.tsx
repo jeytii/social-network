@@ -3,7 +3,7 @@ import { ChangeEvent, FormEvent, KeyboardEvent } from 'react';
 import { useMutation } from 'react-query';
 import { useForm } from 'react-hook-form';
 import { AxiosError, AxiosResponse } from 'axios';
-import ImageUploader from 'components/layouts/profile/ImageUploader';
+import ImageUploader from 'components/macro/profile/ImageUploader';
 import InputField from 'components/utilities/InputField';
 import authenticate from 'lib/auth';
 import type { User } from 'types/user';

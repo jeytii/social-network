@@ -6,7 +6,7 @@ import Spinner from 'components/vectors/Spinner';
 import authenticate from 'lib/auth';
 import type { User } from 'types/user';
 
-const Posts = dynamic(() => import('components/layouts/Posts'), {
+const Posts = dynamic(() => import('components/macro/Posts'), {
     loading: () => <Spinner className='p-lg' />,
 });
 

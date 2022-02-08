@@ -1,5 +1,5 @@
 import { GetServerSideProps } from 'next';
-import Users from 'components/layouts/Users';
+import Users from 'components/macro/Users';
 import authenticate from 'lib/auth';
 
 export default function Search() {
