@@ -17,7 +17,7 @@ import RightSidebar from './macro/right-sidebar';
 import BottomNav from './macro/BottomNav';
 import NotificationBell from './utilities/NotificationBell';
 import Spinner from './utilities/Spinner';
-import Logo from './Logo';
+import Logo from './utilities/Logo';
 
 type UserType = User & {
     dark_mode: boolean;

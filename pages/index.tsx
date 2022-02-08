@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { AxiosError, AxiosResponse } from 'axios';
 import Cookies from 'js-cookie';
 import InputField from 'components/utilities/InputField';
-import Logo from 'components/Logo';
+import Logo from 'components/utilities/Logo';
 import authenticate from 'lib/auth';
 
 interface LoginVariables {
