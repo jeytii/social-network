@@ -15,7 +15,7 @@ import {
     MdOutlineSettings,
 } from 'react-icons/md';
 import clsx from 'clsx';
-import { User } from 'types/user';
+import type { User } from 'types/user';
 
 export default function LeftSidebar() {
     const isPortrait = useMediaQuery({ minWidth: 721 });

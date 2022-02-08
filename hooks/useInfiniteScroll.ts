@@ -4,11 +4,16 @@ import {
     useInfiniteQuery,
     UseInfiniteQueryOptions,
 } from 'react-query';
-import { UserPage, PostPage, CommentPage, NotificationPage } from 'types/page';
-import { User } from 'types/user';
-import { Post } from 'types/post';
-import { Comment } from 'types/comment';
-import { Notification } from 'types/notification';
+import type { User } from 'types/user';
+import type { Post } from 'types/post';
+import type { Comment } from 'types/comment';
+import type { Notification } from 'types/notification';
+import type {
+    UserPage,
+    PostPage,
+    CommentPage,
+    NotificationPage,
+} from 'types/page';
 
 type Page = UserPage | PostPage | CommentPage | NotificationPage;
 type Model = User | Post | Comment | Notification;

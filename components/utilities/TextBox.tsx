@@ -1,8 +1,8 @@
 import { memo } from 'react';
 import { useMutation } from 'react-query';
 import useTextBody from 'hooks/useTextBody';
-import { Post } from 'types/post';
 import clsx from 'clsx';
+import type { Post } from 'types/post';
 
 interface Variables {
     url: string;

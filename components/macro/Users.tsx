@@ -5,8 +5,8 @@ import clsx from 'clsx';
 import User from 'components/micro/User';
 import Spinner from 'components/utilities/Spinner';
 import useInfiniteScroll from 'hooks/useInfiniteScroll';
-import { UserPage } from 'types/page';
-import { User as UserType } from 'types/user';
+import type { UserPage } from 'types/page';
+import type { User as UserType } from 'types/user';
 
 interface Props extends UseInfiniteQueryOptions<UserPage, unknown, UserType> {
     className?: string;

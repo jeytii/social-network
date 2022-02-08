@@ -1,8 +1,8 @@
 import Link from 'next/link';
+import { MutableRefObject, useEffect } from 'react';
 import clsx from 'clsx';
 import BasicInfo from 'components/utilities/BasicInfo';
-import { User } from 'types/user';
-import { MutableRefObject, useEffect } from 'react';
+import type { User } from 'types/user';
 
 interface Props {
     data: User[];

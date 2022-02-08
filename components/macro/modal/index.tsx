@@ -1,8 +1,8 @@
 import { ReactNode } from 'react';
 import { useQueryClient } from 'react-query';
 import { Dialog } from '@headlessui/react';
-import { User } from 'types/user';
 import clsx from 'clsx';
+import type { User } from 'types/user';
 
 interface Props {
     isOpen: boolean;
