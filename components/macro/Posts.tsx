@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { QueryKey, UseInfiniteQueryOptions } from 'react-query';
 import clsx from 'clsx';
 import Post from 'components/micro/post';
-import Spinner from 'components/vectors/Spinner';
+import Spinner from 'components/utilities/Spinner';
 import useInfiniteScroll from 'hooks/useInfiniteScroll';
 import type { PostPage } from 'types/page';
 import type { Post as PostType } from 'types/post';

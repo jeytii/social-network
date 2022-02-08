@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { useQuery } from 'react-query';
 import User from 'components/micro/User';
-import Spinner from 'components/vectors/Spinner';
+import Spinner from 'components/utilities/Spinner';
 import type { User as UserType } from 'types/user';
 
 export default function RandomSuggestions() {

@@ -16,7 +16,7 @@ import LeftSidebar from './macro/LeftSidebar';
 import RightSidebar from './macro/right-sidebar';
 import BottomNav from './macro/BottomNav';
 import NotificationBell from './utilities/NotificationBell';
-import Spinner from './vectors/Spinner';
+import Spinner from './utilities/Spinner';
 import Logo from './Logo';
 
 type UserType = User & {

@@ -2,7 +2,7 @@ import { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
 import { useQueryClient } from 'react-query';
 import TextBox from 'components/utilities/TextBox';
-import Spinner from 'components/vectors/Spinner';
+import Spinner from 'components/utilities/Spinner';
 import authenticate from 'lib/auth';
 import type { User } from 'types/user';
 

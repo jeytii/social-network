@@ -1,6 +1,6 @@
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
-import Spinner from 'components/vectors/Spinner';
+import Spinner from 'components/utilities/Spinner';
 
 const UserFilterer = dynamic(() => import('./UserFilterer'), {
     loading: () => <Spinner />,

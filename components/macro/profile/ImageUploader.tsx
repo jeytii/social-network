@@ -2,7 +2,7 @@ import Image from 'next/image';
 import { ChangeEvent } from 'react';
 import { MdAccountCircle, MdUpload, MdOutlineRefresh } from 'react-icons/md';
 import clsx from 'clsx';
-import Spinner from 'components/vectors/Spinner';
+import Spinner from 'components/utilities/Spinner';
 
 interface Props {
     src: string | null;

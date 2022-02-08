@@ -3,7 +3,7 @@ import { useQuery, useQueryClient } from 'react-query';
 import { MdSearch } from 'react-icons/md';
 import clsx from 'clsx';
 import SearchSuggestions from 'components/micro/SearchSuggestions';
-import Spinner from 'components/vectors/Spinner';
+import Spinner from 'components/utilities/Spinner';
 import useDebounceChange from 'hooks/useDebounceChange';
 import type { User } from 'types/user';
 

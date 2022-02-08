@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { QueryKey, UseInfiniteQueryOptions } from 'react-query';
 import clsx from 'clsx';
 import User from 'components/micro/User';
-import Spinner from 'components/vectors/Spinner';
+import Spinner from 'components/utilities/Spinner';
 import useInfiniteScroll from 'hooks/useInfiniteScroll';
 import { UserPage } from 'types/page';
 import { User as UserType } from 'types/user';

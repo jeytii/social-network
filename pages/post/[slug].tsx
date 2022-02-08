@@ -5,7 +5,7 @@ import { useQuery, useQueryClient } from 'react-query';
 import { AxiosError } from 'axios';
 import Post from 'components/micro/post';
 import CommentBox from 'components/micro/CommentBox';
-import Spinner from 'components/vectors/Spinner';
+import Spinner from 'components/utilities/Spinner';
 import authenticate from 'lib/auth';
 import type { Post as PostType } from 'types/post';
 

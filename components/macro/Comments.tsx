@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { QueryKey, UseInfiniteQueryOptions } from 'react-query';
 import clsx from 'clsx';
 import Comment from 'components/micro/Comment';
-import Spinner from 'components/vectors/Spinner';
+import Spinner from 'components/utilities/Spinner';
 import useInfiniteScroll from 'hooks/useInfiniteScroll';
 import type { CommentPage } from 'types/page';
 import type { Comment as CommentType } from 'types/comment';

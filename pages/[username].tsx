@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import { useMemo } from 'react';
 import clsx from 'clsx';
 import ProfileHeadline from 'components/macro/profile/Headline';
-import Spinner from 'components/vectors/Spinner';
+import Spinner from 'components/utilities/Spinner';
 import axios from 'lib/axios';
 
 interface ProfileInfo {
