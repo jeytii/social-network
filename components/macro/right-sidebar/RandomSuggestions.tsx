@@ -37,7 +37,7 @@ export default function RandomSuggestions() {
 
                 <Link href='/search'>
                     <span className='text-primary-dark text-sm cursor-pointer ml-auto'>
-                        Explore
+                        See all
                     </span>
                 </Link>
             </header>
