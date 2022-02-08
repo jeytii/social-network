@@ -1,7 +1,7 @@
 import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import Cookies from 'js-cookie';
-import DarkModeToggler from 'components/utilities/DarkModeToggler';
+import DarkModeToggler from 'components/micro/DarkModeToggler';
 import axios from 'lib/axios';
 import authenticate from 'lib/auth';
 
