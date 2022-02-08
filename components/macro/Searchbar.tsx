@@ -2,7 +2,7 @@ import { ChangeEvent, useRef, useState } from 'react';
 import { useQuery, useQueryClient } from 'react-query';
 import { MdSearch } from 'react-icons/md';
 import clsx from 'clsx';
-import SearchSuggestions from 'components/chunks/SearchSuggestions';
+import SearchSuggestions from 'components/micro/SearchSuggestions';
 import Spinner from 'components/vectors/Spinner';
 import useDebounceChange from 'hooks/useDebounceChange';
 import type { User } from 'types/user';

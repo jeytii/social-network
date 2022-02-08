@@ -3,7 +3,7 @@ import { InfiniteData, useQueryClient } from 'react-query';
 import clsx from 'clsx';
 import BasicInfo from 'components/utilities/BasicInfo';
 import MoreOptionsButton from 'components/utilities/MoreOptionsButton';
-import LikeButton from 'components/chunks/LikeButton';
+import LikeButton from 'components/micro/LikeButton';
 import type { CommentPage } from 'types/page';
 import type { Comment as CommentType } from 'types/comment';
 

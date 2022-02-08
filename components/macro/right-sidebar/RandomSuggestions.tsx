@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { useQuery } from 'react-query';
-import User from 'components/chunks/User';
+import User from 'components/micro/User';
 import Spinner from 'components/vectors/Spinner';
 import type { User as UserType } from 'types/user';
 

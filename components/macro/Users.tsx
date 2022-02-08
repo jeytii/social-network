@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import { QueryKey, UseInfiniteQueryOptions } from 'react-query';
 import clsx from 'clsx';
-import User from 'components/chunks/User';
+import User from 'components/micro/User';
 import Spinner from 'components/vectors/Spinner';
 import useInfiniteScroll from 'hooks/useInfiniteScroll';
 import { UserPage } from 'types/page';

@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import { InfiniteData, useMutation, useQueryClient } from 'react-query';
 import { MdOutlineChecklist } from 'react-icons/md';
 import clsx from 'clsx';
-import Notification from 'components/chunks/Notification';
+import Notification from 'components/micro/Notification';
 import Spinner from 'components/vectors/Spinner';
 import useInfiniteScroll from 'hooks/useInfiniteScroll';
 import authenticate from 'lib/auth';

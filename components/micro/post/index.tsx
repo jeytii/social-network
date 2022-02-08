@@ -4,7 +4,7 @@ import { MdOutlineChatBubbleOutline } from 'react-icons/md';
 import clsx from 'clsx';
 import BasicInfo from 'components/utilities/BasicInfo';
 import MoreOptionsButton from 'components/utilities/MoreOptionsButton';
-import LikeButton from 'components/chunks/LikeButton';
+import LikeButton from 'components/micro/LikeButton';
 import type { Post as PostType } from 'types/post';
 import type { PostPage } from 'types/page';
 import BookmarkButton from './BookmarkButton';

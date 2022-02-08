@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { QueryKey, UseInfiniteQueryOptions } from 'react-query';
 import clsx from 'clsx';
-import Post from 'components/chunks/post';
+import Post from 'components/micro/post';
 import Spinner from 'components/vectors/Spinner';
 import useInfiniteScroll from 'hooks/useInfiniteScroll';
 import type { PostPage } from 'types/page';
