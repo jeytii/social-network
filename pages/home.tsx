@@ -1,14 +1,12 @@
 import { GetServerSideProps } from 'next';
-import dynamic from 'next/dynamic';
+import { lazy, Suspense } from 'react';
 import { useQueryClient } from 'react-query';
 import TextBox from 'components/utilities/TextBox';
 import Spinner from 'components/utilities/Spinner';
 import authenticate from 'lib/auth';
 import type { User } from 'types/user';
 
-const Posts = dynamic(() => import('components/macro/Posts'), {
-    loading: () => <Spinner className='p-lg' />,
-});
+const Posts = lazy(() => import('components/macro/Posts'));
 
 export default function Home() {
     const queryClient = useQueryClient();
@@ -45,13 +43,15 @@ export default function Home() {
                 onSuccess={onSuccess}
             />
 
-            <Posts
-                className='mt-lg'
-                queryKey='posts'
-                url='/api/posts'
-                refetchInterval={1000 * 60}
-                refetchIntervalInBackground
-            />
+            <Suspense fallback={<Spinner className='p-lg' />}>
+                <Posts
+                    className='mt-lg'
+                    queryKey='posts'
+                    url='/api/posts'
+                    refetchInterval={1000 * 60}
+                    refetchIntervalInBackground
+                />
+            </Suspense>
         </div>
     );
 }

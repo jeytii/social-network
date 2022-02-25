@@ -1,8 +1,7 @@
 import { GetServerSideProps } from 'next';
 import Link from 'next/link';
-import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
-import { useMemo } from 'react';
+import { useMemo, lazy, Suspense } from 'react';
 import clsx from 'clsx';
 import ProfileHeadline from 'components/macro/profile/Headline';
 import Spinner from 'components/utilities/Spinner';
@@ -29,17 +28,9 @@ interface Props {
     currentUser: ProfileInfo | undefined;
 }
 
-const Posts = dynamic(() => import('components/macro/Posts'), {
-    loading: () => <Spinner className='p-lg' />,
-});
-
-const Comments = dynamic(() => import('components/macro/Comments'), {
-    loading: () => <Spinner className='p-lg' />,
-});
-
-const Users = dynamic(() => import('components/macro/Users'), {
-    loading: () => <Spinner className='p-lg' />,
-});
+const Posts = lazy(() => import('components/macro/Posts'));
+const Comments = lazy(() => import('components/macro/Comments'));
+const Users = lazy(() => import('components/macro/Users'));
 
 const isActive = (condition: boolean) =>
     condition
@@ -124,44 +115,52 @@ export default function Profile({ invalid, currentUser }: Props) {
             </nav>
 
             {!section && (
-                <Posts
-                    queryKey={['profile.posts', userData.slug]}
-                    url={`/api/profile/${userData.username}/posts`}
-                    cacheTime={1000 * 60 * 2}
-                    refetchInterval={1000 * 30}
-                    refetchIntervalInBackground
-                />
+                <Suspense fallback={<Spinner className='p-lg' />}>
+                    <Posts
+                        queryKey={['profile.posts', userData.slug]}
+                        url={`/api/profile/${userData.username}/posts`}
+                        cacheTime={1000 * 60 * 2}
+                        refetchInterval={1000 * 30}
+                        refetchIntervalInBackground
+                    />
+                </Suspense>
             )}
 
             {section === 'comments' && (
-                <Comments
-                    queryKey={['profile.comments', userData.slug]}
-                    url={`/api/profile/${userData.username}/comments`}
-                    cacheTime={1000 * 60 * 2}
-                    refetchInterval={1000 * 30}
-                    refetchIntervalInBackground
-                    hasLink
-                />
+                <Suspense fallback={<Spinner className='p-lg' />}>
+                    <Comments
+                        queryKey={['profile.comments', userData.slug]}
+                        url={`/api/profile/${userData.username}/comments`}
+                        cacheTime={1000 * 60 * 2}
+                        refetchInterval={1000 * 30}
+                        refetchIntervalInBackground
+                        hasLink
+                    />
+                </Suspense>
             )}
 
             {section === 'followers' && (
-                <Users
-                    queryKey={['profile.followers', userData.slug]}
-                    url={`/api/profile/${userData.username}/followers`}
-                    cacheTime={1000 * 60 * 2}
-                    refetchInterval={1000 * 30}
-                    refetchIntervalInBackground
-                />
+                <Suspense fallback={<Spinner className='p-lg' />}>
+                    <Users
+                        queryKey={['profile.followers', userData.slug]}
+                        url={`/api/profile/${userData.username}/followers`}
+                        cacheTime={1000 * 60 * 2}
+                        refetchInterval={1000 * 30}
+                        refetchIntervalInBackground
+                    />
+                </Suspense>
             )}
 
             {section === 'following' && (
-                <Users
-                    queryKey={['profile.following', userData.slug]}
-                    url={`/api/profile/${userData.username}/following`}
-                    cacheTime={1000 * 60 * 2}
-                    refetchInterval={1000 * 30}
-                    refetchIntervalInBackground
-                />
+                <Suspense fallback={<Spinner className='p-lg' />}>
+                    <Users
+                        queryKey={['profile.following', userData.slug]}
+                        url={`/api/profile/${userData.username}/following`}
+                        cacheTime={1000 * 60 * 2}
+                        refetchInterval={1000 * 30}
+                        refetchIntervalInBackground
+                    />
+                </Suspense>
             )}
         </div>
     );

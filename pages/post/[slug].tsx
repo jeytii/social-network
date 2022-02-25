@@ -1,6 +1,5 @@
 import { GetServerSideProps } from 'next';
-import dynamic from 'next/dynamic';
-import { useEffect } from 'react';
+import { useEffect, lazy, Suspense } from 'react';
 import { useQuery, useQueryClient } from 'react-query';
 import { AxiosError } from 'axios';
 import Post from 'components/micro/post';
@@ -9,9 +8,7 @@ import Spinner from 'components/utilities/Spinner';
 import authenticate from 'lib/auth';
 import type { Post as PostType } from 'types/post';
 
-const Comments = dynamic(() => import('components/macro/Comments'), {
-    loading: () => <Spinner className='mt-lg' />,
-});
+const Comments = lazy(() => import('components/macro/Comments'));
 
 export default function ViewPost({ slug }: { slug: string }) {
     const queryClient = useQueryClient();
@@ -53,12 +50,14 @@ export default function ViewPost({ slug }: { slug: string }) {
 
             <CommentBox slug={slug} />
 
-            <Comments
-                className='mt-lg'
-                queryKey={['comments', slug]}
-                url='/api/comments'
-                slug={slug}
-            />
+            <Suspense fallback={<Spinner className='mt-lg' />}>
+                <Comments
+                    className='mt-lg'
+                    queryKey={['comments', slug]}
+                    url='/api/comments'
+                    slug={slug}
+                />
+            </Suspense>
         </div>
     );
 }

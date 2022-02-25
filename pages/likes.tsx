@@ -1,18 +1,13 @@
 import { GetServerSideProps } from 'next';
-import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import { lazy, Suspense } from 'react';
 import clsx from 'clsx';
 import Spinner from 'components/utilities/Spinner';
 import axios from 'lib/axios';
 
-const Posts = dynamic(() => import('components/macro/Posts'), {
-    loading: () => <Spinner className='p-lg' />,
-});
-
-const Comments = dynamic(() => import('components/macro/Comments'), {
-    loading: () => <Spinner className='p-lg' />,
-});
+const Posts = lazy(() => import('components/macro/Posts'));
+const Comments = lazy(() => import('components/macro/Comments'));
 
 const isActive = (condition: boolean) =>
     condition
@@ -60,26 +55,30 @@ export default function Likes({ invalid }: { invalid: boolean | undefined }) {
             </nav>
 
             {query.s === 'posts' && (
-                <Posts
-                    className='p-lg'
-                    queryKey='profile.likes.posts'
-                    url='/api/profile/likes/posts'
-                    cacheTime={Infinity}
-                    refetchInterval={1000 * 30}
-                    refetchIntervalInBackground
-                />
+                <Suspense fallback={<Spinner className='p-lg' />}>
+                    <Posts
+                        className='p-lg'
+                        queryKey='profile.likes.posts'
+                        url='/api/profile/likes/posts'
+                        cacheTime={Infinity}
+                        refetchInterval={1000 * 30}
+                        refetchIntervalInBackground
+                    />
+                </Suspense>
             )}
 
             {query.s === 'comments' && (
-                <Comments
-                    className='p-lg'
-                    queryKey='profile.likes.comments'
-                    url='/api/profile/likes/comments'
-                    cacheTime={Infinity}
-                    refetchInterval={1000 * 30}
-                    refetchIntervalInBackground
-                    hasLink
-                />
+                <Suspense fallback={<Spinner className='p-lg' />}>
+                    <Comments
+                        className='p-lg'
+                        queryKey='profile.likes.comments'
+                        url='/api/profile/likes/comments'
+                        cacheTime={Infinity}
+                        refetchInterval={1000 * 30}
+                        refetchIntervalInBackground
+                        hasLink
+                    />
+                </Suspense>
             )}
         </section>
     );
